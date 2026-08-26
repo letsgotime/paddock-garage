@@ -1,0 +1,32 @@
+User-Agent: *
+Allow: /
+
+User-Agent: GPTBot
+Allow: /
+
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: anthropic-ai
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+User-Agent: Google-Extended
+Allow: /
+
+User-Agent: Gemini-User
+Allow: /
+
+User-Agent: Cohere-ai
+Allow: /
+
+User-Agent: Meta-ExternalAgent
+Allow: /
+
+Host: https://garage.paddock20.com
+Sitemap: https://garage.paddock20.com/sitemap.xml

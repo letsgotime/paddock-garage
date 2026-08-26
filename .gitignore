@@ -1,0 +1,10 @@
+node_modules/
+.wrangler/
+.dev.vars
+.DS_Store
+*.log
+
+# agent tooling (installed per-machine via `npx skills add cloudflare/skills`)
+.agents/
+.claude/
+skills-lock.json

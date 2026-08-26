@@ -1,0 +1,14 @@
+name = "paddock-garage"
+compatibility_date = "2025-03-01"
+
+# Static-assets Worker: everything in ./public is served directly.
+# No worker script needed for a single-page dashboard.
+[assets]
+directory = "./public"
+not_found_handling = "single-page-application"
+
+# Binds garage.paddock20.com on deploy and manages the DNS record.
+# Requires paddock20.com to be an active zone on this Cloudflare account.
+[[routes]]
+pattern = "garage.paddock20.com"
+custom_domain = true

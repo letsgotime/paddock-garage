@@ -1,0 +1,13 @@
+{
+  "name": "paddock-garage",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Paddock Garage — vehicle dashboard served from Cloudflare Workers",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

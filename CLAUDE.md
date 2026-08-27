@@ -41,10 +41,33 @@ When in doubt about which surface something belongs to, it is private.
 | Recurrent | connected | market value, range score, fleet-model range |
 | Tesla Fleet API | planned | direct telemetry and commands, independent of TezLab |
 
-Tesla Fleet API note: registration binds a domain permanently. The public key must live at
-`/.well-known/appspecific/com.tesla.3p.public-key.pem` and **stay** there, since app 4.30.0
-put it in the pairing chain of trust. Verified that Workers static assets serves that path
-(dot-directories deploy fine). Decide the domain before registering, not after.
+### Tesla Fleet API
+
+**Registered domain: `garage.paddock20.com`.** Chosen because this host's deploy is fully
+controlled here, unlike the apex, which is v0-managed and can clobber files on sync.
+
+The keypair exists:
+
+- **Public key**, committed and deployed, live at
+  `https://garage.paddock20.com/.well-known/appspecific/com.tesla.3p.public-key.pem`
+  (EC, prime256v1 / P-256, verified serving 200)
+- **Private key** at `~/.tesla/paddock-garage-private.pem`, mode 600, **outside the repo**.
+  It is not backed up anywhere. Losing it means re-registering and re-pairing every car.
+
+**That public key file must never be deleted, moved, or renamed.** Since Tesla mobile app
+4.30.0 it sits in the vehicle pairing chain of trust and is re-fetched, not checked once.
+Removing it breaks pairing for every paired vehicle, and recovery means physically
+re-pairing each car. If this project ever leaves this host, that one file stays behind.
+
+Still to do, and it needs Gavin: create the app at developer.tesla.com with **Allowed
+Origins = `garage.paddock20.com`** (must match the registered domain), then register the
+partner account via `POST /api/1/partner_accounts`. Redirect URIs allow `localhost`
+alongside a production URI on the same app, so the tool itself can run anywhere; it does
+not have to live on this domain.
+
+If registration rejects the key, one thing worth trying before anything else: the file
+currently serves as `application/x-x509-ca-cert` (Cloudflare infers it from the extension).
+A `_headers` file can force `text/plain` if Tesla turns out to be fussy about it.
 
 ## Hard rules
 

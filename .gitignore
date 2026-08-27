@@ -8,3 +8,7 @@ node_modules/
 .agents/
 .claude/
 skills-lock.json
+
+# never commit private keys (the Tesla public key IS committed, deliberately)
+*-private.pem
+*.key

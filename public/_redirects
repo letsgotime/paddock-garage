@@ -1,0 +1,4 @@
+# The vehicle profile used to live at the root. Root is now the hub.
+/index.html   /            301
+/model-y      /log/model-y/  301
+/model-y/     /log/model-y/  301

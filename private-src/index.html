@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Command Center | Paddock Garage</title>
+<style>
+  :root{
+    --surface-0:#0A0E1A; --surface-1:#121826; --surface-2:#1A2233; --surface-3:#212B3F;
+    --border:#263047; --border-strong:#667690;
+    --ink:#F0F2F5; --ink-muted:#AEB6C2; --ink-faint:#8A93A0;
+    --ignition:#F4511E; --amber:#F6A22B; --sky:#57B4E6; --steel:#9AA0AA;
+    --good:#3FB950; --radius:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--surface-0); color:var(--ink);
+    font-family:Arial,"Helvetica Neue",Helvetica,sans-serif; font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px; margin:0 auto; padding:28px 20px 80px}
+  h1,h2,h3{font-family:"Arial Black","Arial Bold",Arial,sans-serif; font-weight:900;
+    letter-spacing:-.015em; margin:0}
+  .lbl{font-size:.66rem; font-weight:700; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-faint)}
+
+  /* header */
+  .top{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end;
+    justify-content:space-between; margin-bottom:26px}
+  .mark{display:flex; gap:4px; margin-bottom:10px}
+  .mark i{display:block; width:12px; height:22px; transform:skewX(-14deg)}
+  h1{font-size:1.7rem}
+  .modebar{display:flex; gap:8px; align-items:center}
+  button{font-family:inherit; font-weight:700; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; padding:9px 14px; border-radius:8px; cursor:pointer;
+    background:var(--surface-2); color:var(--ink-muted); border:1px solid var(--border)}
+  button:hover{border-color:var(--border-strong); color:var(--ink)}
+  button.on{background:var(--ignition); color:#fff; border-color:transparent}
+  button.ghost.on{background:var(--sky); color:#051923}
+
+  .banner{border-radius:var(--radius); padding:11px 16px; font-size:.85rem;
+    margin-bottom:22px; border-left:3px solid var(--sky); background:var(--surface-2);
+    color:var(--ink-muted)}
+  .banner strong{color:var(--sky)}
+  .banner.story{border-left-color:var(--amber)}
+  .banner.story strong{color:var(--amber)}
+
+  /* tiles */
+  .tiles{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px}
+  @media(max-width:760px){.tiles{grid-template-columns:1fr 1fr}}
+  .tile{background:var(--surface-1); border:1px solid var(--border);
+    border-top:4px solid var(--c); border-radius:var(--radius); padding:13px 15px 15px}
+  .tile .v{font-family:"Arial Black",Arial,sans-serif; font-weight:900; font-size:1.5rem}
+  .tile .s{font-size:.72rem; color:var(--ink-faint); margin-top:.25em}
+
+  /* signal */
+  .signal{background:var(--surface-1); border:1px solid var(--border);
+    border-radius:var(--radius); padding:16px 18px; margin-bottom:22px}
+  .signal h2{font-size:.95rem; margin-bottom:.7em}
+  .sig{display:flex; gap:10px; align-items:flex-start; padding:8px 0;
+    border-top:1px solid var(--border); font-size:.88rem; color:var(--ink-muted)}
+  .sig:first-of-type{border-top:0}
+  .dot{flex:0 0 auto; width:8px; height:8px; border-radius:50%; margin-top:.45em}
+  .sig strong{color:var(--ink)}
+
+  /* filters */
+  .filters{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
+
+  /* records */
+  .rec{background:var(--surface-1); border:1px solid var(--border);
+    border-left:4px solid var(--c); border-radius:var(--radius);
+    padding:16px 18px; margin-bottom:12px}
+  .rec-head{display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between;
+    align-items:flex-start; margin-bottom:8px}
+  .rec h3{font-size:1rem}
+  .rec .need{font-size:.88rem; color:var(--ink-muted); margin:.4em 0 .8em}
+  .tags{display:flex; flex-wrap:wrap; gap:6px}
+  .tag{font-size:.66rem; font-weight:700; padding:2px 9px; border-radius:999px;
+    background:var(--surface-2); color:var(--ink-muted); border:1px solid var(--border);
+    white-space:nowrap}
+  .tag.build{background:transparent; border-color:var(--amber); color:var(--amber)}
+  .tag.mo{background:var(--sky); color:#051923; border-color:transparent}
+  .tag.one{background:var(--steel); color:#12151b; border-color:transparent}
+  .ctl{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:10px}
+  select,input{font-family:inherit; font-size:.82rem; padding:7px 9px; border-radius:7px;
+    background:var(--surface-2); color:var(--ink); border:1px solid var(--border)}
+  input{width:112px}
+  .prog{height:4px; background:var(--surface-3); border-radius:99px; overflow:hidden; margin-top:10px}
+  .prog i{display:block; height:100%; background:var(--c)}
+  .tools{font-size:.8rem; color:var(--ink-faint); margin-top:9px}
+
+  footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--border);
+    font-size:.78rem; color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div>
+      <div class="mark" aria-hidden="true">
+        <i style="background:var(--ignition)"></i>
+        <i style="background:var(--amber)"></i>
+        <i style="background:var(--sky)"></i>
+      </div>
+      <h1>Command Center</h1>
+      <p class="lbl" style="margin-top:6px">Project, income and signal tracker</p>
+    </div>
+    <div class="modebar">
+      <span class="lbl">View</span>
+      <button id="mFull" class="on">Full</button>
+      <button id="mStory" class="ghost">Story</button>
+      <button id="reset" title="Clear saved figures">Reset</button>
+    </div>
+  </div>
+
+  <div id="banner" class="banner"></div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="signal">
+    <h2>Signal</h2>
+    <div id="signals"></div>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div id="records"></div>
+
+  <footer>
+    Figures you type are saved in this browser only. Nothing is transmitted.
+    Story view swaps every identity for its role and is what becomes publishable.
+  </footer>
+
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   DATA LAYER. Identity and copy carry both a real and a role form.
+   Story view renders only .role, so the published build is this
+   same file with mode locked, not a rewrite.
+   --------------------------------------------------------------- */
+var VEHICLE = { costPerMile: 0.120, odometer: 19569, irsRate: 0.70 };
+
+var RECORDS = [
+  { id:'sw1', track:'software', build:true, income:'monthly',
+    name:{ real:'Naser, Music City Power & Performance', role:'Performance shop owner' },
+    need:{ real:'Wants an app and system built. Gave access to his auction platform account.',
+           role:'Wants an internal app and system built. Provided data access.' },
+    tools:{ real:'None yet, needs a one-pager drafted from site copy',
+            role:'Blocked on a one-pager' },
+    stages:['One-pager not sent','One-pager sent','Discovery booked','Scoping','Building','Delivered'], stage:0 },
+
+  { id:'sw2', track:'software', build:false, income:'monthly',
+    name:{ real:'Ty & Josh, athlete management app', role:'Athlete-management app founders' },
+    need:{ real:'Owes them a status update. They want LinkedIn and social setup.',
+           role:'Status update owed. Want social presence built out.' },
+    tools:{ real:'Pricing not finalized, setup fee plus possible retainer',
+            role:'Pricing not finalized' },
+    stages:['Update owed','Update sent','Pricing sent','Accepted','In progress','Delivered'], stage:0 },
+
+  { id:'sw3', track:'software', build:true, income:'monthly',
+    name:{ real:'Corn, thecarguy.com', role:'Automotive content creator' },
+    need:{ real:'Wants help with AI and LinkedIn.', role:'Wants AI and social help.' },
+    tools:{ real:'None yet, same one-pager motion', role:'Blocked on a one-pager' },
+    stages:['One-pager not sent','One-pager sent','Discovery booked','Scoping','Building','Delivered'], stage:0 },
+
+  { id:'sw4', track:'software', build:true, income:'monthly',
+    name:{ real:'Arnie', role:'Inbound prospect' },
+    need:{ real:'Wants a software page built, or a meeting about one.',
+           role:'Wants a software page, or a meeting first.' },
+    tools:{ real:'Needs a call first', role:'Blocked on a one-pager' },
+    stages:['Meeting not scheduled','Meeting booked','Scoping','Building','Delivered'], stage:0 },
+
+  { id:'ev1', track:'events', build:false, income:'onetime',
+    name:{ real:'Piston Powered Ranch, Oct 10, Rancho Jaramillo', role:'Car show, ranch venue, October' },
+    need:{ real:'First event under the director role. Marketing opens Aug 30. 31 of 45 booths approved.',
+           role:'First event under a new venue role. 31 of 45 vendor booths approved.' },
+    tools:{ real:'Console built, needs sign-off on the sponsorship proposal',
+            role:'Console built, awaiting venue sign-off' },
+    stages:['Building console','Marketing live','Vendors filling','Event week','Wrapped'], stage:1 },
+
+  { id:'ev2', track:'events', build:false, income:'monthly',
+    name:{ real:'Rancho Jaramillo, director and rep role', role:'Ranch venue, director role' },
+    need:{ real:'Owner wants him as director and representative of the property beyond this one event.',
+           role:'Venue owner wants an ongoing director role beyond one event.' },
+    tools:{ real:'Needs a scope conversation on what director pays and covers',
+            role:'Scope and rate undefined' },
+    stages:['Role undefined','Terms discussed','Agreed','Active'], stage:0 },
+
+  { id:'ev3', track:'events', build:true, income:'monthly',
+    name:{ real:'Encanto Blossom / Orchard', role:'Orchard venue, second property' },
+    need:{ real:'Second property, apple-picking farm. Needs marketing built and income tracked.',
+           role:'Second venue. Needs marketing built and income tracked.' },
+    tools:{ real:'Nothing built yet', role:'Nothing built yet' },
+    stages:['Not started','Scoped','Building','Live'], stage:0 },
+
+  { id:'ev4', track:'events', build:true, income:'onetime',
+    name:{ real:'Location rentals, both properties', role:'Venue location rentals, film and photo' },
+    need:{ real:'List both properties for production location rental. State film commission database is free.',
+           role:'List both venues for production rental. State film office listing is free.' },
+    tools:{ real:'Not listed anywhere yet', role:'Not listed yet' },
+    stages:['Not listed','State DB submitted','Marketplaces live','First booking'], stage:0 },
+
+  { id:'gg1', track:'gig', build:false, income:'monthly',
+    name:{ real:'Instacart', role:'Grocery delivery platform' },
+    need:{ real:'Active gig income. Mileage is the hidden cost.',
+           role:'Active gig income. Mileage is the hidden cost.' },
+    tools:{ real:'Earnings not yet reconciled against measured cost per mile',
+            role:'Earnings not yet reconciled against cost per mile' },
+    stages:['Active, unmeasured','Earnings logged','Netted vs mileage','Decision made'], stage:0 },
+
+  { id:'gg2', track:'gig', build:false, income:'monthly',
+    name:{ real:'Medical courier, evaluating', role:'Medical courier work, evaluating' },
+    need:{ real:'Researching whether it beats current gig work per mile. CDL and hazmat gate the best contracts.',
+           role:'Evaluating whether it beats current gig work per mile. Licensing gates the best contracts.' },
+    tools:{ real:'Research done, no per-mile rate obtained yet',
+            role:'Research done, no rate obtained yet' },
+    stages:['Researching','Rates obtained','Trial run','Decision made'], stage:1 },
+];
+
+var TRACKS = {
+  software:{ label:'Software', color:'var(--sky)' },
+  events:  { label:'Events',   color:'var(--amber)' },
+  gig:     { label:'Gig work', color:'var(--ignition)' }
+};
+
+/* ------------------------- state ------------------------- */
+var KEY='pg-command-center-v1';
+var state = { mode:'full', filter:'all', vals:{}, stages:{} };
+try{ var s=localStorage.getItem(KEY); if(s){ var p=JSON.parse(s);
+  state.vals=p.vals||{}; state.stages=p.stages||{}; } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify({vals:state.vals,stages:state.stages})); }catch(e){} }
+
+function money(n){ return '$'+(n||0).toLocaleString('en-US',{maximumFractionDigits:0}); }
+function stageOf(r){ return state.stages[r.id]!==undefined ? state.stages[r.id] : r.stage; }
+function valOf(r){ return Number(state.vals[r.id]||0); }
+function txt(f){ return state.mode==='story' ? f.role : f.real; }
+
+/* ------------------------- render ------------------------ */
+function render(){
+  var vis = RECORDS.filter(function(r){ return state.filter==='all' || r.track===state.filter; });
+
+  // banner
+  var b=document.getElementById('banner');
+  if(state.mode==='story'){
+    b.className='banner story';
+    b.innerHTML='<strong>Story view.</strong> Every identity is replaced by its role and '+
+      'specifics are generalised. This is the version that can be published. Nothing here '+
+      'names a client, a property, or a negotiation.';
+  } else {
+    b.className='banner';
+    b.innerHTML='<strong>Full view.</strong> Real names and live negotiation detail. '+
+      'This must stay behind authentication. Switch to Story before screenshotting anything.';
+  }
+
+  // tiles
+  var mo=0, one=0;
+  RECORDS.forEach(function(r){ var v=valOf(r); if(r.income==='monthly') mo+=v; else one+=v; });
+  var blocked = RECORDS.filter(function(r){ return r.build; }).length;
+  document.getElementById('tiles').innerHTML=
+    tile('var(--sky)', money(mo)+'<span style="font-size:.55em"> /mo</span>', 'Recurring, when signed')+
+    tile('var(--steel)', money(one), 'One-time, when signed')+
+    tile('var(--ignition)', money(mo*12+one), 'Twelve-month view')+
+    tile('var(--amber)', blocked+' of '+RECORDS.length, 'Threads blocked on a build');
+
+  // signal
+  var sig=[];
+  var onePagers = RECORDS.filter(function(r){ return /one-pager/i.test(r.tools.role); });
+  if(onePagers.length>1){
+    sig.push(['var(--amber)','<strong>'+onePagers.length+' threads are blocked on the same asset.</strong> '+
+      'All of them need a one-pager. That is one afternoon of work standing in front of '+
+      onePagers.length+' separate conversations, not '+onePagers.length+' problems.']);
+  }
+  var unpriced = RECORDS.filter(function(r){ return valOf(r)===0; }).length;
+  if(unpriced){
+    sig.push(['var(--sky)','<strong>'+unpriced+' of '+RECORDS.length+' threads have no number attached.</strong> '+
+      'Until they do, the totals above understate the pipeline and cannot be used to choose between tracks.']);
+  }
+  var stuck = RECORDS.filter(function(r){ return stageOf(r)===0; }).length;
+  if(stuck){
+    sig.push(['var(--ignition)','<strong>'+stuck+' threads sit at their first stage.</strong> '+
+      'Every one is waiting on an action from this side, not from the other party.']);
+  }
+  sig.push(['var(--good)','<strong>Gig work is the only track carrying vehicle cost.</strong> '+
+    'At a measured '+(VEHICLE.costPerMile*100).toFixed(1)+'¢ per mile it looks cheap, but the honest '+
+    'self-employed yardstick is the IRS rate near '+(VEHICLE.irsRate*100).toFixed(0)+'¢, which includes '+
+    'depreciation. Any per-mile rate under that converts car equity into income at a loss.']);
+  document.getElementById('signals').innerHTML = sig.map(function(s){
+    return '<div class="sig"><span class="dot" style="background:'+s[0]+'"></span><span>'+s[1]+'</span></div>';
+  }).join('');
+
+  // filters
+  var f=[['all','All ('+RECORDS.length+')']];
+  Object.keys(TRACKS).forEach(function(k){
+    f.push([k, TRACKS[k].label+' ('+RECORDS.filter(function(r){return r.track===k;}).length+')']);
+  });
+  document.getElementById('filters').innerHTML = f.map(function(x){
+    return '<button data-f="'+x[0]+'" class="'+(state.filter===x[0]?'on':'')+'">'+x[1]+'</button>';
+  }).join('');
+
+  // records
+  document.getElementById('records').innerHTML = vis.map(function(r){
+    var t=TRACKS[r.track], st=stageOf(r), pct=Math.round(st/(r.stages.length-1)*100);
+    var opts=r.stages.map(function(s,i){
+      return '<option value="'+i+'"'+(i===st?' selected':'')+'>'+(i+1)+'. '+s+'</option>'; }).join('');
+    return '<div class="rec" style="--c:'+t.color+'">'+
+      '<div class="rec-head"><div><h3>'+txt(r.name)+'</h3></div>'+
+        '<div class="tags">'+
+          '<span class="tag">'+t.label+'</span>'+
+          '<span class="tag '+(r.income==='monthly'?'mo':'one')+'">'+(r.income==='monthly'?'Recurring':'One-time')+'</span>'+
+          (r.build?'<span class="tag build">Needs build</span>':'')+
+        '</div></div>'+
+      '<div class="need">'+txt(r.need)+'</div>'+
+      '<div class="ctl">'+
+        '<select data-s="'+r.id+'">'+opts+'</select>'+
+        '<label class="lbl">'+(r.income==='monthly'?'Per month':'One-time')+'</label>'+
+        '<input type="number" min="0" step="50" placeholder="0" data-v="'+r.id+'" value="'+(state.vals[r.id]||'')+'">'+
+      '</div>'+
+      '<div class="prog"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="tools">'+txt(r.tools)+'</div>'+
+    '</div>';
+  }).join('');
+}
+function tile(c,v,s){ return '<div class="tile" style="--c:'+c+'"><div class="v">'+v+'</div><div class="s">'+s+'</div></div>'; }
+
+/* ------------------------- events ------------------------ */
+document.addEventListener('click', function(e){
+  var f=e.target.closest('[data-f]');
+  if(f){ state.filter=f.dataset.f; render(); return; }
+  if(e.target.id==='mFull'){ state.mode='full';
+    document.getElementById('mFull').classList.add('on');
+    document.getElementById('mStory').classList.remove('on'); render(); }
+  if(e.target.id==='mStory'){ state.mode='story';
+    document.getElementById('mStory').classList.add('on');
+    document.getElementById('mFull').classList.remove('on'); render(); }
+  if(e.target.id==='reset'){
+    if(confirm('Clear every figure and stage you have entered?')){
+      state.vals={}; state.stages={}; save(); render(); }
+  }
+});
+document.addEventListener('change', function(e){
+  if(e.target.dataset.s!==undefined && e.target.tagName==='SELECT'){
+    state.stages[e.target.dataset.s]=Number(e.target.value); save(); render(); }
+});
+document.addEventListener('input', function(e){
+  if(e.target.dataset.v!==undefined){
+    state.vals[e.target.dataset.v]=Number(e.target.value||0); save();
+    var mo=0,one=0; RECORDS.forEach(function(r){ var v=valOf(r);
+      if(r.income==='monthly') mo+=v; else one+=v; });
+    var blocked=RECORDS.filter(function(r){return r.build;}).length;
+    document.getElementById('tiles').innerHTML=
+      tile('var(--sky)', money(mo)+'<span style="font-size:.55em"> /mo</span>','Recurring, when signed')+
+      tile('var(--steel)', money(one),'One-time, when signed')+
+      tile('var(--ignition)', money(mo*12+one),'Twelve-month view')+
+      tile('var(--amber)', blocked+' of '+RECORDS.length,'Threads blocked on a build');
+  }
+});
+
+render();
+</script>
+</body>
+</html>

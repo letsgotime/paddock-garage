@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Authorization callback</title>
+<style>
+  :root{
+    --surface-0:#0A0E1A; --surface-1:#121826; --surface-2:#1A2233;
+    --border:#263047; --ink:#F0F2F5; --ink-muted:#AEB6C2; --ink-faint:#8A93A0;
+    --ignition:#F4511E; --sky:#57B4E6; --amber:#F6A22B; --radius:10px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:24px; background:var(--surface-0); color:var(--ink);
+    font-family:Arial,"Helvetica Neue",Helvetica,sans-serif; line-height:1.55;
+  }
+  .card{width:100%; max-width:680px; background:var(--surface-1);
+    border:1px solid var(--border); border-radius:var(--radius); padding:28px}
+  .eyebrow{font-weight:700; font-size:.7rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-faint); margin:0 0 .5em}
+  h1{font-family:"Arial Black","Arial Bold",Arial,sans-serif; font-weight:900;
+    font-size:1.5rem; letter-spacing:-.01em; margin:0 0 .5em}
+  p{color:var(--ink-muted); margin:0 0 1em}
+  .val{background:var(--surface-2); border:1px solid var(--border); border-radius:8px;
+    padding:12px 14px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:.82rem; word-break:break-all; color:var(--ink); margin-bottom:10px}
+  button{font-family:inherit; font-weight:700; font-size:.8rem; letter-spacing:.06em;
+    text-transform:uppercase; padding:11px 18px; border-radius:8px; cursor:pointer;
+    border:none; background:var(--ignition); color:#fff}
+  button:disabled{opacity:.6; cursor:default}
+  .note{border-left:3px solid var(--amber); background:var(--surface-2);
+    border-radius:0 6px 6px 0; padding:10px 14px; font-size:.84rem; color:var(--ink-muted)}
+  .err{border-left-color:var(--ignition)}
+  .lbl{font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:700; margin:0 0 .4em}
+</style>
+</head>
+<body>
+  <div class="card">
+    <p class="eyebrow">Paddock Garage</p>
+    <h1 id="head">Authorization callback</h1>
+    <div id="body"><p>Reading the response...</p></div>
+  </div>
+
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var code = q.get('code'), state = q.get('state');
+  var err = q.get('error'), errDesc = q.get('error_description');
+  var head = document.getElementById('head'), body = document.getElementById('body');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+  }
+
+  if (err) {
+    head.textContent = 'Authorization failed';
+    body.innerHTML = '<div class="note err"><strong>' + esc(err) + '</strong>' +
+      (errDesc ? '<br>' + esc(errDesc) : '') + '</div>';
+    return;
+  }
+
+  if (!code) {
+    head.textContent = 'Nothing to show';
+    body.innerHTML = '<p>No authorization code in this URL. This page is the OAuth ' +
+      'redirect target for the Tesla Fleet API application; it only does something ' +
+      'when Tesla sends you here.</p>';
+    return;
+  }
+
+  head.textContent = 'Authorization code';
+  var html = '<p>Copy this and exchange it for tokens. It is single use and expires quickly.</p>' +
+    '<p class="lbl">Code</p><div class="val" id="code">' + esc(code) + '</div>';
+  if (state) html += '<p class="lbl">State</p><div class="val">' + esc(state) + '</div>';
+  html += '<button id="copy">Copy code</button>' +
+    '<p class="note" style="margin-top:16px">This page runs entirely in your browser. ' +
+    'The code is never sent anywhere, stored, or logged. Close the tab when you are done.</p>';
+  body.innerHTML = html;
+
+  document.getElementById('copy').addEventListener('click', function () {
+    var btn = this;
+    navigator.clipboard.writeText(code).then(function () {
+      btn.textContent = 'Copied'; btn.disabled = true;
+      setTimeout(function () { btn.textContent = 'Copy code'; btn.disabled = false; }, 1800);
+    }, function () {
+      btn.textContent = 'Copy failed, select it manually';
+    });
+  });
+})();
+</script>
+</body>
+</html>

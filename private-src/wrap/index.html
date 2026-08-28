@@ -349,12 +349,14 @@
     <h2>The file you upload to the car</h2>
     <div class="shot"><img src="tesla-wallpaper-1920x1200.png" alt="Tesla touchscreen wallpaper, 1920 by 1200"></div>
     <p class="cap">tesla-wallpaper-1920x1200.png &middot; sized for the Model Y center display</p>
-    <div class="note"><b>What Tesla actually accepts.</b> Tesla does not take custom wrap files
-      that re-skin the 3D car model; the on-screen car color comes from Toybox &rsquo;Paint Shop&rsquo;
-      presets. What you <i>can</i> upload is a custom wallpaper: this file, via the touchscreen
-      (Toybox &rarr; Wallpaper &rarr; add from USB) or from your phone&rsquo;s gallery through the app.
-      The physical wrap above is what a shop cuts from this spec; the wallpaper is the livery
-      living on your screen either way.</div>
+    <div class="note"><b>What Tesla actually accepts, corrected.</b> Tesla ships an official
+      custom-wrap pipeline (github.com/teslamotors/custom-wraps): a PNG painted over the
+      Model Y UV template, 512 to 1024 px square, under 1 MB, loaded via the mobile app
+      (Creations &rarr; Wrap &rarr; Upload, app 4.59+) or a USB folder named Wraps, then applied in
+      Toybox &rarr; Paint Shop &rarr; Wraps. Two brand wraps are built to that spec in
+      screen-wraps/: Paddock20_Circuit.png and Paddock20_Track_Day.png. Amusingly, the car&rsquo;s
+      current on-screen livery is Tesla&rsquo;s own Vintage_Stripes example from that repo; these
+      replace it with the brand. The wallpaper below still works as a second surface.</div>
   </div>
 
   <p class="lbl" style="margin-top:24px">Paddock20 &middot; livery spec v1 &middot; colors: ignition F4511E &middot; amber F6A22B &middot; sky 57B4E6 &middot; steel 9AA0AA &middot; QR resolves to garage.paddock20.com</p>

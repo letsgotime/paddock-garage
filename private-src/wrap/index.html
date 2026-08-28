@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>PADDOCK MOBILE Livery Spec | Paddock20</title>
+<style>
+  :root{
+    --g-black:#05070D; --s1:rgba(13,18,32,.62); --s0:rgba(10,14,25,.4);
+    --hl:rgba(229,231,235,.10); --hls:rgba(229,231,235,.2); --hlx:rgba(229,231,235,.06);
+    --ink:#F0F2F5; --mut:#AEB6C2; --fnt:#8A93A0;
+    --ign:#F4511E; --amb:#F6A22B; --sky:#57B4E6; --stl:#9AA0AA; --r:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--g-black);color:var(--ink);
+    font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-size:14.5px;line-height:1.5;
+    -webkit-font-smoothing:antialiased}
+  body::before{content:'';position:fixed;inset:0;z-index:0;
+    background:linear-gradient(180deg,rgba(5,7,13,.8),rgba(5,7,13,.65) 40%,var(--g-black)),
+      url('../../public/img/tex-carbon.jpg') center/cover}
+  body>*{position:relative;z-index:2}
+  .wrap{max-width:1100px;margin:0 auto;padding:36px 20px 80px}
+  .lbl{font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--fnt)}
+  h1,h2{font-family:"Arial Black",Arial,sans-serif;font-weight:900;letter-spacing:-.015em;margin:0}
+  h1{font-size:1.9rem;margin:.2em 0 .15em}
+  h1 span{color:var(--ign)}
+  h2{font-size:.95rem;margin-bottom:12px}
+  .g{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,0) 38%),var(--s1);
+    -webkit-backdrop-filter:blur(18px) saturate(130%);backdrop-filter:blur(18px) saturate(130%);
+    border:1px solid var(--hl);border-radius:var(--r);padding:20px;margin-bottom:16px;
+    box-shadow:inset 0 1px 0 rgba(229,231,235,.1),inset 0 -1px 0 rgba(0,0,0,.35),0 24px 60px -24px rgba(0,0,0,.85)}
+  .head{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+  .head img{height:26px}
+  .head .lbl{margin-left:auto;text-align:right}
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--hlx);vertical-align:top}
+  th{font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--fnt)}
+  .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:7px;vertical-align:-1px;border:1px solid rgba(255,255,255,.2)}
+  .note{background:var(--s0);border-left:3px solid var(--amb);border-radius:0 10px 10px 0;
+    padding:11px 15px;font-size:.85rem;color:var(--mut);margin-top:12px}
+  .note b{color:var(--amb)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:860px){.grid2{grid-template-columns:1fr}}
+  .shot img{width:100%;border-radius:12px;border:1px solid var(--hl);display:block}
+  .cap{font-size:.72rem;color:var(--fnt);margin-top:8px}
+  svg text{font-family:"Arial Black",Arial,sans-serif}
+  .callout{font-size:.66rem;letter-spacing:.06em;fill:#8A93A0;font-family:Arial}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <img src="wordmark.png" alt="Paddock20">
+    <span class="lbl">Livery spec · v1 · Aug 2026</span>
+  </div>
+  <p class="lbl">PADDOCK MOBILE · 2024 Model Y Long Range AWD · Solid Black</p>
+  <h1>The <span>#20</span> wrap</h1>
+  <p style="color:var(--mut);max-width:70ch">
+    Racing livery over the factory Solid Black paint. The brand&rsquo;s slanted bars become the
+    stripe package at car scale, rising front-to-rear on both sides. Number 20 on both front
+    doors, URL on the rockers and tailgate, scannable QR on the rear quarter glass. Black paint
+    does most of the work, so the wrap is a partial: stripes, number, type, and marks only.
+  </p>
+
+  <!-- ================= SIDE VIEW ================= -->
+  <div class="g">
+    <h2>Side profile · driver side <span class="lbl" style="float:right">passenger side mirrors this layout</span></h2>
+    <svg viewBox="0 0 1000 430" role="img" aria-label="Model Y side profile with livery">
+      <defs>
+        <clipPath id="body">
+          <path d="M62 330
+                   L70 300 Q78 272 122 262 L200 250 Q300 168 420 152 Q560 132 660 168 Q760 200 830 226
+                   Q880 244 892 268 Q900 292 894 314 L888 330
+                   L806 330 A74 74 0 0 0 660 330 L318 330 A74 74 0 0 0 172 330 Z"/>
+        </clipPath>
+      </defs>
+
+      <!-- ground -->
+      <line x1="20" y1="382" x2="980" y2="382" stroke="rgba(229,231,235,.12)" stroke-width="1"/>
+
+      <!-- body base -->
+      <path d="M62 330
+               L70 300 Q78 272 122 262 L200 250 Q300 168 420 152 Q560 132 660 168 Q760 200 830 226
+               Q880 244 892 268 Q900 292 894 314 L888 330
+               L806 330 A74 74 0 0 0 660 330 L318 330 A74 74 0 0 0 172 330 Z"
+            fill="#101318" stroke="rgba(229,231,235,.25)" stroke-width="1.5"/>
+
+      <!-- glasshouse -->
+      <path d="M232 250 Q320 178 424 164 Q548 148 640 180 Q700 200 742 222 L688 232 Q560 208 470 214 Q360 220 296 240 Z"
+            fill="#05070D" stroke="rgba(229,231,235,.18)" stroke-width="1"/>
+      <line x1="470" y1="214" x2="474" y2="160" stroke="rgba(229,231,235,.15)" stroke-width="1"/>
+
+      <!-- LIVERY, clipped to body -->
+      <g clip-path="url(#body)">
+        <g transform="skewX(-16)">
+          <rect x="365" y="150" width="46" height="240" fill="#F4511E"/>
+          <rect x="425" y="150" width="34" height="240" fill="#F6A22B"/>
+          <rect x="471" y="150" width="26" height="240" fill="#57B4E6"/>
+          <rect x="509" y="150" width="16" height="240" fill="#9AA0AA"/>
+        </g>
+        <!-- rocker URL band -->
+        <rect x="200" y="304" width="480" height="26" fill="rgba(5,7,13,.001)"/>
+        <text x="236" y="323" font-size="21" letter-spacing="3.5" fill="#F0F2F5">GARAGE.PADDOCK20.COM</text>
+      </g>
+
+      <!-- door number -->
+      <g transform="translate(318 258)">
+        <circle r="53" fill="#F0F2F5"/>
+        <circle r="53" fill="none" stroke="#F4511E" stroke-width="5"/>
+        <text x="0" y="24" text-anchor="middle" font-size="64" transform="skewX(-8)" fill="#05070D">20</text>
+      </g>
+
+      <!-- wheels -->
+      <g fill="#0B0D12" stroke="rgba(229,231,235,.3)" stroke-width="1.5">
+        <circle cx="245" cy="330" r="52"/><circle cx="733" cy="330" r="52"/>
+      </g>
+      <g fill="none" stroke="rgba(229,231,235,.35)" stroke-width="1">
+        <circle cx="245" cy="330" r="30"/><circle cx="733" cy="330" r="30"/>
+      </g>
+
+      <!-- callouts -->
+      <g stroke="rgba(138,147,160,.5)" stroke-width="1">
+        <line x1="420" y1="120" x2="420" y2="152"/><line x1="318" y1="180" x2="318" y2="205"/>
+        <line x1="236" y1="352" x2="236" y2="330"/><line x1="806" y1="120" x2="762" y2="196"/>
+      </g>
+      <text class="callout" x="420" y="112" text-anchor="middle">STRIPE PACK · RISES 16&#176; FRONT&#8594;REAR</text>
+      <text class="callout" x="318" y="172" text-anchor="middle">#20 ROUNDEL &#183; BOTH DOORS</text>
+      <text class="callout" x="236" y="366">ROCKER URL &#183; BOTH SIDES</text>
+      <text class="callout" x="806" y="112" text-anchor="middle">TAGLINE &#183; REAR QTR</text>
+    </svg>
+  </div>
+
+  <div class="grid2">
+    <!-- ================= REAR ================= -->
+    <div class="g">
+      <h2>Rear</h2>
+      <svg viewBox="0 0 460 320" role="img" aria-label="Rear livery">
+        <path d="M80 270 L86 172 Q90 130 140 118 L320 118 Q370 130 374 172 L380 270 Q380 286 360 286 L100 286 Q80 286 80 270 Z"
+              fill="#101318" stroke="rgba(229,231,235,.25)" stroke-width="1.5"/>
+        <path d="M120 128 L340 128 Q356 132 358 150 L102 150 Q104 132 120 128 Z" fill="#05070D" stroke="rgba(229,231,235,.15)"/>
+        <rect x="102" y="176" width="256" height="7" rx="3" fill="#F4511E" opacity=".85"/>
+        <text x="230" y="216" text-anchor="middle" font-size="17" letter-spacing="2.4" fill="#F0F2F5">GARAGE.PADDOCK20.COM</text>
+        <g transform="translate(230 246)"><text x="0" y="0" text-anchor="middle" font-size="11" letter-spacing="2" fill="#F6A22B" font-family="Arial" font-weight="bold">DIGEST. DEVELOP. DELIVER.</text></g>
+        <image href="qr.png" x="330" y="196" width="42" height="42"/>
+        <rect x="330" y="196" width="42" height="42" fill="none" stroke="rgba(255,255,255,.6)"/>
+        <text class="callout" x="352" y="252" text-anchor="middle">QR &#183; QTR GLASS</text>
+        <text class="callout" x="230" y="306" text-anchor="middle">TAILGATE: URL CENTERED UNDER LIGHT BAR &#183; NUMBER PLATE UNTOUCHED</text>
+      </svg>
+    </div>
+
+    <!-- ================= HOOD ================= -->
+    <div class="g">
+      <h2>Hood · top down</h2>
+      <svg viewBox="0 0 460 320" role="img" aria-label="Hood livery">
+        <path d="M110 40 Q230 20 350 40 L376 250 Q230 290 84 250 Z"
+              fill="#101318" stroke="rgba(229,231,235,.25)" stroke-width="1.5"/>
+        <g transform="skewX(-8)">
+          <rect x="196" y="52" width="30" height="212" fill="#F4511E"/>
+          <rect x="236" y="52" width="22" height="212" fill="#F6A22B"/>
+          <rect x="266" y="52" width="16" height="212" fill="#57B4E6"/>
+        </g>
+        <text class="callout" x="230" y="304" text-anchor="middle">STRIPES OFFSET TO DRIVER SIDE &#183; RUN NOSE&#8594;WINDSHIELD</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ================= MATERIALS ================= -->
+  <div class="g">
+    <h2>Cut list &amp; materials <span class="lbl" style="float:right">3M 2080 series or KPMF equivalent</span></h2>
+    <table>
+      <thead><tr><th>Element</th><th>Finish</th><th>Placement</th><th>Approx size</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sw" style="background:#F4511E"></span>Ignition stripe</td><td>3M 2080-G14 Gloss Burnt Orange</td><td>Doors both sides + hood + roof spine optional</td><td>10 in wide at door</td></tr>
+        <tr><td><span class="sw" style="background:#F6A22B"></span>Amber stripe</td><td>3M 2080-G15 Gloss Bright Yellow tinted or printed PMS 143C</td><td>Trailing the ignition stripe</td><td>7 in</td></tr>
+        <tr><td><span class="sw" style="background:#57B4E6"></span>Sky stripe</td><td>3M 2080-G77 Gloss Sky Blue</td><td>Third bar</td><td>5 in</td></tr>
+        <tr><td><span class="sw" style="background:#9AA0AA"></span>Steel bar</td><td>3M 2080-G120 Gloss White Aluminum</td><td>Fourth, shortest</td><td>3 in</td></tr>
+        <tr><td><span class="sw" style="background:#F0F2F5"></span>#20 roundel</td><td>Printed + laminated, white field, orange ring, black number</td><td>Both front doors, centered on crease</td><td>21 in dia</td></tr>
+        <tr><td><span class="sw" style="background:#F0F2F5"></span>Rocker URL</td><td>Cut vinyl, Arial Black, white</td><td>Both rockers + tailgate center</td><td>36 x 2.5 in</td></tr>
+        <tr><td><span class="sw" style="background:#F6A22B"></span>Tagline</td><td>Cut vinyl, amber</td><td>Rear quarter + under tailgate URL</td><td>18 x 1.2 in</td></tr>
+        <tr><td><span class="sw" style="background:#fff"></span>QR panel</td><td>Printed + laminated, white quiet zone mandatory</td><td>Rear quarter glass, passenger side</td><td>8 x 8 in min</td></tr>
+      </tbody>
+    </table>
+    <div class="note"><b>Why partial coverage wins here.</b> The car is already Solid Black, which is the
+      livery&rsquo;s base color. A full wrap re-covers black with black for thousands more. This design
+      installs as stripes, number kits, and lettering: a day in the shop, and any panel is
+      replaceable in minutes. QR minimum size 8 inches: tested scannable at 10 to 15 ft when
+      parked. Nothing covers lights, glass forward of the B-pillar, plate, or camera housings.</div>
+  </div>
+
+  <!-- ================= TESLA SCREEN ================= -->
+  <div class="g">
+    <h2>The file you upload to the car</h2>
+    <div class="shot"><img src="tesla-wallpaper-1920x1200.png" alt="Tesla touchscreen wallpaper, 1920 by 1200"></div>
+    <p class="cap">tesla-wallpaper-1920x1200.png &middot; sized for the Model Y center display</p>
+    <div class="note"><b>What Tesla actually accepts.</b> Tesla does not take custom wrap files
+      that re-skin the 3D car model; the on-screen car color comes from Toybox &rsquo;Paint Shop&rsquo;
+      presets. What you <i>can</i> upload is a custom wallpaper: this file, via the touchscreen
+      (Toybox &rarr; Wallpaper &rarr; add from USB) or from your phone&rsquo;s gallery through the app.
+      The physical wrap above is what a shop cuts from this spec; the wallpaper is the livery
+      living on your screen either way.</div>
+  </div>
+
+  <p class="lbl" style="margin-top:24px">Paddock20 &middot; livery spec v1 &middot; colors: ignition F4511E &middot; amber F6A22B &middot; sky 57B4E6 &middot; steel 9AA0AA &middot; QR resolves to garage.paddock20.com</p>
+</div>
+</body>
+</html>

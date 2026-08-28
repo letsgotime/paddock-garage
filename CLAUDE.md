@@ -130,9 +130,15 @@ topics), e2 commands with the ignition ring, ONE per view. ~4.5% film
 grain over a full-bleed backdrop plate.
 
 Backdrop plates are bespoke Higgsfield generations (soul_location model,
-21:9, no text or logos prompted) in `public/img/`: hero-garage (home),
+21:9, no text or logos prompted) in `public/img/`: hero-ev-road (home),
 hero-highway (case study), hero-charge (model-y), tex-carbon (log,
 callback). Each page picks its plate via `--page-bg`.
+
+**Imagery rule: backgrounds show EVs or EV lifestyle only.** No gas
+vehicles, no grilles, no exhaust cues; prompt EV design language (closed
+front, full-width light bars, charge ports, chargers). A generated plate
+that shows readable AI text anywhere (a license plate counts) gets the
+pixels redacted before shipping, same standard as the VIN rule.
 
 The site is deliberately dark-only: the light-mode media blocks were
 removed from every page, and the model-y theme toggle is hidden. Do not

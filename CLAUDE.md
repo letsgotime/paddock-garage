@@ -119,3 +119,21 @@ becomes the deploy and local `wrangler deploy` should stop, so the two never rac
 Note: the live HTML returns 403 to server-side fetches. That is Super Bot Fight Mode
 challenging non-browser traffic, and it is correct behavior. Read `public/index.html` from
 the repo instead; the repo is the source of truth, not the rendered page.
+
+## Visual system: floating glass
+
+The public site runs the ACC glass spec ported to the garage palette:
+`public/assets/glass.css` holds the entire system and restyles every page
+through the cascade (loaded after each page's inline styles). Three
+elevations: e0 recedes (callouts, chips), e1 rests (cards, tiles, tables,
+topics), e2 commands with the ignition ring, ONE per view. ~4.5% film
+grain over a full-bleed backdrop plate.
+
+Backdrop plates are bespoke Higgsfield generations (soul_location model,
+21:9, no text or logos prompted) in `public/img/`: hero-garage (home),
+hero-highway (case study), hero-charge (model-y), tex-carbon (log,
+callback). Each page picks its plate via `--page-bg`.
+
+The site is deliberately dark-only: the light-mode media blocks were
+removed from every page, and the model-y theme toggle is hidden. Do not
+reintroduce a light theme without a real design pass.

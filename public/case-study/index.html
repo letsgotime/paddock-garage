@@ -42,14 +42,7 @@
     --ink:#F0F2F5; --ink-muted:#AEB6C2; --ink-faint:#8A93A0;
     --ignition:#F4511E; --amber:#F6A22B; --sky:#57B4E6; --steel:#9AA0AA; --radius:10px;
   }
-  @media (prefers-color-scheme: light){
-    :root:not([data-theme="dark"]){
-      --surface-0:#FFFFFF; --surface-1:#F5F6F8; --surface-2:#EAEDF1; --surface-3:#DEE2E8;
-      --border:#D8DCE3; --border-strong:#748092;
-      --ink:#0A0E1A; --ink-muted:#454E5B; --ink-faint:#5A6270;
-      --ignition:#C23A12; --amber:#8A5A0E; --sky:#1D6FA0; --steel:#5B6270;
-    }
-  }
+  
   *{box-sizing:border-box}
   body{margin:0; background:var(--surface-0); color:var(--ink);
     font-family:Arial,"Helvetica Neue",Helvetica,sans-serif; font-size:16px; line-height:1.58;
@@ -102,6 +95,9 @@
   footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--border);
     font-size:.82rem; color:var(--ink-faint)}
 </style>
+
+<link rel="stylesheet" href="/assets/glass.css">
+<style>:root{--page-bg:url('/img/hero-highway.jpg')}</style>
 </head>
 <body>
 <div class="wrap">
@@ -118,10 +114,10 @@
 
   <div class="strip">
     <div class="tile" style="--c:var(--ignition)">
-      <div class="v">12.0&cent;</div><div class="l">Cost per mile</div>
+      <div class="v">13.0&cent;</div><div class="l">Cost per mile</div>
     </div>
     <div class="tile" style="--c:var(--sky)">
-      <div class="v">19,569</div><div class="l">Odometer, mi</div>
+      <div class="v">19,748</div><div class="l">Odometer, mi</div>
     </div>
     <div class="tile" style="--c:var(--amber)">
       <div class="v">3</div><div class="l">Active tracks</div>
@@ -141,10 +137,10 @@
   <div class="tbl-wrap"><table>
     <thead><tr><th>Measure</th><th class="num">Value</th><th>Source</th></tr></thead>
     <tbody>
-      <tr><td>Cost per mile</td><td class="num"><strong>12.0&cent;</strong></td><td>3 paid Supercharger invoices, 82.5 kWh, $38.36</td></tr>
-      <tr><td>Blended energy rate</td><td class="num">46.5&cent;/kWh</td><td>Same invoices, 40&cent; to 56&cent; range</td></tr>
+      <tr><td>Cost per mile</td><td class="num"><strong>13.0&cent;</strong></td><td>3 paid Supercharger invoices, 126.0 kWh, $54.01</td></tr>
+      <tr><td>Blended energy rate</td><td class="num">42.9&cent;/kWh</td><td>Same invoices, 40&cent; to 56&cent; range</td></tr>
       <tr><td>Efficiency</td><td class="num">258 Wh/mi</td><td>TezLab telemetry, mild weather</td></tr>
-      <tr><td>Battery degradation</td><td class="num">0%</td><td>79 of 79 kWh at 19,569 mi</td></tr>
+      <tr><td>Battery degradation</td><td class="num">0%</td><td>79 of 79 kWh at 19,748 mi</td></tr>
       <tr><td>Cost per mile, home charging</td><td class="num">2.1&cent;</td><td>Modeled at the local 8.1&cent;/kWh rate</td></tr>
     </tbody>
   </table></div>
@@ -154,10 +150,10 @@
   </p>
 
   <div class="good">
-    <strong>Why 12.0&cent; is the number that matters.</strong> It is the only per-mile figure
+    <strong>Why 13.0&cent; is the number that matters.</strong> It is the only per-mile figure
     here derived entirely from receipts. Every alternative on the internet is a national
     average applied to a car nobody owns. If a track cannot clear its own mileage at
-    12.0&cent;, that is a real finding, not a rounding error.
+    13.0&cent;, that is a real finding, not a rounding error.
   </div>
 
   <h2>The three tracks</h2>
@@ -166,14 +162,11 @@
   <h3>Gig work</h3>
   <p>
     Vehicle-dependent by definition, so it carries the full mileage cost. This is the track
-    where the 12.0&cent; figure does the most work, because gig pay is quoted gross and the
+    where the 13.0&cent; figure does the most work, because gig pay is quoted gross and the
     vehicle cost is invisible until you measure it.
   </p>
   <p>
-    One finding already: at a marginal 12.0&cent; per mile the car looks cheap, but the
-    honest yardstick for self-employed vehicle use is the IRS standard mileage rate near
-    70&cent;, which approximates true cost including depreciation. Any per-mile courier or
-    delivery rate below that is converting vehicle equity into income at a loss.
+    One finding already, and it cuts against the common advice: the IRS standard mileage rate near 70¢ is a tax convention built on average drivers, not a cost. At this car's mileage, measured energy plus the mileage-linked share of depreciation puts the true marginal cost near 23¢ a mile, modeled until a second market-value reading confirms the slope. A per-mile rate has to clear that number, not 70¢.
   </p>
 
   <h3>Software</h3>

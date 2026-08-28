@@ -1,0 +1,163 @@
+/* ============================================================
+   PADDOCK GARAGE — FLOATING GLASS SYSTEM
+   Ported from the ACC glass spec: three depth-graded elevations
+   (e0 recedes, e1 rests, e2 commands), dual inner bevels, film
+   grain, one command surface per view. Adapted to the Paddock
+   palette: ignition orange is the command ring.
+   Loads after each page's inline styles; the cascade does the
+   restyle so page copy is never touched.
+   ============================================================ */
+
+:root{
+  --page-bg: none;                    /* each page sets its plate */
+  --g-black:  #05070D;
+  --g-fill-1: rgba(13, 18, 32, 0.58);   /* e1 resting glass  */
+  --g-fill-0: rgba(10, 14, 25, 0.36);   /* e0 receding glass */
+  --g-fill-2: rgba(13, 18, 32, 0.66);   /* e2 command glass  */
+  --hairline:        rgba(229, 231, 235, 0.10);
+  --hairline-strong: rgba(229, 231, 235, 0.20);
+  --hairline-soft:   rgba(229, 231, 235, 0.06);
+  --bevel-top:    inset 0 1px 0 0 rgba(229, 231, 235, 0.10);
+  --bevel-bottom: inset 0 -1px 0 0 rgba(0, 0, 0, 0.35);
+  --drop-1: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
+  --drop-2: 0 36px 90px -30px rgba(0, 0, 0, 0.92);
+  --ring-ignition: 0 0 0 1px rgba(244, 81, 30, 0.22);
+  --glow-ignition: 0 18px 70px -18px rgba(244, 81, 30, 0.30);
+  --dur: 200ms;
+  --ease: cubic-bezier(.2,.7,.25,1);
+
+  /* retune the shared page tokens onto glass */
+  --surface-0: var(--g-black);
+  --surface-1: var(--g-fill-1);
+  --surface-2: rgba(19, 26, 44, 0.42);
+  --surface-3: rgba(255, 255, 255, 0.05);
+  --s0: var(--g-black); --s1: var(--g-fill-1);
+  --s2: rgba(19,26,44,.42); --s3: rgba(255,255,255,.05);
+  --border: var(--hairline);
+  --border-strong: var(--hairline-strong);
+  --bd: var(--hairline); --bds: var(--hairline-strong);
+  --shadow: var(--drop-1);
+}
+
+/* ---------- backdrop: plate, scrim, vignette ---------- */
+html{ background: var(--g-black); }
+body{ background: var(--g-black) !important; }
+body::before{
+  content:''; position:fixed; inset:0; z-index:0;
+  background-image:
+    radial-gradient(120% 90% at 50% 0%, rgba(5,7,13,0) 40%, rgba(5,7,13,.55) 100%),
+    linear-gradient(180deg, rgba(5,7,13,.66) 0%, rgba(5,7,13,.48) 30%, rgba(5,7,13,.82) 72%, var(--g-black) 100%),
+    var(--page-bg);
+  background-size: cover, cover, cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-color: var(--g-black);
+}
+/* ~4.5% film grain: kills gradient banding so the field reads
+   photographic, not rendered (ACC Motion Spec §2) */
+body::after{
+  content:''; position:fixed; inset:-50%; z-index:2; pointer-events:none;
+  opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+body > *{ position:relative; z-index:3; }
+
+/* ============================================================
+   ELEVATIONS
+   ============================================================ */
+
+/* e1 — resting glass: the workhorse container */
+.card, .tile, .kpi, .stat-tile,
+details.topic,
+.tbl-wrap, .signal, .budget, .rec,
+.illo-photo-frame, .quicknav-wrap{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,0) 38%),
+    var(--g-fill-1);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  backdrop-filter: blur(18px) saturate(130%);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  box-shadow: var(--bevel-top), var(--bevel-bottom), var(--drop-1);
+}
+
+/* keep the brand accent bars riding on top of the glass */
+.tile, .kpi, .stat-tile{ border-top: 3px solid var(--c, var(--hairline-strong)); }
+.card{ border-left-width: 1px; }
+a.card, .rec{ border-left: 4px solid var(--c, var(--ignition, #F4511E)); }
+
+/* bare tables on editorial pages become glass slabs */
+.tbl-wrap{ padding: 6px 14px; }
+.tbl-wrap table{ margin: 6px 0; }
+th, td{ border-bottom: 1px solid var(--hairline-soft); }
+thead th{ border-bottom: 1px solid var(--hairline); }
+
+/* e0 — receding glass: nested context, callouts, code, chips */
+.nugget, .flag, .good, .note, .val, .drill td,
+.meta-line, .legend, .tools{
+  background: var(--g-fill-0);
+  -webkit-backdrop-filter: blur(10px) saturate(115%);
+  backdrop-filter: blur(10px) saturate(115%);
+}
+.nugget{ border: 1px dashed var(--hairline-strong); }
+.flag, .good, .note{ border-radius: 0 10px 10px 0; }
+.pill, .tag{
+  background: rgba(19,26,44,.5);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--hairline-soft);
+}
+
+/* e2 — command surface: ONE per view, ignition ring */
+a.card[href="/case-study/"],
+.glass-e2{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0) 42%),
+    var(--g-fill-2);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  backdrop-filter: blur(28px) saturate(140%);
+  border-color: rgba(244, 81, 30, 0.40);
+  box-shadow:
+    inset 0 1px 0 0 rgba(229,231,235,.12),
+    inset 0 -1px 0 0 rgba(0,0,0,.35),
+    var(--ring-ignition), var(--glow-ignition), var(--drop-2);
+}
+
+/* ---------- interaction: glass lifts, never slides ---------- */
+a.card, tr.clk, button, .tile, .kpi, .stat-tile{
+  transition: transform var(--dur) var(--ease),
+              border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+a.card:hover{
+  transform: translateY(-3px);
+  border-color: var(--hairline-strong);
+  box-shadow: var(--bevel-top), var(--bevel-bottom), var(--drop-2);
+}
+a.card[href="/case-study/"]:hover{
+  border-color: rgba(244,81,30,.6);
+  box-shadow: inset 0 1px 0 0 rgba(229,231,235,.12), inset 0 -1px 0 0 rgba(0,0,0,.35),
+    0 0 0 1px rgba(244,81,30,.35), 0 24px 90px -18px rgba(244,81,30,.38), var(--drop-2);
+}
+
+/* ---------- page furniture ---------- */
+.rule, hr{ background: linear-gradient(90deg, var(--hairline-strong), rgba(229,231,235,0)); border:0; height:1px; }
+footer{ border-top: 1px solid var(--hairline-soft) !important; }
+.theme-toggle{ display:none !important; }   /* the site commits to the dark editorial look */
+
+/* the model-y hero keeps its photograph; seat it into the field */
+.hero{ border-bottom: 1px solid var(--hairline-soft); }
+
+/* deep-page readability: the long-form doc floats on one wide slab */
+.container{ position:relative; }
+
+/* ---------- honesty fallbacks ---------- */
+@supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))){
+  .card,.tile,.kpi,.stat-tile,details.topic,.tbl-wrap,.signal,.budget,.rec,
+  .illo-photo-frame,.quicknav-wrap{ background:#10162A; }
+  .nugget,.flag,.good,.note,.val{ background:#0C1120; }
+}
+@media (prefers-reduced-motion: reduce){
+  a.card, tr.clk, button, .tile, .kpi, .stat-tile{ transition:none; }
+  a.card:hover{ transform:none; }
+}

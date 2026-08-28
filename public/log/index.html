@@ -22,13 +22,7 @@
     --border:#263047; --ink:#F0F2F5; --ink-muted:#AEB6C2; --ink-faint:#8A93A0;
     --ignition:#F4511E; --amber:#F6A22B; --sky:#57B4E6; --steel:#9AA0AA; --radius:10px;
   }
-  @media (prefers-color-scheme: light){
-    :root:not([data-theme="dark"]){
-      --surface-0:#FFFFFF; --surface-1:#F5F6F8; --surface-2:#EAEDF1;
-      --border:#D8DCE3; --ink:#0A0E1A; --ink-muted:#454E5B; --ink-faint:#5A6270;
-      --ignition:#C23A12; --amber:#8A5A0E; --sky:#1D6FA0; --steel:#5B6270;
-    }
-  }
+  
   *{box-sizing:border-box}
   body{margin:0; background:var(--surface-0); color:var(--ink);
     font-family:Arial,"Helvetica Neue",Helvetica,sans-serif; font-size:16px; line-height:1.55;
@@ -58,6 +52,9 @@
     font-size:.8rem; color:var(--ink-faint)}
   footer a{color:var(--sky)}
 </style>
+
+<link rel="stylesheet" href="/assets/glass.css">
+<style>:root{--page-bg:url('/img/tex-carbon.jpg')}</style>
 </head>
 <body>
 <div class="wrap">
@@ -75,12 +72,12 @@
     <p class="meta">August 2026</p>
     <h2>2024 Tesla Model Y Long Range AWD</h2>
     <p>
-      Three paid Supercharger invoices, 320 tracked miles, 0% battery degradation, and a
+      Four paid Supercharger invoices, 265 tracked miles, 0% battery degradation, and a
       cost comparison against the work van, the V8 SUV, and the minivan it replaced.
     </p>
     <span class="kv">
       <span class="pill on">Measured</span>
-      <span class="pill">12.0&cent; per mile</span>
+      <span class="pill">13.0&cent; per mile</span>
       <span class="pill">vs 28.0&cent; work van</span>
     </span>
   </a>

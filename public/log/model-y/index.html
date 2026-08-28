@@ -42,6 +42,9 @@
    "mileageFromOdometer":{"@type":"QuantitativeValue","value":19569,"unitCode":"SMI"},
    "manufacturer":{"@type":"Organization","name":"Tesla, Inc."}}
  ]}</script>
+
+<link rel="stylesheet" href="/assets/glass.css">
+<style>:root{--page-bg:url('/img/hero-charge.jpg')}</style>
 </head><body>
 <style>
   :root {
@@ -65,28 +68,7 @@
     --shadow: 0 12px 32px rgba(0,0,0,0.35);
     --radius: 10px;
   }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --surface-0: #FFFFFF;
-      --surface-1: #F5F6F8;
-      --surface-2: #EAEDF1;
-      --surface-3: #DEE2E8;
-      --border: #D8DCE3;
-      --border-strong: #748092;
-      --ink: #0A0E1A;
-      --ink-muted: #454E5B;
-      --ink-faint: #5A6270;
-      --ignition: #C23A12;
-      --ignition-ink: #FFFFFF;
-      --amber: #8A5A0E;
-      --amber-ink: #FFF7EA;
-      --sky: #1D6FA0;
-      --sky-ink: #EAF6FF;
-      --steel: #5B6270;
-      --steel-ink: #FFFFFF;
-      --shadow: 0 8px 24px rgba(20,25,35,0.10);
-    }
-  }
+  
   :root[data-theme="dark"] {
     --surface-0: #0A0E1A;
     --surface-1: #121826;
@@ -107,26 +89,7 @@
     --steel-ink: #12151b;
     --shadow: 0 12px 32px rgba(0,0,0,0.35);
   }
-  :root[data-theme="light"] {
-    --surface-0: #FFFFFF;
-    --surface-1: #F5F6F8;
-    --surface-2: #EAEDF1;
-    --surface-3: #DEE2E8;
-    --border: #D8DCE3;
-    --border-strong: #748092;
-    --ink: #0A0E1A;
-    --ink-muted: #454E5B;
-    --ink-faint: #5A6270;
-    --ignition: #C23A12;
-    --ignition-ink: #FFFFFF;
-    --amber: #8A5A0E;
-    --amber-ink: #FFF7EA;
-    --sky: #1D6FA0;
-    --sky-ink: #EAF6FF;
-    --steel: #5B6270;
-    --steel-ink: #FFFFFF;
-    --shadow: 0 8px 24px rgba(20,25,35,0.10);
-  }
+  
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -168,11 +131,7 @@
     border-bottom: 1px solid var(--border);
     padding: 36px 20px 30px;
   }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) .hero {
-      background-image: linear-gradient(180deg, var(--surface-1) 0%, var(--surface-0) 100%);
-    }
-  }
+  
   :root[data-theme="light"] .hero {
     background-image: linear-gradient(180deg, var(--surface-1) 0%, var(--surface-0) 100%);
   }

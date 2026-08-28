@@ -38,14 +38,7 @@
     --ink:#F0F2F5; --ink-muted:#AEB6C2; --ink-faint:#8A93A0;
     --ignition:#F4511E; --amber:#F6A22B; --sky:#57B4E6; --steel:#9AA0AA; --radius:10px;
   }
-  @media (prefers-color-scheme: light){
-    :root:not([data-theme="dark"]){
-      --surface-0:#FFFFFF; --surface-1:#F5F6F8; --surface-2:#EAEDF1; --surface-3:#DEE2E8;
-      --border:#D8DCE3; --border-strong:#748092;
-      --ink:#0A0E1A; --ink-muted:#454E5B; --ink-faint:#5A6270;
-      --ignition:#C23A12; --amber:#8A5A0E; --sky:#1D6FA0; --steel:#5B6270;
-    }
-  }
+  
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0; background:var(--surface-0); color:var(--ink);
@@ -102,6 +95,9 @@
   footer{margin-top:64px; padding-top:22px; border-top:1px solid var(--border);
     font-size:.82rem; color:var(--ink-faint)}
 </style>
+
+<link rel="stylesheet" href="/assets/glass.css">
+<style>:root{--page-bg:url('/img/hero-garage.jpg')}</style>
 </head>
 <body>
 <div class="wrap">
@@ -132,7 +128,7 @@
 
   <div class="strip">
     <div class="tile" style="--c:var(--ignition)">
-      <div class="v">12.0&cent;</div>
+      <div class="v">13.0&cent;</div>
       <div class="l">Per mile, measured</div>
     </div>
     <div class="tile" style="--c:var(--sky)">
@@ -174,7 +170,7 @@
     </p>
     <span class="kv">
       <span class="pill on">Measured</span>
-      <span class="pill">12.0&cent; per mile</span>
+      <span class="pill">13.0&cent; per mile</span>
       <span class="pill">vs 28.0&cent; work van</span>
       <span class="pill">90.8% FSD</span>
     </span>

@@ -234,6 +234,12 @@
             <div class="gv">10.8%</div><div class="gl">Idle drain share</div>
           </div>
         </div>
+        <div class="stats2" style="margin:12px 0 2px">
+          <div class="g0 mini"><div class="v">80.5<small> mph</small></div><div class="l">Max observed &middot; Aug 27</div></div>
+          <div class="g0 mini"><div class="v">82.9<small> mi</small></div><div class="l">Range regenerated</div></div>
+          <div class="g0 mini"><div class="v">6,506<small> ft</small></div><div class="l">Elevation climbed</div></div>
+          <div class="g0 mini"><div class="v">$1.56</div><div class="l">Cheapest 20 mi run</div></div>
+        </div>
         <div class="days" style="margin-top:14px">
           <div class="day"><div class="bar" data-h="88"></div><b>85.8</b><span>MON 25</span></div>
           <div class="day"><div class="bar" data-h="90"></div><b>87.2</b><span>TUE 26</span></div>
@@ -334,28 +340,38 @@ requestAnimationFrame(function(){
   document.getElementById('gidle').style.strokeDasharray=(0.108*arc)+' 200';
   document.querySelectorAll('.day .bar').forEach(function(b){b.style.height=b.dataset.h+'px'});
 });
-/* map */
+/* map — real GPS endpoints from TezLab drive details */
 try{
-  var map=L.map('map',{zoomControl:true,attributionControl:true}).setView([36.08,-86.62],10);
+  var map=L.map('map',{zoomControl:true,attributionControl:true}).setView([36.06,-86.56],10);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
     {maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
-  var pts={brentwood:[36.0331,-86.7828],franklin:[35.9251,-86.8689],
-           lebanon:[36.2081,-86.2911],percy:[36.147,-86.6407],
-           moores:[35.9598,-86.8155],hickory:[36.0155,-86.7818]};
-  function dot(ll,color,r){return L.circleMarker(ll,{radius:r,color:color,weight:2,
-    fillColor:color,fillOpacity:.55}).addTo(map)}
-  // commute triangle
-  L.polyline([pts.brentwood,pts.lebanon,pts.franklin,pts.brentwood],
-    {color:'#9AA0AA',weight:2,opacity:.55,dashArray:'6 7'}).addTo(map);
-  L.polyline([pts.lebanon,pts.percy,pts.franklin],
-    {color:'#9AA0AA',weight:1.5,opacity:.35,dashArray:'3 7'}).addTo(map);
-  dot(pts.moores,'#F4511E',7).bindTooltip('Moores Lane · $0.46-0.56');
-  dot(pts.hickory,'#F4511E',7).bindTooltip('Old Hickory · $0.40');
-  dot(pts.percy,'#F4511E',7).bindTooltip('Percy Priest · $0.36');
-  dot(pts.lebanon,'#9AA0AA',6).bindTooltip('Lebanon · top destination');
-  dot(pts.franklin,'#9AA0AA',6).bindTooltip('Franklin');
-  var car=dot(pts.brentwood,'#57B4E6',9);
-  car.bindTooltip('PADDOCK MOBILE · last known',{permanent:false});
+  var P={
+    home:[35.96794,-86.823572], lebanon:[36.1762,-86.2954],
+    franklin:[35.9545,-86.8190], percy:[36.15428,-86.62712],
+    moores:[35.9598,-86.8155], hickory:[36.0155,-86.7818]
+  };
+  var CORRIDORS=[
+    {a:'home',b:'lebanon',trips:3,mi:124.6,wh:231,spd:59,cost:'$2.90/run',col:'#F4511E'},
+    {a:'lebanon',b:'franklin',trips:2,mi:84.4,wh:250,spd:49,cost:'$3.06/run',col:'#F6A22B'},
+    {a:'lebanon',b:'percy',trips:1,mi:20.3,wh:263,spd:56,cost:'$1.56/run',col:'#57B4E6'},
+    {a:'percy',b:'franklin',trips:1,mi:23.0,wh:256,spd:41,cost:'$1.71/run',col:'#57B4E6'},
+    {a:'franklin',b:'home',trips:6,mi:12.4,wh:340,spd:22,cost:'short hops',col:'#9AA0AA'}
+  ];
+  CORRIDORS.forEach(function(c){
+    L.polyline([P[c.a],P[c.b]],{color:c.col,weight:1.5+c.trips*1.2,opacity:.7})
+     .addTo(map)
+     .bindTooltip('<b>'+c.a+' &rarr; '+c.b+'</b><br>'+c.trips+' trips &middot; '
+       +c.mi+' mi &middot; '+c.wh+' Wh/mi<br>avg '+c.spd+' mph &middot; '+c.cost,
+       {sticky:true});
+  });
+  function dot(ll,color,r,tip){var m=L.circleMarker(ll,{radius:r,color:color,weight:2,
+    fillColor:color,fillOpacity:.6}).addTo(map); if(tip)m.bindTooltip(tip); return m}
+  dot(P.moores,'#F4511E',7,'Moores Lane SC &middot; $0.46&ndash;0.56/kWh');
+  dot(P.hickory,'#F4511E',7,'Old Hickory SC &middot; $0.40/kWh');
+  dot(P.percy,'#F4511E',7,'Percy Priest SC &middot; $0.36/kWh &middot; cheapest');
+  dot(P.lebanon,'#9AA0AA',6,'Lebanon &middot; top destination &middot; 3 inbound runs');
+  dot(P.franklin,'#9AA0AA',6,'Franklin &middot; Mallory Ln');
+  dot(P.home,'#57B4E6',9,'<b>PADDOCK MOBILE</b> &middot; last known &middot; Brentwood');
 }catch(e){
   document.getElementById('map').innerHTML=
     '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#8A93A0;font-size:.8rem">Map unavailable offline. Corridors table below carries the same data.</div>';

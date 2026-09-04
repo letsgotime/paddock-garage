@@ -1,4 +1,13 @@
-# The vehicle profile used to live at the root. Root is now the hub.
-/index.html   /            301
-/model-y      /log/model-y/  301
-/model-y/     /log/model-y/  301
+# Kept from the previous structure: the vehicle profile used to be the root.
+/index.html      /         301
+/model-y         /car/     301
+/model-y/        /car/     301
+
+# The 2026-09-03 reorganization.
+/case-study/     /ledger/  301
+/log/model-y/    /car/     301
+/log/            /switch/  301
+
+/case-study/*    /ledger/  301
+/log/model-y/*   /car/     301
+/log/*           /switch/  301

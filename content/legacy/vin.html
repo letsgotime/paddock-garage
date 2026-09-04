@@ -1,0 +1,28 @@
+<div class="topic-body">
+      <h3>What the VIN says</h3>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Field</th><th>What it decodes to</th><th>Where it lives in the VIN</th></tr></thead>
+        <tbody>
+          <tr><td>Manufacturer block</td><td class="num">7SAYGAEE8</td><td>Positions 1–9 (WMI + vehicle descriptor)</td></tr>
+          <tr><td>Check digit</td><td>Valid (passes the mod-11/SAE check)</td><td>Position 9</td></tr>
+          <tr><td>Drivetrain / motor</td><td><strong>E → AWD Dual Motor</strong></td><td>Position 8</td></tr>
+          <tr><td>Model year</td><td><strong>R → 2024</strong></td><td>Position 10</td></tr>
+          <tr><td>Assembly plant</td><td><strong>F → Fremont, CA</strong></td><td>Position 11</td></tr>
+          <tr><td>Serial number</td><td class="num">169,869</td><td>Positions 12–17</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h3>NHTSA's official decode agrees</h3>
+      <p>We pulled the same VIN through NHTSA's free public vPIC decoder, the U.S. government's own database, independent of anything Tesla or we calculated by hand. It confirms Make (Tesla), Model (Model Y), Model Year (2024), Plant (Fremont, California, USA), and drive configuration (Dual Motor): a clean match on every field it covers, plus a passing check-digit validation, meaning this VIN is well-formed and untampered.</p>
+      <div class="flag"><strong>One gap, not a disagreement:</strong> NHTSA's database doesn't carry Tesla-specific detail like battery pack size or Long Range vs. Performance trim. That's a known limitation of the public database, not an error. Trim confirmation (Long Range specifically) comes from your Tesla account and window sticker, not NHTSA.</div>
+
+      <h3>HW3 vs. HW4: which one you have</h3>
+      <p>Fremont's Model Y line switched from Autopilot HW3 to HW4 hardware around a serial-number window in 2023. Your car is a full model year (2024) past that transition and doesn't fall inside the ambiguous window at all: <strong>this is HW4, high confidence</strong>, no serial-number lookup required. If you ever want to check a different VIN (a friend's car, one you're shopping), that's exactly what our Cutover tool does: same decode logic, VIN in, answer out.</p>
+      <p>This car's own screen puts it to rest. Under Software → Additional Vehicle Information, it reads <strong>"AI Computer: Full Self-Driving Computer 4."</strong> Straight from the car, no VIN math required. Even the car's own nickname in the Tesla app matches this page's name.</p>
+      <div class="illo-photo-frame reveal">
+        <img loading="lazy" decoding="async" class="illo-photo" src="/img/car/vin-plate-1da82c.jpg" alt="This car's Additional Vehicle Information screen, reading AI Computer: Full Self-Driving Computer 4">
+      </div>
+      <p class="illo-cap">The car's own screen, confirming HW4 directly.</p>
+    </div>

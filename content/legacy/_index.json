@@ -1,0 +1,72 @@
+{
+  "vin": {
+    "title": "This car, verified",
+    "teaser": "We ran this car's VIN through the same decode logic behind our Cutover tool, then cross-checked it against NHTSA's own public database. Both agree on every field that overlaps: Fremont-built, model year 2024, Dual Motor AWD. Here's the breakdown, position by position.",
+    "bytes": 2896
+  },
+  "specs": {
+    "title": "The full spec sheet",
+    "teaser": "4.8 seconds to 60, 310 miles EPA range, a 250 kW peak charge rate, and the color story you probably don't know: your black paint wasn't the free color in 2024. Stealth Grey was.",
+    "bytes": 9230
+  },
+  "lineup": {
+    "title": "Where Long Range AWD sits in the lineup",
+    "teaser": "Tesla's trim ladder is mostly a range-and-performance ladder, not a features ladder: the touchscreen, heated seats, and glass roof on your car are the same ones on every other 2024 Model Y.",
+    "bytes": 1979
+  },
+  "history": {
+    "title": "Production history &amp; the \"best-selling car\" claim",
+    "teaser": "Model Y really was the best-selling vehicle on Earth in 2023: the first EV ever to hold that title. 2024 is genuinely a coin flip depending on whose numbers you trust. We checked both.",
+    "bytes": 2407
+  },
+  "juniper": {
+    "title": "Pre-Juniper vs. Juniper: what this car has and doesn't",
+    "teaser": "Tesla redesigned Model Y in 2025. This car predates it: here's exactly what changed, so a buyer knows what they're not getting (and what they are).",
+    "bytes": 1786
+  },
+  "costs": {
+    "title": "What this car costs to run",
+    "teaser": "Home charging is a clear, durable win over gas. Supercharging's advantage is a lot thinner than the internet tells you. At today's prices, it can vanish entirely. Here's the real math for this car's 24,000\u201328,000 mi/year plan.",
+    "bytes": 8948
+  },
+  "fleet": {
+    "title": "What it actually replaced",
+    "teaser": "The RAV4-class comparison above is a hypothetical car. These three are the ones really in the driveway between September 2025 and August 2026: a 13&nbsp;mpg work van, a 15&nbsp;mpg V8 SUV, and a 20&nbsp;mpg minivan. Measured against the fleet this car genuinely displaced, the math stops being close.",
+    "bytes": 6493
+  },
+  "resale": {
+    "title": "Resale value &amp; warranty: the honest version",
+    "teaser": "Model Y depreciation genuinely runs worse than the segment average, mostly because of Tesla's own price cuts. The warranty, on the other hand, is good news: it transferred to you automatically.",
+    "bytes": 4697
+  },
+  "software": {
+    "title": "FSD, Autopilot, software &amp; connectivity: what's running",
+    "teaser": "This car is running FSD (Supervised) v14.3.6, and it's confirmed active on the current owner's account: they added the $99/month subscription themselves, so there's no guessing here like there is on a lot of used-Tesla purchases. The car is also on Premium Connectivity, with the owner's phone set up as a key.",
+    "bytes": 2805
+  },
+  "usecases": {
+    "title": "Real-world use cases",
+    "teaser": "Specs and a VIN decode only go so far. This is what owning this specific car actually looks like against real routines and real trips, with real numbers attached: the daily commute, a weekend road trip, winter range, insurance, and a real three-jobs-one-car schedule. Built to hold more over time.",
+    "bytes": 28608
+  },
+  "fun": {
+    "title": "The fun stuff: Toybox, Easter eggs &amp; only-Tesla tricks",
+    "teaser": "Emissions Testing Mode is still there. So is Caraoke, Mars Mode, and a genuine SpaceX docking simulator. The Atari games, though, are gone from your car specifically. Here's the current, verified list.",
+    "bytes": 3805
+  },
+  "accessories": {
+    "title": "Accessories that earn their keep",
+    "teaser": "Tesla ships this car with almost no cargo organization and no floor protection. Here's what owners buy first, and a few places to compare before you do.",
+    "bytes": 2083
+  },
+  "appliance": {
+    "title": "Living with a transportation appliance",
+    "teaser": "This car's owner coined that phrase because it fits: mainly a commuter, built to run every day without asking for much back.",
+    "bytes": 2539
+  },
+  "community": {
+    "title": "Community &amp; resources",
+    "teaser": "Forums, third-party apps that go further than the Tesla app, what it actually takes to self-host TeslaMate, and the handful of YouTube channels the community trusts for straight information over hype.",
+    "bytes": 6739
+  }
+}

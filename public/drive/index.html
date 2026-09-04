@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Drive</title>
+<meta name="description" content="925.4 measured miles across 79 drives, 97.1% of them driven by the car, mapped to city level.">
+<link rel="canonical" href="https://garage.paddock20.com/drive/">
+<meta name="theme-color" content="#05070D">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Paddock Garage">
+<meta property="og:url" content="https://garage.paddock20.com/drive/">
+<meta property="og:title" content="Drive">
+<meta property="og:description" content="925.4 measured miles across 79 drives, 97.1% of them driven by the car, mapped to city level.">
+<meta property="og:image" content="https://garage.paddock20.com/og/garage.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/glass.css">
+<link rel="stylesheet" href="/assets/garage.css">
+<style>:root{--page-bg:url('/img/hero-highway.jpg')}</style>
+
+</head>
+<body>
+<header class="pg-nav">
+  <div class="pg-nav-inner">
+    <a class="pg-nav-logo" href="/" aria-label="Paddock Garage home"><img src="/img/wordmark.png" alt="Paddock20"></a>
+    <span class="pg-nav-sp"></span>
+    <input type="checkbox" id="pg-menu-t" class="pg-menu-t">
+    <label for="pg-menu-t" class="pg-burger" role="button" aria-label="Menu" tabindex="0"><span></span><span></span><span></span></label>
+    <nav class="pg-menu" aria-label="Site">
+      <a href="/switch/">The Switch</a>
+      <a href="/drive/" aria-current="page">Drive</a>
+      <a href="/charge/">Charge</a>
+      <a href="/ledger/">Ledger</a>
+      <a href="/battery/">Battery</a>
+      <a href="/car/">The Car</a>
+    </nav>
+  </div>
+</header>
+<main class="gx">
+<p class="eyebrow">Telemetry &middot; 10 days, 79 drives</p>
+<h1>Where it <span>actually goes</span>.</h1>
+<p class="lede prose">Not a route planner and not a map of everywhere a Model Y could go. This is
+925.4 real miles across 79 drives, aggregated to city level on purpose.</p>
+<div class="g g-0 live">
+  <span>Odometer <b>20,409.4 mi</b></span>
+  <span>Per mile <b>10.1¢</b></span>
+  <span>Degradation <b>0%</b></span>
+  <span>On FSD <b>97.1%</b></span>
+  <span class="src">Snapshot 2026-09-03, baked at deploy. This page makes no live requests.</span>
+</div>
+
+<section class="g">
+  <h2>Operating area</h2>
+  <p class="prose">Eight towns, twelve corridors. Line weight is trip count, so the thick line is
+  the one that pays for itself. Orange rings mark places the car has actually charged.</p>
+  <svg class="map" viewBox="0 0 720 430" role="img" aria-label="City to city corridors, weighted by trip count"><line class="corr" x1="145.2" y1="149.2" x2="340.6" y2="376.0" stroke-width="1.7" opacity="0.26"><title>Brentwood to Unionville: 1 trips, 31.7 mi</title></line><line class="corr" x1="560.9" y1="251.2" x2="340.6" y2="376.0" stroke-width="1.7" opacity="0.26"><title>Murfreesboro to Unionville: 1 trips, 27.4 mi</title></line><line class="corr" x1="666.0" y1="54.0" x2="425.0" y2="176.6" stroke-width="1.7" opacity="0.26"><title>Lebanon to Smyrna: 1 trips, 33.1 mi</title></line><line class="corr" x1="287.3" y1="305.9" x2="666.0" y2="54.0" stroke-width="1.7" opacity="0.26"><title>Eagleville to Lebanon: 1 trips, 45.9 mi</title></line><line class="corr" x1="287.3" y1="305.9" x2="340.6" y2="376.0" stroke-width="1.7" opacity="0.26"><title>Eagleville to Unionville: 1 trips, 7.8 mi</title></line><line class="corr" x1="54.0" y1="208.0" x2="340.6" y2="376.0" stroke-width="1.7" opacity="0.26"><title>Franklin to Unionville: 1 trips, 30.7 mi</title></line><line class="corr" x1="54.0" y1="208.0" x2="146.5" y2="78.7" stroke-width="1.7" opacity="0.26"><title>Franklin to Nashville: 1 trips, 23.0 mi</title></line><line class="corr" x1="145.2" y1="149.2" x2="146.5" y2="78.7" stroke-width="2.8" opacity="0.33"><title>Brentwood to Nashville: 3 trips, 48.7 mi</title></line><line class="corr" x1="666.0" y1="54.0" x2="146.5" y2="78.7" stroke-width="3.3" opacity="0.36"><title>Lebanon to Nashville: 4 trips, 104.4 mi</title></line><line class="corr" x1="54.0" y1="208.0" x2="666.0" y2="54.0" stroke-width="3.9" opacity="0.40"><title>Franklin to Lebanon: 5 trips, 210.7 mi</title></line><line class="corr" x1="145.2" y1="149.2" x2="666.0" y2="54.0" stroke-width="4.9" opacity="0.47"><title>Brentwood to Lebanon: 7 trips, 291.6 mi</title></line><line class="corr" x1="145.2" y1="149.2" x2="54.0" y2="208.0" stroke-width="9.7" opacity="0.80"><title>Brentwood to Franklin: 16 trips, 38.7 mi</title></line><circle class="sc" cx="145.2" cy="149.2" r="13.3" opacity=".28"/><circle class="city" cx="145.2" cy="149.2" r="9.9"><title>Brentwood: 27 trips</title></circle><text class="cl" x="154.2" y="152.8" text-anchor="start">Brentwood</text><circle class="city" cx="287.3" cy="305.9" r="4.1"><title>Eagleville: 2 trips</title></circle><text class="cl" x="296.3" y="309.5" text-anchor="start">Eagleville</text><circle class="city" cx="54.0" cy="208.0" r="9.9"><title>Franklin: 23 trips</title></circle><text class="cl" x="63.0" y="211.6" text-anchor="start">Franklin</text><circle class="city" cx="666.0" cy="54.0" r="9.3"><title>Lebanon: 18 trips</title></circle><text class="cl" x="657.0" y="57.6" text-anchor="end">Lebanon</text><circle class="city" cx="560.9" cy="251.2" r="3.8"><title>Murfreesboro: 1 trips</title></circle><text class="cl" x="551.9" y="254.8" text-anchor="end">Murfreesboro</text><circle class="sc" cx="146.5" cy="78.7" r="9.5" opacity=".28"/><circle class="city" cx="146.5" cy="78.7" r="6.1"><title>Nashville: 8 trips</title></circle><text class="cl" x="155.5" y="82.3" text-anchor="start">Nashville</text><circle class="sc" cx="425.0" cy="176.6" r="7.2" opacity=".28"/><circle class="city" cx="425.0" cy="176.6" r="3.8"><title>Smyrna: 1 trips</title></circle><text class="cl" x="434.0" y="180.2" text-anchor="start">Smyrna</text><circle class="city" cx="340.6" cy="376.0" r="4.8"><title>Unionville: 4 trips</title></circle><text class="cl" x="349.6" y="379.6" text-anchor="start">Unionville</text></svg>
+  <p class="chart-note"><span class="chip chip-m">measured</span> from 79 drives. Corridors are city to city only.
+  Per drive coordinates and departure times are deliberately held back: the clusters resolve to a
+  home and a regular destination, and CLAUDE.md forbids publishing either.</p>
+</section>
+
+<section class="row row-2">
+  <div class="g">
+    <h2>Miles per day</h2>
+    <svg class="chart" viewBox="0 0 720 190" role="img" aria-label=" mi"><line class="axis" x1="0" y1="156" x2="720" y2="156"/><rect class="bar" x="4.0" y="86.8" width="69.2" height="69.2" rx="4.0" fill="var(--m1)"><title>08/25: 86 mi</title></rect><text class="lab" x="38.6" y="179" text-anchor="middle">08/25</text><rect class="bar" x="75.2" y="85.7" width="69.2" height="70.3" rx="4.0" fill="var(--m1)"><title>08/26: 87 mi</title></rect><text class="lab" x="109.8" y="179" text-anchor="middle">08/26</text><rect class="bar" x="146.4" y="82.0" width="69.2" height="74.0" rx="4.0" fill="var(--m1)"><title>08/27: 92 mi</title></rect><text class="lab" x="181.0" y="179" text-anchor="middle">08/27</text><rect class="bar" x="217.6" y="84.5" width="69.2" height="71.5" rx="4.0" fill="var(--m1)"><title>08/28: 89 mi</title></rect><text class="lab" x="252.2" y="179" text-anchor="middle">08/28</text><rect class="bar" x="288.8" y="105.6" width="69.2" height="50.4" rx="4.0" fill="var(--m1)"><title>08/29: 62 mi</title></rect><text class="lab" x="323.4" y="179" text-anchor="middle">08/29</text><rect class="bar" x="360.0" y="87.4" width="69.2" height="68.6" rx="4.0" fill="var(--m1)"><title>08/30: 85 mi</title></rect><text class="lab" x="394.6" y="179" text-anchor="middle">08/30</text><rect class="bar" x="431.2" y="30.0" width="69.2" height="126.0" rx="4.0" fill="var(--m1)"><title>08/31: 156 mi</title></rect><text class="val" x="465.8" y="25.0" text-anchor="middle">156</text><text class="lab" x="465.8" y="179" text-anchor="middle">08/31</text><rect class="bar" x="502.4" y="84.1" width="69.2" height="71.9" rx="4.0" fill="var(--m1)"><title>09/01: 89 mi</title></rect><text class="lab" x="537.0" y="179" text-anchor="middle">09/01</text><rect class="bar" x="573.6" y="86.2" width="69.2" height="69.8" rx="4.0" fill="var(--m1)"><title>09/02: 86 mi</title></rect><text class="lab" x="608.2" y="179" text-anchor="middle">09/02</text><rect class="bar" x="644.8" y="81.6" width="69.2" height="74.4" rx="4.0" fill="var(--m1)"><title>09/03: 92 mi</title></rect><text class="lab" x="679.4" y="179" text-anchor="middle">09/03</text></svg>
+    <p class="chart-note"><span class="chip chip-m">measured</span>. The peak is a 156.2 mile day running
+    down to Unionville and back.</p>
+  </div>
+  <div class="g">
+    <h2>What it costs to park</h2>
+    <svg class="chart" viewBox="0 0 720 190" role="img" aria-label=" mi"><line class="axis" x1="0" y1="156" x2="720" y2="156"/><rect class="bar" x="4.0" y="30.0" width="69.2" height="126.0" rx="4.0" fill="var(--m3)"><title>08/25: 22.7 mi</title></rect><text class="val" x="38.6" y="25.0" text-anchor="middle">22.7</text><text class="lab" x="38.6" y="179" text-anchor="middle">08/25</text><rect class="bar" x="75.2" y="144.3" width="69.2" height="11.7" rx="4.0" fill="var(--m3)"><title>08/26: 2.1 mi</title></rect><text class="lab" x="109.8" y="179" text-anchor="middle">08/26</text><rect class="bar" x="146.4" y="114.9" width="69.2" height="41.1" rx="4.0" fill="var(--m3)"><title>08/27: 7.4 mi</title></rect><text class="lab" x="181.0" y="179" text-anchor="middle">08/27</text><rect class="bar" x="217.6" y="94.9" width="69.2" height="61.1" rx="4.0" fill="var(--m3)"><title>08/28: 11.0 mi</title></rect><text class="lab" x="252.2" y="179" text-anchor="middle">08/28</text><rect class="bar" x="288.8" y="50.5" width="69.2" height="105.5" rx="4.0" fill="var(--m3)"><title>08/29: 19.0 mi</title></rect><text class="lab" x="323.4" y="179" text-anchor="middle">08/29</text><rect class="bar" x="360.0" y="108.8" width="69.2" height="47.2" rx="4.0" fill="var(--m3)"><title>08/30: 8.5 mi</title></rect><text class="lab" x="394.6" y="179" text-anchor="middle">08/30</text><rect class="bar" x="431.2" y="43.9" width="69.2" height="112.1" rx="4.0" fill="var(--m3)"><title>08/31: 20.2 mi</title></rect><text class="lab" x="465.8" y="179" text-anchor="middle">08/31</text><rect class="bar" x="502.4" y="136.0" width="69.2" height="20.0" rx="4.0" fill="var(--m3)"><title>09/01: 3.6 mi</title></rect><text class="lab" x="537.0" y="179" text-anchor="middle">09/01</text><rect class="bar" x="573.6" y="146.0" width="69.2" height="10.0" rx="4.0" fill="var(--m3)"><title>09/02: 1.8 mi</title></rect><text class="lab" x="608.2" y="179" text-anchor="middle">09/02</text><rect class="bar" x="644.8" y="134.9" width="69.2" height="21.1" rx="4.0" fill="var(--m3)"><title>09/03: 3.8 mi</title></rect><text class="lab" x="679.4" y="179" text-anchor="middle">09/03</text></svg>
+    <p class="chart-note"><span class="chip chip-m">measured</span>. Range lost while parked, 100 miles
+    over 10 days. Nobody publishes this number. It is roughly
+    10 miles a day of standing still.</p>
+  </div>
+</section>
+
+<section class="row row-2">
+  <div class="g g-2 cmd">
+    <p class="k">Miles driven by the car</p>
+    <p class="v">97.1%</p>
+    <p class="sub">898.4 of 924.8 miles, across 51 of
+    61 trips. On the most recent charge cycle it was 97%.</p>
+  </div>
+  <div class="g">
+    <h2>Against the neighbors</h2>
+    <p>TezLab compares this car to 19 other Model Ys within
+    90 km. This one returns 92% of its rated efficiency.
+    The local group averages 83%.</p>
+    <ul class="legend" style="margin-top:12px">
+      <li><i style="background:var(--m1)"></i>This car, 92%</li>
+      <li><i style="background:var(--m-neutral)"></i>19 nearby Model Ys, 83%</li>
+    </ul>
+    <svg class="chart" viewBox="0 0 720 132" role="img" aria-label="Comparison in %"><text class="lab" x="0" y="16.0">This car</text><rect class="bar" x="0" y="30.0" width="588.0" height="20" rx="4" fill="var(--m1)"><title>This car: 92.0% rated efficiency</title></rect><text class="val" x="598.0" y="43.0" dominant-baseline="middle">92.0%</text><text class="lab" x="0" y="82.0">19 nearby Model Ys</text><rect class="bar" x="0" y="96.0" width="530.5" height="20" rx="4" fill="var(--m-neutral)"><title>19 nearby Model Ys: 83.0% group average</title></rect><text class="val" x="540.5" y="109.0" dominant-baseline="middle">83.0%</text></svg>
+    <p class="chart-note"><span class="chip chip-m">measured</span> by TezLab. Nine points is mostly route: steady 40 mile runs at
+    45 mph average beat short cold trips.</p>
+  </div>
+</section>
+
+<section class="g">
+  <h2>Every corridor</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Corridor</th><th class="n">Trips</th><th class="n">Miles</th><th class="n">Avg</th></tr></thead>
+    <tbody><tr><td>Brentwood to Franklin</td><td class="n">16</td><td class="n">38.7</td><td class="n">2.4</td></tr><tr><td>Brentwood to Lebanon</td><td class="n">7</td><td class="n">291.6</td><td class="n">41.7</td></tr><tr><td>Franklin to Lebanon</td><td class="n">5</td><td class="n">210.7</td><td class="n">42.1</td></tr><tr><td>Lebanon to Nashville</td><td class="n">4</td><td class="n">104.4</td><td class="n">26.1</td></tr><tr><td>Brentwood to Nashville</td><td class="n">3</td><td class="n">48.7</td><td class="n">16.2</td></tr><tr><td>Brentwood to Unionville</td><td class="n">1</td><td class="n">31.7</td><td class="n">31.7</td></tr><tr><td>Murfreesboro to Unionville</td><td class="n">1</td><td class="n">27.4</td><td class="n">27.4</td></tr><tr><td>Lebanon to Smyrna</td><td class="n">1</td><td class="n">33.1</td><td class="n">33.1</td></tr><tr><td>Eagleville to Lebanon</td><td class="n">1</td><td class="n">45.9</td><td class="n">45.9</td></tr><tr><td>Eagleville to Unionville</td><td class="n">1</td><td class="n">7.8</td><td class="n">7.8</td></tr><tr><td>Franklin to Unionville</td><td class="n">1</td><td class="n">30.7</td><td class="n">30.7</td></tr><tr><td>Franklin to Nashville</td><td class="n">1</td><td class="n">23.0</td><td class="n">23.0</td></tr></tbody>
+  </table></div>
+  <p class="chart-note"><span class="chip chip-m">measured</span>. Short hops inside one town are counted separately and left off this
+  table: 9 in Lebanon,
+  6 in Brentwood.</p>
+</section>
+
+<section class="g">
+  <h2>The most recent charge cycle</h2>
+  <p class="prose">One full cycle, 64% down to 36%, on a
+  92&deg;F day. 74.9 miles on 19 kWh at
+  95% of rated efficiency.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Drive</th><th class="n">Miles</th><th class="n">Efficiency</th><th class="n">On FSD</th></tr></thead>
+    <tbody><tr><td>Nashville to Lebanon</td><td class="n">30.6</td><td class="n">98%</td><td class="n">100%</td></tr><tr><td>Lebanon to Franklin</td><td class="n">42.0</td><td class="n">97%</td><td class="n">95%</td></tr><tr><td>Franklin to Brentwood</td><td class="n">2.2</td><td class="n">70%</td><td class="n">99%</td></tr></tbody>
+  </table></div>
+  <p class="chart-note"><span class="chip chip-m">measured</span> on 2026-09-03. Climate ran 5 minutes while parked,
+  Sentry 0.</p>
+</section>
+
+<section class="g g-0">
+  <h2>Not here yet</h2>
+  <p style="margin:0">Two modules are built and empty on purpose. Road trips: TezLab returns zero saved road trips. Module ships when the first one is saved.
+  Efficiency against temperature: Needs two full months. Window is 10 days. Ships when the data exists.</p>
+</section>
+<div class="rulebar">
+  <span><span class="chip chip-m">measured</span> invoice or sensor</span>
+  <span><span class="chip chip-mo">modeled</span> derived, and says so</span>
+  <span class="sp">Pulled 2026-09-03 &middot; VIN serial masked &middot; no addresses</span>
+</div>
+</main>
+<footer class="pg-footer" role="contentinfo">
+ <div class="pg-footer-inner">
+  <div class="pg-f-cols">
+   <div class="pg-f-brand">
+    <img src="/img/stacked.png" alt="Paddock20, Digest. Develop. Deliver." style="height:104px;width:auto;display:block" loading="lazy" decoding="async">
+    <p>One owner's live record of going from gas to electric. Every mile, every charge, every dollar, measured from the car and from real invoices. Nashville, TN.</p>
+   </div>
+   <nav class="pg-f-nav" aria-label="Footer navigation">
+    <a href="/switch/">The Switch</a>
+    <a href="/drive/">Drive</a>
+    <a href="/charge/">Charge</a>
+    <a href="/ledger/">Ledger</a>
+    <a href="/battery/">Battery</a>
+    <a href="/car/">The Car</a>
+    <a href="/driver/">The Driver</a>
+    <a href="https://paddock20.com">Paddock20 Main Site</a>
+   </nav>
+   <div class="pg-f-col pg-f-connect">
+    <p class="pg-f-h">Connect</p>
+    <a href="https://github.com/letsgotime" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a>
+    <a href="https://www.linkedin.com/in/gavinbrooks-leader/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span></a>
+   </div>
+   <div class="pg-f-col pg-f-community">
+    <p class="pg-f-h">Owner resources</p>
+    <a href="https://teslamotorsclub.com" target="_blank" rel="noopener noreferrer"><span>Tesla Motors Club</span></a>
+    <a href="https://abetterrouteplanner.com" target="_blank" rel="noopener noreferrer"><span>A Better Routeplanner</span></a>
+    <a href="https://tezlabapp.com" target="_blank" rel="noopener noreferrer"><span>TezLab</span></a>
+    <a href="https://www.recurrentauto.com" target="_blank" rel="noopener noreferrer"><span>Recurrent</span></a>
+   </div>
+  </div>
+  <div class="pg-f-bottom">
+   <p class="pg-f-legend">Figures are labeled measured or modeled. Measured means an invoice or a
+   sensor. Data pulled 2026-09-03 from TezLab and the Tesla Fleet API. Not affiliated with,
+   endorsed by, or sponsored by Tesla, Inc. Tesla, Model Y, Supercharger and Full Self-Driving are
+   trademarks of Tesla, Inc.</p>
+  </div>
+ </div>
+</footer>
+</body>
+</html>

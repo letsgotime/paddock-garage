@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Car</title>
+<meta name="description" content="2024 Model Y Long Range AWD in Solid Black: verified VIN decode, full spec sheet, Juniper differences, and six Tesla Paint Shop wrap files.">
+<link rel="canonical" href="https://garage.paddock20.com/car/">
+<meta name="theme-color" content="#05070D">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Paddock Garage">
+<meta property="og:url" content="https://garage.paddock20.com/car/">
+<meta property="og:title" content="The Car">
+<meta property="og:description" content="2024 Model Y Long Range AWD in Solid Black: verified VIN decode, full spec sheet, Juniper differences, and six Tesla Paint Shop wrap files.">
+<meta property="og:image" content="https://garage.paddock20.com/og/garage.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/glass.css">
+<link rel="stylesheet" href="/assets/garage.css">
+<style>:root{--page-bg:url('/img/tex-carbon.jpg')}</style>
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.tabs button'); if(!b) return;
+  var list=b.closest('.tabs');
+  list.querySelectorAll('button').forEach(function(x){
+    var on=x===b; x.setAttribute('aria-selected',on?'true':'false');
+    document.getElementById(x.id.replace('t-','p-')).hidden=!on;
+  });
+});
+</script>
+</head>
+<body>
+<header class="pg-nav">
+  <div class="pg-nav-inner">
+    <a class="pg-nav-logo" href="/" aria-label="Paddock Garage home"><img src="/img/wordmark.png" alt="Paddock20"></a>
+    <span class="pg-nav-sp"></span>
+    <input type="checkbox" id="pg-menu-t" class="pg-menu-t">
+    <label for="pg-menu-t" class="pg-burger" role="button" aria-label="Menu" tabindex="0"><span></span><span></span><span></span></label>
+    <nav class="pg-menu" aria-label="Site">
+      <a href="/switch/">The Switch</a>
+      <a href="/drive/">Drive</a>
+      <a href="/charge/">Charge</a>
+      <a href="/ledger/">Ledger</a>
+      <a href="/battery/">Battery</a>
+      <a href="/car/" aria-current="page">The Car</a>
+    </nav>
+  </div>
+</header>
+<main class="gx">
+<p class="eyebrow">The machine &middot; 2024 Model Y Long Range AWD</p>
+<h1>The <span>Car</span>.</h1>
+<p class="lede prose">A 2024 Model Y Long Range AWD in Solid Black, built January 2024, Fremont, seven seats
+and a tow hitch. VIN descriptor 7SAYGAEE8RF, with the serial masked in text and in
+images. Everything below was verified against the car, not copied from a brochure.</p>
+<div class="g g-0 live">
+  <span>Odometer <b>20,409.4 mi</b></span>
+  <span>Per mile <b>10.1¢</b></span>
+  <span>Degradation <b>0%</b></span>
+  <span>On FSD <b>97.1%</b></span>
+  <span class="src">Snapshot 2026-09-03, baked at deploy. This page makes no live requests.</span>
+</div>
+
+<section class="g">
+  <h2>Specification</h2>
+  <ul class="tabs" role="tablist" aria-label="Specification sections"><li><button role="tab" id="t-vin" aria-controls="p-vin" aria-selected="true">Verified</button></li><li><button role="tab" id="t-specs" aria-controls="p-specs" aria-selected="false">Spec sheet</button></li><li><button role="tab" id="t-juniper" aria-controls="p-juniper" aria-selected="false">Juniper</button></li><li><button role="tab" id="t-software" aria-controls="p-software" aria-selected="false">Software</button></li><li><button role="tab" id="t-fun" aria-controls="p-fun" aria-selected="false">Toybox</button></li><li><button role="tab" id="t-accessories" aria-controls="p-accessories" aria-selected="false">Accessories</button></li></ul>
+  <div class="panel legacy" role="tabpanel" id="p-vin" aria-labelledby="t-vin"><div class="topic-body">
+      <h3>What the VIN says</h3>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Field</th><th>What it decodes to</th><th>Where it lives in the VIN</th></tr></thead>
+        <tbody>
+          <tr><td>Manufacturer block</td><td class="num">7SAYGAEE8</td><td>Positions 1–9 (WMI + vehicle descriptor)</td></tr>
+          <tr><td>Check digit</td><td>Valid (passes the mod-11/SAE check)</td><td>Position 9</td></tr>
+          <tr><td>Drivetrain / motor</td><td><strong>E → AWD Dual Motor</strong></td><td>Position 8</td></tr>
+          <tr><td>Model year</td><td><strong>R → 2024</strong></td><td>Position 10</td></tr>
+          <tr><td>Assembly plant</td><td><strong>F → Fremont, CA</strong></td><td>Position 11</td></tr>
+          <tr><td>Serial number</td><td class="num">169,869</td><td>Positions 12–17</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h3>NHTSA's official decode agrees</h3>
+      <p>We pulled the same VIN through NHTSA's free public vPIC decoder, the U.S. government's own database, independent of anything Tesla or we calculated by hand. It confirms Make (Tesla), Model (Model Y), Model Year (2024), Plant (Fremont, California, USA), and drive configuration (Dual Motor): a clean match on every field it covers, plus a passing check-digit validation, meaning this VIN is well-formed and untampered.</p>
+      <div class="flag"><strong>One gap, not a disagreement:</strong> NHTSA's database doesn't carry Tesla-specific detail like battery pack size or Long Range vs. Performance trim. That's a known limitation of the public database, not an error. Trim confirmation (Long Range specifically) comes from your Tesla account and window sticker, not NHTSA.</div>
+
+      <h3>HW3 vs. HW4: which one you have</h3>
+      <p>Fremont's Model Y line switched from Autopilot HW3 to HW4 hardware around a serial-number window in 2023. Your car is a full model year (2024) past that transition and doesn't fall inside the ambiguous window at all: <strong>this is HW4, high confidence</strong>, no serial-number lookup required. If you ever want to check a different VIN (a friend's car, one you're shopping), that's exactly what our Cutover tool does: same decode logic, VIN in, answer out.</p>
+      <p>This car's own screen puts it to rest. Under Software → Additional Vehicle Information, it reads <strong>"AI Computer: Full Self-Driving Computer 4."</strong> Straight from the car, no VIN math required. Even the car's own nickname in the Tesla app matches this page's name.</p>
+      <div class="illo-photo-frame reveal">
+        <img loading="lazy" decoding="async" class="illo-photo" src="/img/car/vin-plate-1da82c.jpg" alt="This car's Additional Vehicle Information screen, reading AI Computer: Full Self-Driving Computer 4">
+      </div>
+      <p class="illo-cap">The car's own screen, confirming HW4 directly.</p>
+    </div></div><div class="panel legacy" role="tabpanel" id="p-specs" aria-labelledby="t-specs" hidden><div class="topic-body">
+
+      <h3>Performance</h3>
+      <div class="tbl-wrap"><table>
+        <tbody>
+          <tr><td>0–60 mph</td><td class="num">4.8 sec</td></tr>
+          <tr><td>Top speed</td><td class="num">135 mph</td></tr>
+          <tr><td>Combined power</td><td class="num">~425 hp (estimated)</td></tr>
+          <tr><td>Combined torque</td><td class="num">~402 lb-ft (estimated)</td></tr>
+        </tbody>
+      </table></div>
+      <div class="flag"><strong>Tesla has never published an official horsepower number</strong> for Model Y. The ~425 hp figure is a third-party sum of both motors' nameplate ratings, not a factory spec or a dyno test. Treat it as a good estimate, not gospel.</div>
+
+      <h3>Range, efficiency &amp; battery</h3>
+      <div class="tbl-wrap"><table>
+        <tbody>
+          <tr><td>EPA range</td><td class="num">310 mi</td></tr>
+          <tr><td>EPA efficiency</td><td class="num">117 MPGe · 288 Wh/mi</td></tr>
+          <tr><td>Real-world efficiency (varies with speed/heat)</td><td class="num">~300–360 Wh/mi</td></tr>
+          <tr><td>Battery pack, total</td><td class="num">~82.1 kWh @ 360V</td></tr>
+          <tr><td>Battery pack, usable</td><td class="num">~75–78 kWh</td></tr>
+        </tbody>
+      </table></div>
+      <div class="flag"><strong>The 310-mile rating isn't the number this car launched with.</strong> Tesla revised Long Range AWD's EPA rating down from 330 to 310 miles on January 5, 2024 under a new EPA test methodology (a paperwork change, not a hardware one), and 310 is what covers essentially your entire model year.</div>
+
+      <h3>Charging</h3>
+      <div class="tbl-wrap"><table>
+        <tbody>
+          <tr><td>Peak DC fast-charge rate</td><td class="num">250 kW</td></tr>
+          <tr><td>10–80% at a Supercharger</td><td class="num">~30–33 min</td></tr>
+          <tr><td>Onboard AC charger</td><td class="num">11.5 kW</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Weight &amp; dimensions</h3>
+      <div class="tbl-wrap"><table>
+        <tbody>
+          <tr><td>Curb weight</td><td class="num">4,363 lb</td></tr>
+          <tr><td>GVWR</td><td class="num">~5,712 lb</td></tr>
+          <tr><td>Length / width (w/ mirrors) / height</td><td class="num">187.0" / 83.8" / 63.9"</td></tr>
+          <tr><td>Wheelbase / ground clearance</td><td class="num">113.8" / 6.8"</td></tr>
+          <tr><td>Drag coefficient</td><td class="num">0.23 Cd</td></tr>
+          <tr><td>Towing (with tow package)</td><td class="num">3,500 lb</td></tr>
+        </tbody>
+      </table></div>
+      <div class="flag">Tesla's own owner's manual gives a lower worked-example payload figure (954 lb) than the ~1,349 lb our GVWR-minus-curb-weight math implies. We couldn't fully reconcile the two. For anything payload-critical, the real answer is on the <strong>Tire and Loading Information placard on your driver's door jamb</strong>, not this table.</div>
+
+      <h3>Cargo volume</h3>
+      <div class="tbl-wrap"><table>
+        <tbody>
+          <tr><td>Frunk</td><td class="num">4.1 cu ft</td></tr>
+          <tr><td>Rear cargo, seats up</td><td class="num">30.2 cu ft</td></tr>
+          <tr><td>Rear cargo, seats folded</td><td class="num">72.1 cu ft</td></tr>
+          <tr><td><strong>Total, seats up (incl. frunk)</strong></td><td class="num"><strong>34.3 cu ft</strong></td></tr>
+          <tr><td><strong>Total, seats folded (incl. frunk)</strong></td><td class="num"><strong>76.2 cu ft</strong></td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Wheels</h3>
+      <p>Long Range AWD offered exactly two wheel choices in 2024, no 18" or 21" option on this trim (21" Überturbine wheels are Performance-only):</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Size</th><th>Name</th><th>Tire</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>19"</td><td>Gemini Wheels</td><td>255/45R19</td><td>Standard</td></tr>
+          <tr><td>20"</td><td>Induction Wheels</td><td>255/40R20</td><td>Paid upgrade (~$2,000)</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>The factory tire, not just the size:</strong> your 19" Gemini wheels (the ones on this car) ship on the <strong>Continental ProContact RX</strong> (255/45R19, 104W XL), extra-load-rated with an acoustic foam inner liner (Continental's ContiSilent) specifically to quiet road noise, which carries further in a car with no engine to mask it. The 20" Induction option instead runs 255/40R20 101W/101Y XL, sourced from either Goodyear (Eagle F1 Asymmetric 5) or Michelin (Pilot Sport EV) depending on the production run. Tesla has used both for the same wheel.</p>
+      <div class="flag"><strong>Why the "XL" matters, on this tire or any replacement:</strong> EVs run heavier than comparable gas cars because of battery weight, so Tesla specs a minimum 104 load index: an XL (extra load) tire built to carry more at the same pressure than a standard-load tire in the same size. A newer HL (high load) standard exists since 2023, but XL is what your car calls for. Whatever these get replaced with, matching that load rating isn't optional the way tire brand is.</div>
+      <p><strong>On SKUs:</strong> Tesla doesn't publish a public parts catalog the way traditional automakers do, so the "OEM part numbers" quoted on wheel-reseller and salvage listings for a casting like this aren't something Tesla itself puts out. Researching this, we found inconsistent numbers even across listings claiming to describe the same wheel. If you ever need a factory replacement, your VIN plus a Tesla Service Center or Tesla's own parts desk is the reliable path, not a part number copied off a listing site.</p>
+      <p><strong>If you're shopping replacement tires</strong> rather than staying OEM, the common cross-shops in your size (255/45R19) split into three tiers: all-season grand-touring (Michelin CrossClimate2, Continental SecureContact AW, Goodyear Assurance WeatherReady2, Vredestein Quatrac Pro+), ultra-high-performance all-season (Michelin Pilot Sport All Season 4, Continental ExtremeContact DWS 06 Plus, Vredestein Hypertrac All Season), and summer-only performance (Michelin Pilot Sport 4, Bridgestone Potenza Sport, Vredestein Ultrac Pro). None of that is a Tesla endorsement, just what fits and gets cross-shopped in this size. The acoustic foam liner your factory tire has is a comfort nice-to-have you'd lose on most aftermarket choices, not a functional requirement.</p>
+
+      <h3>Colors &amp; interior: the correction</h3>
+      <p>Here's the one that surprises most owners: for essentially all of 2024, <strong>Stealth Grey, not black, was Tesla's free color.</strong> Solid Black carried a real paint upcharge.</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Color</th><th>2024 pricing</th></tr></thead>
+        <tbody>
+          <tr><td>Stealth Grey</td><td>Free (replaced Midnight Silver, Jan 5 2024)</td></tr>
+          <tr><td>Pearl White Multi-Coat</td><td>~$1,000</td></tr>
+          <tr><td>Deep Blue Metallic</td><td>~$1,000</td></tr>
+          <tr><td><strong>Solid Black</strong></td><td><strong>~$1,500–$2,000</strong></td></tr>
+          <tr><td>Ultra Red</td><td>$2,000 (added Jan 2024)</td></tr>
+          <tr><td>Quicksilver</td><td>$2,000 (added May 2024, LR/Performance only)</td></tr>
+        </tbody>
+      </table></div>
+      <p>Interior: <strong>All-Black</strong> was the standard, no-cost finish; <strong>Black &amp; White</strong> was a paid upgrade (commonly cited around $1,000, though we couldn't pin an exact 2024 U.S. figure to a dated source; worth confirming on your original build sheet if it matters to you).</p>
+
+      <h3>Safety &amp; standard equipment</h3>
+      <ul class="facts">
+        <li><strong>NHTSA 5-star overall rating</strong>, 5 stars in every sub-category. Tesla's own announcement specifically named the Long Range AWD configuration (your exact trim), with a 7.9% rollover risk it called the lowest of any SUV NHTSA had recorded at the time.</li>
+        <li>Standard: automatic emergency braking, forward collision warning, lane departure warning, blind-spot monitoring, pedestrian AEB, and standard Autopilot (Autosteer + Traffic-Aware Cruise Control).</li>
+        <li>Enhanced Autopilot and Full Self-Driving (Supervised) were separate paid upgrades. More on where your car stands in the Software section below.</li>
+      </ul>
+
+      <h3>What it cost new</h3>
+      <p>Tesla repriced Model Y several times through 2024. A Long Range AWD like yours landed somewhere in the <strong>$47,990–$51,990</strong> range before paint, wheels, interior, or FSD. The exact number depends on exactly when in the year it was ordered.</p>
+
+      <h3>Warranty snapshot</h3>
+      <div class="tbl-wrap"><table>
+        <tbody>
+          <tr><td>Basic vehicle</td><td class="num">4 yr / 50,000 mi</td></tr>
+          <tr><td>Battery &amp; drive unit</td><td class="num">8 yr / 120,000 mi, min. 70% capacity</td></tr>
+          <tr><td>Restraint system</td><td class="num">5 yr / 60,000 mi</td></tr>
+        </tbody>
+      </table></div>
+      <p>Full detail (including what transfers to a buyer) is in <a href="#resale">Resale &amp; warranty</a> below.</p>
+    </div></div><div class="panel legacy" role="tabpanel" id="p-juniper" aria-labelledby="t-juniper" hidden><div class="topic-body">
+      <p>Tesla's refreshed "Juniper" Model Y arrived for the 2025 model year, unveiled January 2025, U.S. deliveries starting March 8, 2025. Your car is a pre-refresh 2024, and the differences are concrete, not just cosmetic buzzwords:</p>
+
+      <h3>What Juniper changed</h3>
+      <ul class="facts">
+        <li><strong>Full-width LED light bars</strong> front and rear, replacing your car's separate headlight/taillight units.</li>
+        <li><strong>New rear-seat touchscreen</strong> (8") for climate/media. Your car has no second screen for rear passengers.</li>
+        <li><strong>Removed the gear-selector stalk</strong>: Park/Drive/Reverse moved to the touchscreen, similar to Tesla's Model 3 redesign.</li>
+        <li><strong>Kept the physical turn-signal stalk</strong>, unlike the Model 3 redesign that eliminated it entirely. Your car and Juniper both still use a real stalk for turn signals.</li>
+        <li>Acoustic glass front and rear for lower wind noise; retuned suspension bushings reviewers describe as noticeably more settled over expansion joints.</li>
+        <li>EPA range rose to roughly 340+ miles, mostly from aerodynamics and efficiency work rather than a bigger battery.</li>
+      </ul>
+      <div class="good"><strong>One thing that did <em>not</em> change at launch, worth knowing:</strong> Juniper launched with the same 15.4" center screen size your car already has. A larger 16" QHD screen didn't arrive until a June 2026 running change, rolled out gradually, so plenty of early Juniper cars share your exact screen size and resolution.</div>
+      <p>Charging hardware, NACS port, and Supercharger network access are unchanged between the two generations. Nothing about how you charge today is "outdated."</p>
+    </div></div><div class="panel legacy" role="tabpanel" id="p-software" aria-labelledby="t-software" hidden><div class="topic-body">
+      <h3>What this car has, confirmed</h3>
+      <ul class="facts">
+        <li><strong>Autopilot</strong> (Autosteer + Traffic-Aware Cruise Control) is standard equipment on every Model Y, including this one, at no extra cost.</li>
+        <li>This car is running <strong>FSD (Supervised) v14.3.6</strong>, and the <strong>$99/month subscription is active on the current owner's account</strong>: they added it themselves, so this isn't a leftover trial from a previous owner. "Supervised" is Tesla's own term, meaning the system drives but the driver is required to stay attentive and ready to take over; it is not an unsupervised/robotaxi-grade system on this hardware.</li>
+        <li>The car is also subscribed to <strong>Premium Connectivity</strong> ($9.99/month, or $99/year): the paid tier above Standard Connectivity's free-for-8-years baseline. It adds satellite-view maps, live traffic visualization, in-car video and music streaming (Netflix, Disney+, Spotify and the like, each still needs its own separate app subscription), an in-car web browser, weather radar, and live Sentry Mode camera viewing from the app when away from the car. It renews next on September 21, 2026.</li>
+        <li><strong>Phone Key is set up</strong>: the owner's phone unlocks and starts the car over Bluetooth automatically on approach, no card tap needed. Worth keeping a physical <strong>Key Card</strong> in the glovebox or a wallet anyway, as backup for the rare time a phone's dead or Bluetooth misbehaves.</li>
+        <li>Software build <strong>2026.20.6.11</strong> is what this car is currently on.</li>
+        <li><strong>Real usage, not a subscription sitting idle:</strong> per the Tesla app's Self-Driving Stats, this car is running <strong>81%</strong> self-driving on recent trips (<strong>64 of the last 80 miles</strong>) with a longest single FSD streak of <strong>21.4 miles</strong> and a 2-day streak currently active.</li>
+      </ul>
+      <div class="flag"><strong>Worth knowing for whenever you sell:</strong> your FSD subscription is tied to your Tesla account, not the VIN, so it doesn't transfer with the car. If you sell, the subscription simply ends. A buyer who wants FSD starts their own $99/month plan. That's a real difference from the old one-time-purchase model, which Tesla ended entirely on February 14, 2026: FSD bought outright before that cutoff stays with the car, VIN-tied, permanently. Premium Connectivity works the same way: it's a subscription on your account, not an asset that conveys with a sale.</div>
+      <p>This profile doesn't pull live telemetry: no real-time Autopilot mileage, streaks, or charging history. Those live inside the owner's Tesla account and the mobile app; nothing here claims to sync with them.</p>
+    </div></div><div class="panel legacy" role="tabpanel" id="p-fun" aria-labelledby="t-fun" hidden><div class="topic-body">
+      <h3>Still active, as of 2026</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Feature</th><th>What it does</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Emissions Testing Mode</td><td>Six selectable fart sounds through the cabin speakers</td><td><span class="pill on">Confirmed active</span></td></tr>
+          <tr><td>Light Show / Boombox</td><td>Choreographed exterior lights; custom sounds through the exterior speaker</td><td><span class="pill on">Active (Boombox is Park-only now)</span></td></tr>
+          <tr><td>Romance Mode</td><td>Fireplace visual + cozy heat setting</td><td><span class="pill verify">Likely active (verify)</span></td></tr>
+          <tr><td>Santa Mode</td><td>Seasonal holiday dashboard, returns each December</td><td><span class="pill on">Confirmed, redesigned Dec 2025</span></td></tr>
+          <tr><td>Caraoke</td><td>Karaoke with on-screen lyrics, Park-only</td><td><span class="pill on">Confirmed active</span></td></tr>
+          <tr><td>Bioweapon Defense Mode</td><td>Max-speed HEPA cabin filtration</td><td><span class="pill on">Standard on Model Y</span></td></tr>
+          <tr><td>Mars Mode / Tron Mode</td><td>Themed nav map / Lightcycle car model</td><td><span class="pill on">Confirmed active</span></td></tr>
+          <tr><td>SpaceX ISS Docking Simulator</td><td>New Arcade game using the real astronaut docking interface</td><td><span class="pill on">Added Dec 2025</span></td></tr>
+          <tr><td>Rainbow charge-port light</td><td>Tap the charge port button 10x while plugged in</td><td><span class="pill on">Confirmed active</span></td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Gone from your car specifically</h3>
+      <div class="flag"><strong>The Atari arcade classics (Missile Command, Asteroids, Lunar Lander and the rest) were removed in June 2024 specifically from vehicles with AMD Ryzen infotainment.</strong> Your 2024 Model Y almost certainly has that hardware, so don't go looking for them; the current Arcade lineup rotates other titles (Cuphead, Beach Buggy Racing 2, Stardew Valley among them).</div>
+      <p>Also worth correcting: light-up, auto-presenting door handles are a popular aftermarket accessory, not something Tesla actually ships from the factory. If you've seen that on another car, it wasn't stock software.</p>
+
+      <h3>Things experienced owners find embarrassingly late</h3>
+      <ul class="facts">
+        <li><strong>Trip Planner auto-preconditioning:</strong> navigating to a Supercharger automatically warms the battery pack so it hits peak charge speed the moment you plug in, estimated to save up to 10 minutes per stop. A December 2025 update added live stall occupancy to the map.</li>
+        <li><strong>Tesla Theater streaming</strong> (Netflix, YouTube, Disney+, Hulu, Twitch): requires the car fully parked with the parking brake set: it does <em>not</em> work while driving, and doesn't turn on just because Autopilot or FSD is engaged, despite that being a common assumption.</li>
+        <li><strong>In-car web browser:</strong> a real browser in the app dock, useful at a Supercharger stop. A 2026 update added full-screen support and even browser-based video calling.</li>
+        <li><strong>Naming your car</strong> in the app isn't just cosmetic: certain names (Monty Python and Hitchhiker's Guide references among them) trigger their own hidden responses.</li>
+      </ul>
+      <div class="nugget">Not yet on this car, for what it's worth: the newest door-open "TESLA" wordmark animation that debuted in a mid-2026 software update is limited to 2024+ Model 3 and the redesigned Juniper Model Y. Something to look forward to if you ever upgrade, not something missing from your current software.</div>
+    </div></div><div class="panel legacy" role="tabpanel" id="p-accessories" aria-labelledby="t-accessories" hidden><div class="topic-body">
+      <h3>Where to start looking</h3>
+      <p>Tesery (tesery.com) is a dedicated Tesla accessories store that's been running since 2021, with a Model Y catalog split by generation, so it's easy to find parts sized for a legacy car instead of a Juniper one. It's one option, not the only one. Tesla's own shop (shop.tesla.com) sells OEM parts at OEM prices with guaranteed fit. Teslarati's shop is another Tesla-focused storefront worth comparing against before you buy. None of this is an endorsement of one seller over another. Treat it as a starting point for comparison shopping.</p>
+
+      <h3>What owners buy first</h3>
+      <p>Roughly in the order most owners buy them, based on what comes up most in owner forums and shows up as bestsellers at the stores above:</p>
+      <ul class="facts">
+        <li><strong>All-weather floor liners:</strong> the single most common first purchase. The factory carpet has no protection at all, and liners trimmed to the Model Y footwell keep road salt and mud off it.</li>
+        <li><strong>Frunk and trunk organizers:</strong> the car ships with no cargo organization anywhere, front or back. Fitted bins stop groceries and gear from sliding around both trunks.</li>
+        <li><strong>Center console tray:</strong> the console's open storage tunnel is deep but unshaped, so small items slide around and disappear into it. A fitted insert fixes that.</li>
+        <li><strong>Windshield and rear sunshades:</strong> closer to necessary than optional on a car with this much glass overhead. Interior temperatures climb fast without one.</li>
+        <li><strong>Center screen protector:</strong> the 15.4" display handles nearly every control in the car, so it takes constant touch contact. A matte or glass protector is cheap insurance against scratches.</li>
+      </ul>
+      <div class="good">Skip anything that changes the exterior lighting, badging, or aero pieces if resale matters. Those are the easiest changes for a future buyer to flag as not stock, and the cheapest to leave alone.</div>
+    </div></div>
+</section>
+
+<section class="g">
+  <h2>Wraps</h2>
+  <p class="prose">Six liveries built on Tesla's official Model Y wrap template from the
+  teslamotors/custom-wraps repository. Each one is a real Paint Shop file: under 1 MB, correctly
+  named, and it loads into the car through Toybox after a USB or mobile app upload.</p>
+  <ul class="row row-3" style="list-style:none;margin:14px 0 0;padding:0"><li class="g" style="padding:14px var(--pad)"><h3>Circuit</h3><p style="margin:0;font-size:.86rem"><a href="/wraps/Paddock20_Circuit.png" download>Download Paddock20_Circuit.png</a></p></li><li class="g" style="padding:14px var(--pad)"><h3>Track Day</h3><p style="margin:0;font-size:.86rem"><a href="/wraps/Paddock20_Track_Day.png" download>Download Paddock20_Track_Day.png</a></p></li><li class="g" style="padding:14px var(--pad)"><h3>Full Send</h3><p style="margin:0;font-size:.86rem"><a href="/wraps/Paddock20_Full_Send.png" download>Download Paddock20_Full_Send.png</a></p></li><li class="g" style="padding:14px var(--pad)"><h3>Ignition</h3><p style="margin:0;font-size:.86rem"><a href="/wraps/Paddock20_Ignition.png" download>Download Paddock20_Ignition.png</a></p></li><li class="g" style="padding:14px var(--pad)"><h3>Sky Bolt</h3><p style="margin:0;font-size:.86rem"><a href="/wraps/Paddock20_Sky_Bolt.png" download>Download Paddock20_Sky_Bolt.png</a></p></li><li class="g" style="padding:14px var(--pad)"><h3>Bars</h3><p style="margin:0;font-size:.86rem"><a href="/wraps/Paddock20_Bars.png" download>Download Paddock20_Bars.png</a></p></li></ul>
+  <p class="chart-note">A 3D preview of these on the car is not shipped. Building one required a
+  real Model Y mesh, and the earlier attempt used a shape drawn from scratch, which was the wrong
+  answer and was removed.</p>
+</section>
+
+<section class="g g-0">
+  <h2>Footnote: the best selling car claim</h2>
+  <div class="legacy"><div class="topic-body">
+      <h3>Where and when this car's design was built</h3>
+      <ul class="facts">
+        <li><strong>Fremont, CA</strong> (your plant): production began January 2020; first deliveries March 13, 2020.</li>
+        <li><strong>Shanghai:</strong> production began December 2020.</li>
+        <li><strong>Austin, TX:</strong> trial production late 2021; official "Cyber Rodeo" opening April 7, 2022.</li>
+        <li>Fremont built this same body style from January 2020 until the redesigned "Juniper" version arrived in early 2025. Your 2024 car comes from near the very end of that five-year run.</li>
+        <li>Tesla passed <strong>4 million cumulative global Model Y deliveries</strong> around March 2026, making it the best-selling EV nameplate in history, independent of any "best overall vehicle" argument.</li>
+      </ul>
+
+      <h3>Was it really the best-selling car in the world?</h3>
+      <p>In <strong>2023, yes, cleanly.</strong> JATO Dynamics, an independent auto-data firm, confirmed Model Y as the best-selling vehicle of any kind globally that year: 1.22 million units, ahead of the Toyota RAV4 and Corolla, the first time a pure EV had ever topped that list.</p>
+      <div class="flag"><strong>2024 is genuinely disputed, not a clean repeat.</strong> JATO's own 2024 count has the Toyota RAV4 narrowly ahead: 1,187,000 to Model Y's 1,185,000, a margin under 3,000 units. A different tracker, Focus2Move, counted Model Y still on top that year. Tesla's own claim of "three years running" (2023–2025) stitches together three different data vendors, one per year. Treat that framing as marketing, not an independently confirmed streak. What's not in dispute: Model Y has been the best-selling <em>EV</em> globally every year since 2023, no asterisk needed.</div>
+
+      <h3>Awards this exact model year earned</h3>
+      <ul class="facts">
+        <li><strong>IIHS Top Safety Pick+</strong> for 2024, under IIHS's tougher, updated 2023+ criteria that a number of other vehicles failed to meet that cycle. Model Y has now earned this award four years running (2021–2024).</li>
+        <li><strong>Consumer Reports 2024 Top Pick, EV category</strong>: the only pure battery-EV on CR's overall Top Picks list that year. Worth noting: CR has historically been one of the tougher graders of Tesla build quality, so this wasn't a rubber stamp.</li>
+      </ul>
+    </div></div>
+</section>
+<div class="rulebar">
+  <span><span class="chip chip-m">measured</span> invoice or sensor</span>
+  <span><span class="chip chip-mo">modeled</span> derived, and says so</span>
+  <span class="sp">Pulled 2026-09-03 &middot; VIN serial masked &middot; no addresses</span>
+</div>
+</main>
+<footer class="pg-footer" role="contentinfo">
+ <div class="pg-footer-inner">
+  <div class="pg-f-cols">
+   <div class="pg-f-brand">
+    <img src="/img/stacked.png" alt="Paddock20, Digest. Develop. Deliver." style="height:104px;width:auto;display:block" loading="lazy" decoding="async">
+    <p>One owner's live record of going from gas to electric. Every mile, every charge, every dollar, measured from the car and from real invoices. Nashville, TN.</p>
+   </div>
+   <nav class="pg-f-nav" aria-label="Footer navigation">
+    <a href="/switch/">The Switch</a>
+    <a href="/drive/">Drive</a>
+    <a href="/charge/">Charge</a>
+    <a href="/ledger/">Ledger</a>
+    <a href="/battery/">Battery</a>
+    <a href="/car/">The Car</a>
+    <a href="/driver/">The Driver</a>
+    <a href="https://paddock20.com">Paddock20 Main Site</a>
+   </nav>
+   <div class="pg-f-col pg-f-connect">
+    <p class="pg-f-h">Connect</p>
+    <a href="https://github.com/letsgotime" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a>
+    <a href="https://www.linkedin.com/in/gavinbrooks-leader/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span></a>
+   </div>
+   <div class="pg-f-col pg-f-community">
+    <p class="pg-f-h">Owner resources</p>
+    <a href="https://teslamotorsclub.com" target="_blank" rel="noopener noreferrer"><span>Tesla Motors Club</span></a>
+    <a href="https://abetterrouteplanner.com" target="_blank" rel="noopener noreferrer"><span>A Better Routeplanner</span></a>
+    <a href="https://tezlabapp.com" target="_blank" rel="noopener noreferrer"><span>TezLab</span></a>
+    <a href="https://www.recurrentauto.com" target="_blank" rel="noopener noreferrer"><span>Recurrent</span></a>
+   </div>
+  </div>
+  <div class="pg-f-bottom">
+   <p class="pg-f-legend">Figures are labeled measured or modeled. Measured means an invoice or a
+   sensor. Data pulled 2026-09-03 from TezLab and the Tesla Fleet API. Not affiliated with,
+   endorsed by, or sponsored by Tesla, Inc. Tesla, Model Y, Supercharger and Full Self-Driving are
+   trademarks of Tesla, Inc.</p>
+  </div>
+ </div>
+</footer>
+</body>
+</html>

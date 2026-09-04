@@ -1,0 +1,74 @@
+<div class="topic-body">
+
+    <div class="stat-strip">
+      <div class="stat-tile reveal">
+        <div class="icon-row"><div class="label">Work van</div></div>
+        <div class="value">28.0&cent;<span style="font-size:0.5em"> /mi</span></div>
+        <div class="sub">2015 Express 2500, 13 mpg</div>
+      </div>
+      <div class="stat-tile reveal">
+        <div class="icon-row"><div class="label">This car, measured</div></div>
+        <div class="value">13.0&cent;<span style="font-size:0.5em"> /mi</span></div>
+        <div class="sub">4 Supercharger invoices</div>
+      </div>
+      <div class="stat-tile reveal">
+        <div class="icon-row"><div class="label">Annual difference</div></div>
+        <div class="value">$4,160</div>
+        <div class="sub">van vs. this car, 26,000 mi</div>
+      </div>
+    </div>
+
+    <h3>The fleet, in order</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Period</th><th>Vehicle</th><th>Role</th><th class="num">EPA combined</th></tr></thead>
+      <tbody>
+        <tr><td>Sep 2025 to Jul 2026</td><td>2015 Chevrolet Express 2500 Cargo</td><td>Detail van, DuPont runs plus detail jobs 1 to 2 weekends a month</td><td class="num">13 mpg</td></tr>
+        <tr><td>Jul 2026</td><td>2011 Toyota Sienna Limited</td><td>Interim daily driver</td><td class="num">20 mpg</td></tr>
+        <tr><td>Jul to Aug 2026 (15 days)</td><td>2016 Toyota Sequoia Platinum 2WD</td><td>Interim daily driver</td><td class="num">15 mpg</td></tr>
+        <tr><td>Aug 2026</td><td>2011 Toyota Sienna Limited</td><td>Interim daily driver, second stint</td><td class="num">20 mpg</td></tr>
+        <tr><td>Aug 24, 2026 &rarr;</td><td><strong>2024 Tesla Model Y Long Range AWD</strong></td><td>Current</td><td class="num"></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Cost per mile at today&rsquo;s Tennessee pump price</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Vehicle</th><th class="num">Efficiency</th><th class="num">Cost / mile</th><th class="num">vs. Supercharging</th><th class="num">vs. home charging</th></tr></thead>
+      <tbody>
+        <tr><td>2015 Express 2500 Cargo</td><td class="num">13 mpg</td><td class="num"><strong>28.0&cent;</strong></td><td class="num">+16.0&cent;</td><td class="num">+25.9&cent;</td></tr>
+        <tr><td>2016 Sequoia Platinum 2WD</td><td class="num">15 mpg</td><td class="num"><strong>24.3&cent;</strong></td><td class="num">+12.3&cent;</td><td class="num">+22.2&cent;</td></tr>
+        <tr><td>2011 Sienna Limited</td><td class="num">20 mpg</td><td class="num"><strong>18.2&cent;</strong></td><td class="num">+6.2&cent;</td><td class="num">+16.1&cent;</td></tr>
+        <tr><td>This car, Supercharging</td><td class="num">258 Wh/mi</td><td class="num"><strong>13.0&cent;</strong></td><td class="num"></td><td class="num"></td></tr>
+        <tr><td>This car, home charging</td><td class="num">258 Wh/mi</td><td class="num"><strong>2.1&cent;</strong></td><td class="num"></td><td class="num"></td></tr>
+      </tbody>
+    </table></div>
+    <p>Gas figures use Tennessee&rsquo;s statewide average of <strong>$3.64/gal</strong> (AAA, August&nbsp;24,&nbsp;2026). The Supercharging number is not an estimate: it is four paid Tesla invoices, 126.0&nbsp;kWh for $54.01, a blended <strong>42.9&cent;/kWh</strong>. Home charging applies Middle Tennessee Electric&rsquo;s 8.1&cent;/kWh residential rate to the same measured consumption.</p>
+
+    <div class="nugget"><strong>Two things only direct API access could show (Aug 27, 2026).</strong>
+    First, charging loss is real and measurable: Tesla billed 43.484&nbsp;kWh at Percy Priest Drive while the battery
+    recorded 39.4&nbsp;kWh arriving, a <strong>9.4% loss</strong> between the plug and the pack. Every per-mile figure
+    that ignores it understates cost. Second, self-driving share is higher than previously published:
+    <strong>259.4 of 264.7 miles, or 98%</strong>, across three consecutive days, including one day at
+    <strong>100%</strong>. Charging history came from Tesla Fleet API, which holds sessions no third-party tracker
+    had, and the battery-side figure came from telemetry. Neither number exists without both sources.</div>
+    <h3>What that is worth over a year</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Vehicle</th><th class="num">Annual fuel</th><th class="num">Saved vs. Supercharging</th><th class="num">Saved vs. home charging</th></tr></thead>
+      <tbody>
+        <tr><td>2015 Express 2500 Cargo</td><td class="num">$7,280</td><td class="num"><strong>$4,160</strong></td><td class="num"><strong>$6,734</strong></td></tr>
+        <tr><td>2016 Sequoia Platinum 2WD</td><td class="num">$6,318</td><td class="num"><strong>$3,198</strong></td><td class="num"><strong>$5,772</strong></td></tr>
+        <tr><td>2011 Sienna Limited</td><td class="num">$4,732</td><td class="num"><strong>$1,612</strong></td><td class="num"><strong>$4,186</strong></td></tr>
+        <tr><td>This car, Supercharging</td><td class="num">$3,120</td><td class="num"></td><td class="num"></td></tr>
+        <tr><td>This car, home charging</td><td class="num">$546</td><td class="num"></td><td class="num"></td></tr>
+      </tbody>
+    </table></div>
+    <p>At the 26,000&nbsp;mi/year midpoint of this car&rsquo;s plan.</p>
+
+    <div class="good">
+      <strong>Why this section exists.</strong> Every other comparison in this document, and the one the Tesla app shows, measures this car against something in the high-20s or low-30s mpg. Nothing in that range was ever actually owned. The real bar was 13 to 20 mpg, and against that bar the Model Y wins on Supercharging alone, before a home charger is ever installed.
+    </div>
+
+    <div class="flag">
+      <strong>Where these numbers are soft.</strong> The three mpg figures are EPA combined ratings, not measured tank averages for these specific vehicles, so they carry the usual EPA optimism. A loaded detail van doing short local stops realistically ran nearer 11 to 12&nbsp;mpg than 13, and the Sienna Limited is rated 18&nbsp;mpg rather than 20 if it was the all-wheel-drive version. Both corrections widen the gap in this car&rsquo;s favour, so the table above is the conservative reading. The 258&nbsp;Wh/mi figure is driving consumption only, measured over mild-weather highway miles. The 13.0&cent; per mile above is higher because it also carries idle drain and a measured 9.4% charging loss, and it will rise again in winter and in traffic.
+    </div>
+
+  </div>

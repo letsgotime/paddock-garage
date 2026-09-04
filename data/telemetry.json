@@ -1,0 +1,394 @@
+{
+  "pulled_at": "2026-09-03",
+  "source": "TezLab (drives, charges, battery, efficiency) + Tesla Fleet API (live state)",
+  "window": {
+    "start": "2026-08-25",
+    "end": "2026-09-03",
+    "days": 10,
+    "note": "TezLab account window opens 2026-07-26; first recorded drive 2026-08-25."
+  },
+  "vehicle": {
+    "name": "PADDOCK MOBILE",
+    "year": 2024,
+    "model": "Model Y Long Range AWD",
+    "color": "Solid Black",
+    "odometer": 20409.4,
+    "vin_descriptor": "7SAYGAEE8RF",
+    "delivered": "2026-08-22",
+    "build": "January 2024, Fremont"
+  },
+  "driving": {
+    "distance": 925.4,
+    "drives": 79,
+    "avg_efficiency_pct": 93,
+    "avg_speed": 45,
+    "duration_sec": 74128,
+    "wh_per_mi": 270.4
+  },
+  "fsd": {
+    "miles": 898.4,
+    "of_miles": 924.8,
+    "pct": 97.1,
+    "drives": 51,
+    "of_drives": 61
+  },
+  "charging": {
+    "energy_kwh": 250.2,
+    "sessions": 9,
+    "cost": 93.7,
+    "blended_per_kwh": 0.375,
+    "paid_per_kwh": 0.4217,
+    "free_kwh": 28.0,
+    "paid_kwh": 222.2,
+    "charge_time_sec": 18127
+  },
+  "cost": {
+    "per_mile": 0.1012,
+    "per_mile_cents": 10.1
+  },
+  "battery": {
+    "health": "excellent",
+    "oem_kwh": 79,
+    "current_kwh": 79,
+    "degradation_pct": 0,
+    "cycles": 103,
+    "vs_region_degradation": "low",
+    "vs_region_cycles": "low",
+    "recurrent_range_score": 96,
+    "recurrent_value_low": 26247,
+    "recurrent_value_high": 33746,
+    "recurrent_trend_pct_mo": -1.35
+  },
+  "efficiency_vs_region": {
+    "mine_pct": 92,
+    "group_pct": 83,
+    "sample": 19,
+    "radius_km": 90
+  },
+  "idle_loss": {
+    "range_lost_mi": 100,
+    "days": 10
+  },
+  "savings_tezlab_modeled": 42.66,
+  "gas": {
+    "price_per_gal": 3.64,
+    "source": "AAA Tennessee",
+    "as_of": "2026-08-24"
+  },
+  "fleet": [
+    {
+      "name": "2015 Chevrolet Express 2500",
+      "role": "Detail van, DuPont runs",
+      "mpg": 13,
+      "cents_per_mi": 28.0,
+      "held": "Sep 2025 to Jul 2026"
+    },
+    {
+      "name": "2016 Toyota Sequoia Platinum 2WD",
+      "role": "Stopgap, 15 days",
+      "mpg": 15,
+      "cents_per_mi": 24.3,
+      "held": "2026"
+    },
+    {
+      "name": "2011 Toyota Sienna Limited",
+      "role": "Family hauler",
+      "mpg": 20,
+      "cents_per_mi": 18.2,
+      "held": "to 2026"
+    }
+  ],
+  "chargers": [
+    {
+      "name": "Nashville, Percy Priest Drive",
+      "kind": "Tesla Supercharger",
+      "sessions": 2,
+      "kwh": 72.5,
+      "max_kw": 500,
+      "last": "2026-08-31"
+    },
+    {
+      "name": "Nashville, Thompson Lane",
+      "kind": "Tesla Supercharger",
+      "sessions": 2,
+      "kwh": 64.0,
+      "max_kw": 325,
+      "last": "2026-09-03"
+    },
+    {
+      "name": "Brentwood, Moores Lane",
+      "kind": "Tesla Supercharger",
+      "sessions": 2,
+      "kwh": 64.0,
+      "max_kw": 325,
+      "last": "2026-09-02"
+    },
+    {
+      "name": "Smyrna",
+      "kind": "Tesla Supercharger",
+      "sessions": 1,
+      "kwh": 21.6,
+      "max_kw": 250,
+      "last": "2026-08-31"
+    },
+    {
+      "name": "Private charger, Lebanon",
+      "kind": "Level 2, no cost to us",
+      "sessions": 3,
+      "kwh": 28.0,
+      "max_kw": 10,
+      "last": "2026-08-29"
+    }
+  ],
+  "daily": [
+    {
+      "d": "2026-08-25",
+      "mi": 85.8,
+      "drives": 4,
+      "eff": 101,
+      "fsd": 82.9,
+      "kwh": 0,
+      "cost": 0,
+      "idle": 22.7
+    },
+    {
+      "d": "2026-08-26",
+      "mi": 87.2,
+      "drives": 5,
+      "eff": 94,
+      "fsd": 87.2,
+      "kwh": 39.4,
+      "cost": 15.65,
+      "idle": 2.1
+    },
+    {
+      "d": "2026-08-27",
+      "mi": 91.7,
+      "drives": 7,
+      "eff": 99,
+      "fsd": 89.3,
+      "kwh": 14.3,
+      "cost": 0,
+      "idle": 7.4
+    },
+    {
+      "d": "2026-08-28",
+      "mi": 88.6,
+      "drives": 8,
+      "eff": 82,
+      "fsd": 84.4,
+      "kwh": 33.5,
+      "cost": 20.95,
+      "idle": 11.0
+    },
+    {
+      "d": "2026-08-29",
+      "mi": 62.5,
+      "drives": 9,
+      "eff": 72,
+      "fsd": 60.0,
+      "kwh": 13.7,
+      "cost": 0,
+      "idle": 19.0
+    },
+    {
+      "d": "2026-08-30",
+      "mi": 85.0,
+      "drives": 8,
+      "eff": 91,
+      "fsd": 83.4,
+      "kwh": 64.2,
+      "cost": 12.07,
+      "idle": 8.5
+    },
+    {
+      "d": "2026-08-31",
+      "mi": 156.2,
+      "drives": 6,
+      "eff": 93,
+      "fsd": 154.1,
+      "kwh": 21.6,
+      "cost": 16.61,
+      "idle": 20.2
+    },
+    {
+      "d": "2026-09-01",
+      "mi": 89.1,
+      "drives": 5,
+      "eff": 98,
+      "fsd": 83.9,
+      "kwh": 30.5,
+      "cost": 16.31,
+      "idle": 3.6
+    },
+    {
+      "d": "2026-09-02",
+      "mi": 86.5,
+      "drives": 3,
+      "eff": 112,
+      "fsd": 83.1,
+      "kwh": 0,
+      "cost": 0,
+      "idle": 1.8
+    },
+    {
+      "d": "2026-09-03",
+      "mi": 92.2,
+      "drives": 6,
+      "eff": 93,
+      "fsd": 90.1,
+      "kwh": 32.9,
+      "cost": 12.11,
+      "idle": 3.8
+    }
+  ],
+  "last_cycle": {
+    "date": "2026-09-03",
+    "start_pct": 64,
+    "end_pct": 36,
+    "miles": 74.9,
+    "efficiency_pct": 95,
+    "kwh_used": 19,
+    "temp_f": 92,
+    "fsd_mi": 72.7,
+    "fsd_pct": 97,
+    "climate_mins": 5,
+    "sentry_mins": 0,
+    "phantom_mi": -4,
+    "drives": [
+      {
+        "from": "Nashville",
+        "to": "Lebanon",
+        "mi": 30.6,
+        "eff": 98,
+        "fsd": 100
+      },
+      {
+        "from": "Lebanon",
+        "to": "Franklin",
+        "mi": 42.0,
+        "eff": 97,
+        "fsd": 95
+      },
+      {
+        "from": "Franklin",
+        "to": "Brentwood",
+        "mi": 2.2,
+        "eff": 70,
+        "fsd": 99
+      }
+    ]
+  },
+  "empty_modules": {
+    "road_trips": "TezLab returns zero saved road trips. Module ships when the first one is saved.",
+    "monthly_efficiency": "Needs two full months. Window is 10 days. Ships when the data exists.",
+    "capacity_history": "TezLab returns null. Built locally from one reading per Monday."
+  },
+  "corridors": [
+    {
+      "a": "Brentwood",
+      "b": "Franklin",
+      "trips": 16,
+      "miles": 38.7
+    },
+    {
+      "a": "Brentwood",
+      "b": "Lebanon",
+      "trips": 7,
+      "miles": 291.6
+    },
+    {
+      "a": "Franklin",
+      "b": "Lebanon",
+      "trips": 5,
+      "miles": 210.7
+    },
+    {
+      "a": "Lebanon",
+      "b": "Nashville",
+      "trips": 4,
+      "miles": 104.4
+    },
+    {
+      "a": "Brentwood",
+      "b": "Nashville",
+      "trips": 3,
+      "miles": 48.7
+    },
+    {
+      "a": "Brentwood",
+      "b": "Unionville",
+      "trips": 1,
+      "miles": 31.7
+    },
+    {
+      "a": "Murfreesboro",
+      "b": "Unionville",
+      "trips": 1,
+      "miles": 27.4
+    },
+    {
+      "a": "Lebanon",
+      "b": "Smyrna",
+      "trips": 1,
+      "miles": 33.1
+    },
+    {
+      "a": "Eagleville",
+      "b": "Lebanon",
+      "trips": 1,
+      "miles": 45.9
+    },
+    {
+      "a": "Eagleville",
+      "b": "Unionville",
+      "trips": 1,
+      "miles": 7.8
+    },
+    {
+      "a": "Franklin",
+      "b": "Unionville",
+      "trips": 1,
+      "miles": 30.7
+    },
+    {
+      "a": "Franklin",
+      "b": "Nashville",
+      "trips": 1,
+      "miles": 23.0
+    }
+  ],
+  "within_city": [
+    {
+      "city": "Lebanon",
+      "trips": 9,
+      "miles": 13.9
+    },
+    {
+      "city": "Brentwood",
+      "trips": 6,
+      "miles": 13.0
+    },
+    {
+      "city": "Franklin",
+      "trips": 2,
+      "miles": 2.2
+    },
+    {
+      "city": "Unionville",
+      "trips": 2,
+      "miles": 1.9
+    }
+  ],
+  "cities": [
+    "Brentwood",
+    "Eagleville",
+    "Franklin",
+    "Lebanon",
+    "Murfreesboro",
+    "Nashville",
+    "Smyrna",
+    "Unionville"
+  ],
+  "privacy_note": "Corridors are city-to-city only. Per-drive coordinates and departure times are held back on purpose: the clusters resolve to a home and a regular destination."
+}

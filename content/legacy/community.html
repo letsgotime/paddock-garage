@@ -1,0 +1,49 @@
+<div class="topic-body">
+      <h3>Third-party apps worth knowing about</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>App</th><th>Adds</th></tr></thead>
+        <tbody>
+          <tr><td>TezLab</td><td>Free battery-health tracking, trip summaries, climate automations</td></tr>
+          <tr><td>TeslaFi / Tessie</td><td>Subscription dashboards (deep charging and degradation history)</td></tr>
+          <tr><td>TeslaMate</td><td>Free, self-hosted alternative to the above for the technically inclined</td></tr>
+          <tr><td>Scan My Tesla</td><td>Requires an OBD2 dongle (exposes cell voltages, pack temps, real motor output)</td></tr>
+          <tr><td>A Better Route Planner (ABRP)</td><td>Mixed-network trip routing (Superchargers + non-Tesla chargers)</td></tr>
+          <tr><td>PlugShare</td><td>The largest crowdsourced charger map, useful outside the Supercharger network</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>TeslaMate, and the newer AI-assistant layer on top</h3>
+      <p>The table above calls TeslaMate "free, self-hosted, for the technically inclined." Here's what that means in practice, since it's a meaningfully different commitment than downloading TezLab or starting a Tessie subscription.</p>
+
+      <p>TeslaMate runs as a small server stack: the TeslaMate application itself, a Postgres database to store everything it pulls, Grafana to turn that data into dashboards, and an MQTT broker (Mosquitto) if the data is going to feed something like Home Assistant. All four run together through Docker, on a machine that stays on and connected to the internet continuously, not a laptop that sleeps. A Raspberry Pi 3 or newer on a 64-bit OS works, so does a Docker-capable NAS, a spare always-on computer, or a small cloud VM. The floor is 1 GB of RAM, with 2 GB recommended.</p>
+
+      <p>The part most people worry about first: does this mean handing a Tesla login to a third party? It doesn't, and it's worth being specific about why. Personal, single-car use doesn't require registering anything with Tesla's Developer or Fleet API program; that's specifically for Tesla's commercial fleet customers, and Tesla's own Fleet API logs at a coarser resolution than individual owners actually want anyway. TeslaMate authenticates through the unofficial Owner API instead, the same reverse-engineered API much of the Tesla third-party app world is built on. The standard tool for generating that token, Tesla Auth, built by TeslaMate's own original author, opens Tesla's real login page in a native window, MFA included, and hands over the resulting access and refresh tokens to paste into TeslaMate afterward. The password itself goes to Tesla directly, never to TeslaMate or the token tool.</p>
+
+      <div class="flag"><strong>Get it from the source, nothing else.</strong> TeslaMate's own maintainers warn that impersonator websites and unofficial mobile apps using its name have shown up before, some carrying malware. The only versions worth trusting are the official GitHub repository (teslamate-org/teslamate) and its documentation (docs.teslamate.org). Anywhere else offering a shortcut is the sign to stop.</div>
+
+      <p>There's a newer layer on top of either data source, and it's specifically what prompted this section: letting an AI assistant query, or in one case act on, this car's data directly, through the Model Context Protocol (MCP). TezLab now offers this as an official, hosted feature gated behind TezLab Pro, listed on the App Store at $6.99 a month or $59.99 a year (pricing can vary slightly by platform and region), with a one-time-payment Founders Series membership as the alternative. Connect it to Claude or any other MCP-compatible assistant through OAuth, no server required, and it can read charging reports, battery health, drive patterns, and efficiency data, plus send real commands to the car itself, gated behind a confirmation step. TeslaMate has its own answer to the same idea, unofficial and community-maintained: an open-source MCP server that reads straight from a self-hosted TeslaMate's own database, free, with no subscription attached, but strictly read-only, no command capability at all, and one more piece of software layered onto the stack described above.</p>
+
+      <p>The dividing line worth sitting with: an AI assistant reading this car's data is a fairly low-stakes decision either way. An AI assistant sending real commands to the car, even gated behind a confirmation step, is a different kind of decision, worth making deliberately rather than defaulting into by clicking through an OAuth prompt.</p>
+
+      <p>What either path would actually change about this document: every charging and resale figure above is a model, built from published rates and this car's own spot-check numbers, one real Supercharging session, one real week's charging pattern, not a running total. A real logger, TeslaMate or otherwise, replaces the model with the real thing: every charge and every drive logged as it happens, plus a battery degradation curve tracked against this car's actual miles instead of the generic depreciation curve the resale estimate leans on now.</p>
+
+      <p>Given the technical work already behind Paddock20, standing up the self-hosted stack is a smaller lift here than for most owners. TeslaMate itself is free; the real ongoing cost is one more always-on system to keep patched, on top of everything else already on this owner's plate.</p>
+
+      <h3>Forums</h3>
+      <ul class="facts">
+        <li><strong>Tesla Owners Online</strong>: 51,000+ members, especially active on software-build discussion.</li>
+        <li><strong>r/teslamotors</strong> (~2M members) for general news and technical Q&amp;A; <strong>r/TeslaLounge</strong> (~93,000) for the more casual, lifestyle side.</li>
+        <li>Tesla's own official forums (forums.tesla.com), where staff occasionally weigh in.</li>
+      </ul>
+
+      <h3>YouTube channels known for accuracy over hype</h3>
+      <ul class="facts">
+        <li><strong>Tesla Daily</strong> (Rob Maurer): near-daily, data-driven news and analysis.</li>
+        <li><strong>Out of Spec Reviews</strong> (Kyle Conner): rigorous, brand-agnostic range and winter testing.</li>
+        <li><strong>State of Charge</strong> (Tom Moloughney): more depth on home/AC charging than any other channel we found.</li>
+        <li><strong>DirtyTesla</strong>: unedited, real-world FSD test drives, not curated highlight reels.</li>
+      </ul>
+
+      <h3>A little trivia</h3>
+      <p>The S-3-X-Y model naming is confirmed intentional. Elon Musk has said it directly. The "3" exists only because Ford already held the trademark on Tesla's original choice, "Model E."</p>
+    </div>

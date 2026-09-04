@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "date": "2026-09-03",
+      "title": "First full pull since the site was rebuilt",
+      "body": "Ten days of driving, 61 drives, 925 miles. Four published figures were wrong and have been corrected: cost per mile moved from 13.0&cent; to 10.1&cent; as cheaper sessions and one free plug entered the average, the blended energy rate fell from 42.9&cent; to 37.5&cent; a kWh, battery cycles went from 100 to 103, and the odometer from 19,748 to 20,409. The 9.4% charge loss figure was withdrawn rather than restated, because this pull does not return the fields needed to recompute it."
+    },
+    {
+      "date": "2026-09-03",
+      "title": "The site was reorganized",
+      "body": "One 1 MB page holding fourteen sections became six. The weight was almost entirely images encoded into the HTML, including one 70 KB photo pasted in three times. Those are real files now and the pages load a fraction of what they did."
+    }
+  ]
+}

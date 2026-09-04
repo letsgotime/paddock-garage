@@ -75,6 +75,14 @@ A `_headers` file can force `text/plain` if Tesla turns out to be fussy about it
    characters stay masked, in text *and* in images. Image redaction means destroying the
    pixels, not a CSS overlay or a blur.
 2. **Never publish home or work addresses.** City names and mileage are fine.
+   This now extends to telemetry: drive coordinates cluster onto a home and a regular
+   destination, so `/drive/` publishes city-to-city corridors and distances only.
+   Per-drive coordinates and departure times stay out, because a departure pattern is
+   a statement about when the house is empty. TezLab returns a street address on the
+   private charger; it is listed by city only.
+2b. **The driver carve-out (approved 2026-09-03).** Personal *context* is public: the
+   one line on the home page and `/driver/`. Personal *figures* are not: income, debt,
+   per-track earnings and financing terms stay in the private tool.
 3. **Zero em dashes** in published pages. House standard, enforced by the rail-redline
    pass, because the em dash is a recognizable AI tell. Use colons, commas, or the word
    "to". Grep for `—` and `&mdash;` before committing; the page is currently at zero and
@@ -93,19 +101,64 @@ A `_headers` file can force `text/plain` if Tesla turns out to be fussy about it
 
 ## Layout
 
+The public site is **generated**, not hand-edited. Every published figure comes from
+one JSON snapshot, which is what stops numbers going stale on one page while another
+page moves on.
+
 ```
-public/            deployed as-is by the Workers assets binding
-  index.html       the vehicle profile, fully self-contained, ~1MB
-  og/garage.png    OG card, regenerate with tools/og-image.py
-  robots.txt       real file; Cloudflare's synthesized one is off
-  sitemap.xml
-tools/og-image.py  OG card generator, needs Pillow
-wrangler.toml      name must stay "paddock-garage" or Workers Builds fails
+data/telemetry.json   the measured snapshot: TezLab + Fleet API + invoices
+data/log.json         the dated entries shown on /switch/
+content/legacy/*.html prose fragments lifted out of the old 1 MB page
+tools/build.py        renders public/ from data + content   <- run this
+tools/check.py        pre-deploy gate: privacy, dead links, page weight
+tools/extract-legacy.py  one-time image and fragment extraction, already run
+public/               GENERATED. Do not hand-edit a page here.
+  assets/glass.css    the elevation system (e0/e1/e2)
+  assets/garage.css   base reset, layout, charts, mobile-first breakpoints
 ```
 
-`public/index.html` inlines all styles, scripts, and imagery. There is no build step and
-no runtime external requests. Edit it with targeted string replacement, not wholesale
-rewrites, and grep rather than reading the whole file.
+**Do not hand-edit `public/*/index.html`.** Change `data/telemetry.json` or the page
+functions in `tools/build.py`, then run:
+
+```
+python3 tools/build.py && python3 tools/check.py
+```
+
+`check.py` fails the build on an em dash, an exposed VIN serial, a street address, a
+private coordinate, a dead internal link, or any page over 200 KB. It is the gate; do
+not skip it.
+
+`garage.css` carries the base reset (`box-sizing`, body margin, the Arial stack).
+The legacy pages kept that reset in their own inline `<style>` and glass.css was only
+ever an overlay on top of it, so a generated page without garage.css renders in Times
+with a horizontal scrollbar.
+
+### Site structure, set 2026-09-03
+
+Six doors plus a seventh reached from the hero and footer. The wordmark is Home.
+
+| Page | Carries |
+|---|---|
+| `/switch/` | The gas-to-electric story in seven chapters, plus the dated log |
+| `/drive/` | Corridor map, miles per day, FSD share, efficiency vs the region |
+| `/charge/` | Sessions, blended vs Supercharger rate, spend per day, locations |
+| `/ledger/` | Cost per mile vs the gas fleet, value, warranty, what the car earns |
+| `/battery/` | Degradation, cycles, phantom drain, warranty floor |
+| `/car/` | Verified VIN, spec sheet as tabs, Juniper, Toybox, wrap downloads |
+| `/driver/` | The context, the fleet before, where the privacy line sits |
+
+`/case-study/`, `/log/` and `/log/model-y/` are retired and 301 to their new homes via
+`public/_redirects`, which Workers Assets applies before serving any asset.
+
+## Charts
+
+Brand hues are too light for chart marks on `#05070D`. The marks use hues stepped into
+the dark-mode OKLCH band (L .48 to .67, C >= .10) and validated for colour-vision
+separation: ignition `#E84301`, sky `#0791C8`, amber `#B97504`, with steel `#7F8794`
+as a neutral reference that never carries identity. UI accents keep the brighter brand
+values. SVG text scales with the viewBox, so chart label sizes are set per breakpoint
+in `garage.css` to land near 10px on screen; changing a chart's viewBox width means
+retuning those.
 
 ## Deploy
 

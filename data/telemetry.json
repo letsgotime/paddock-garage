@@ -1,6 +1,6 @@
 {
   "pulled_at": "2026-09-03",
-  "source": "TezLab (drives, charges, battery, efficiency) + Tesla Fleet API (live state)",
+  "source": "TezLab for drives, pack-side energy and battery health; Tesla Fleet API for billing-grade charging invoices and live vehicle state",
   "window": {
     "start": "2026-08-25",
     "end": "2026-09-03",
@@ -390,5 +390,23 @@
     "Smyrna",
     "Unionville"
   ],
-  "privacy_note": "Corridors are city-to-city only. Per-drive coordinates and departure times are held back on purpose: the clusters resolve to a home and a regular destination."
+  "privacy_note": "Corridors are city-to-city only. Per-drive coordinates and departure times are held back on purpose: the clusters resolve to a home and a regular destination.",
+  "charge_loss": {
+    "pct": 8.82,
+    "kwh_drawn": 422.56,
+    "kwh_into_pack": 385.3,
+    "kwh_lost": 37.26,
+    "sessions": 11,
+    "spread_low": 4.27,
+    "spread_high": 13.98,
+    "billed_per_kwh": 0.3784,
+    "effective_per_kwh_into_pack": 0.415,
+    "method": "Tesla's invoice reports the energy drawn from the charger. TezLab reports the energy that reached the pack. Neither number is the other, and neither source publishes the difference. Reconciling them per session is what makes the loss measurable."
+  },
+  "warehouse": {
+    "store": "Neon Postgres, garage schema",
+    "sessions": 14,
+    "reconciled": 11,
+    "unreconciled_note": "Two free Level 2 sessions have no Tesla invoice, so they cannot be reconciled and are excluded."
+  }
 }

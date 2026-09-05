@@ -223,7 +223,8 @@ FOOTER = f"""</main>
   </div>
   <div class="pg-f-bottom">
    <p class="pg-f-legend">Figures are labeled measured or modeled. Measured means an invoice or a
-   sensor. Data pulled {D['pulled_at']} from TezLab and the Tesla Fleet API. Not affiliated with,
+   sensor. Pulled {D['pulled_at']}: TezLab for drives and pack-side energy, the Tesla Fleet
+   API for billing invoices and live state. Not affiliated with,
    endorsed by, or sponsored by Tesla, Inc. Tesla, Model Y, Supercharger and Full Self-Driving are
    trademarks of Tesla, Inc.</p>
   </div>
@@ -774,13 +775,34 @@ the real sessions.</p>
   published, here or anywhere on this site.</p>
 </section>
 
-<section class="g g-0">
-  <h2>Charge loss, pending</h2>
-  <p style="margin:0">An earlier version of this site published a {pct(9.4,1)} figure for energy
-  lost between the plug and the pack. This pull does not return the energy drawn against energy
-  added fields needed to recompute it, so the number is withdrawn rather than restated from
-  memory. It comes back when the Fleet API billing records support it.</p>
+<section class="g">
+  <h2>What the plug charges you for, and what the battery keeps</h2>
+  <p class="prose">Tesla's invoice bills the energy drawn from the charger. The car reports the
+  energy that actually reached the pack. Those are not the same number, and neither source
+  publishes the gap. Reconciling {D['charge_loss']['sessions']} sessions against their invoices
+  measures it.</p>
+  <div class="row row-2-1" style="margin-top:14px">
+    <div class="g g-2 cmd" style="border-radius:14px">
+      <p class="k">Charge loss, measured</p>
+      <p class="v">{pct(D['charge_loss']['pct'],1)}</p>
+      <p class="sub">{D['charge_loss']['kwh_drawn']:.1f} kWh drawn from chargers,
+      {D['charge_loss']['kwh_into_pack']:.1f} kWh into the pack.
+      {D['charge_loss']['kwh_lost']:.1f} kWh paid for and never stored.</p>
+    </div>
+    <div class="g g-0">
+      <h3>What it does to the rate</h3>
+      <p style="margin:0 0 .6em">Billed rate {cents(D['charge_loss']['billed_per_kwh']*100,1)} a kWh.</p>
+      <p style="margin:0"><strong>Rate for energy that actually reaches the battery
+      {cents(D['charge_loss']['effective_per_kwh_into_pack']*100,1)}.</strong> Every published
+      cost per mile on this site already includes that loss, because it is priced from the
+      invoice, not from the dash.</p>
+    </div>
+  </div>
+  <p class="chart-note">{M} across {D['charge_loss']['sessions']} reconciled sessions. Per session
+  the loss runs {pct(D['charge_loss']['spread_low'],2)} to {pct(D['charge_loss']['spread_high'],2)}.
+  Two free Level 2 sessions have no Tesla invoice and are excluded rather than guessed at.</p>
 </section>
+
 {rulebar()}
 """
     return write("/charge/", "Charge",

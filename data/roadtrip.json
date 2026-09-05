@@ -1,0 +1,762 @@
+{
+  "id": "2026-09-04-muscle-shoals-birmingham",
+  "title": "Two states, four legs, five plugs",
+  "dates": {
+    "start": "2026-09-04",
+    "end": "2026-09-05"
+  },
+  "route": [
+    "Brentwood, TN",
+    "Florence, AL",
+    "Birmingham, AL",
+    "Athens, AL",
+    "Franklin, TN"
+  ],
+  "pulled_at": "2026-09-05",
+  "source": "TezLab drive and charge detail, per-leg and per-session",
+  "totals": {
+    "distance_long_legs": 439.2,
+    "distance_total": 460.6,
+    "legs": 4,
+    "charges": 5,
+    "drive_sec": 26181,
+    "charge_sec": 7587,
+    "energy_used_kwh": 120.4,
+    "energy_added_kwh": 163.2,
+    "spend": 66.21,
+    "blended_per_kwh": 0.4057,
+    "cents_per_mile": 14.4,
+    "fsd_miles": 432.7,
+    "fsd_pct": 98.5,
+    "climbed_ft": 22876,
+    "regen_miles": 203.1,
+    "co2_saved_g": 86156,
+    "gas_saved_tezlab": 11.01
+  },
+  "legs": [
+    {
+      "n": 1,
+      "from": "Brentwood, TN",
+      "to": "Florence, AL",
+      "date": "2026-09-04",
+      "mi": 120.4,
+      "sec": 7922,
+      "eff_pct": 94,
+      "kwh": 30.9,
+      "wh_mi": 256,
+      "soc_start": 80,
+      "soc_end": 36,
+      "range_start": 230,
+      "range_end": 102,
+      "fsd_mi": 120.4,
+      "fsd_pct": 100,
+      "avg_mph": 54.7,
+      "climbed_ft": 6089,
+      "descended_ft": 6161,
+      "elev_change_ft": -72,
+      "temp_min": 80.6,
+      "temp_max": 107.6,
+      "regen_mi": 61,
+      "co2_saved_g": 24261,
+      "odo_start": 20500.2,
+      "odo_end": 20620.7,
+      "note": "Every mile of it on FSD. Not most. All of it."
+    },
+    {
+      "n": 2,
+      "from": "Florence, AL",
+      "to": "Birmingham, AL",
+      "date": "2026-09-04",
+      "mi": 130.6,
+      "sec": 7446,
+      "eff_pct": 92,
+      "kwh": 33.9,
+      "wh_mi": 260,
+      "soc_start": 94,
+      "soc_end": 45,
+      "range_start": 270,
+      "range_end": 128,
+      "fsd_mi": 126.5,
+      "fsd_pct": 97,
+      "avg_mph": 62.7,
+      "climbed_ft": 6663,
+      "descended_ft": 6634,
+      "elev_change_ft": 30,
+      "temp_min": 78.8,
+      "temp_max": 90.5,
+      "regen_mi": 56.7,
+      "co2_saved_g": 26366,
+      "odo_start": 20628.4,
+      "odo_end": 20759.1,
+      "note": "The longest leg, run after dark. Climbed 6,663 feet and finished 30 feet higher than it started."
+    },
+    {
+      "n": 3,
+      "from": "Birmingham, AL",
+      "to": "Athens, AL",
+      "date": "2026-09-05",
+      "mi": 103.0,
+      "sec": 6319,
+      "eff_pct": 79,
+      "kwh": 31.7,
+      "wh_mi": 307,
+      "soc_start": 79,
+      "soc_end": 34,
+      "range_start": 228,
+      "range_end": 97,
+      "fsd_mi": 102.5,
+      "fsd_pct": 100,
+      "avg_mph": 58.5,
+      "climbed_ft": 5459,
+      "descended_ft": 5266,
+      "elev_change_ft": 194,
+      "temp_min": 95.0,
+      "temp_max": 105.8,
+      "regen_mi": 46.1,
+      "co2_saved_g": 18643,
+      "odo_start": 20762.8,
+      "odo_end": 20865.9,
+      "note": "The expensive one. 307 Wh a mile against 256 on the way down, in 105 degree heat with the climate system fighting it."
+    },
+    {
+      "n": 4,
+      "from": "Athens, AL",
+      "to": "Franklin, TN",
+      "date": "2026-09-05",
+      "mi": 85.2,
+      "sec": 4494,
+      "eff_pct": 87,
+      "kwh": 23.9,
+      "wh_mi": 280,
+      "soc_start": 80,
+      "soc_end": 46,
+      "range_start": 230,
+      "range_end": 132,
+      "fsd_mi": 83.3,
+      "fsd_pct": 98,
+      "avg_mph": 68.1,
+      "climbed_ft": 4665,
+      "descended_ft": 4613,
+      "elev_change_ft": 52,
+      "temp_min": 96.8,
+      "temp_max": 100.4,
+      "regen_mi": 39.3,
+      "co2_saved_g": 16886,
+      "odo_start": 20865.9,
+      "odo_end": 20951.1,
+      "note": "Fastest average of the trip at 68 mph, and the last 85 miles home."
+    }
+  ],
+  "charges": [
+    {
+      "n": 1,
+      "site": "Brentwood, TN",
+      "label": "Old Hickory Boulevard",
+      "date": "2026-09-04",
+      "sec": 2488,
+      "soc_start": 1,
+      "soc_end": 80,
+      "kwh": 56.7,
+      "range_added": 226,
+      "peak_kw": 221,
+      "avg_kw": 89.9,
+      "cost": 25.44,
+      "per_kwh": 0.4488,
+      "temp_f": 104.6,
+      "note": "Rolled in on 1%. Peak 221 kW, the fastest session of the trip, because an empty pack takes charge hardest.",
+      "curve": [
+        {
+          "t": 0,
+          "soc": 2.0,
+          "kw": 6,
+          "v": 414
+        },
+        {
+          "t": 1,
+          "soc": 5.5,
+          "kw": 219,
+          "v": 360
+        },
+        {
+          "t": 2,
+          "soc": 12.2,
+          "kw": 219,
+          "v": 365
+        },
+        {
+          "t": 3,
+          "soc": 19.0,
+          "kw": 218,
+          "v": 375
+        },
+        {
+          "t": 4,
+          "soc": 23.2,
+          "kw": 155,
+          "v": 370
+        },
+        {
+          "t": 5,
+          "soc": 27.1,
+          "kw": 107,
+          "v": 365
+        },
+        {
+          "t": 6,
+          "soc": 28.9,
+          "kw": 88,
+          "v": 365
+        },
+        {
+          "t": 7,
+          "soc": 30.5,
+          "kw": 81,
+          "v": 365
+        },
+        {
+          "t": 8,
+          "soc": 32.1,
+          "kw": 81,
+          "v": 365
+        },
+        {
+          "t": 9,
+          "soc": 35.6,
+          "kw": 81,
+          "v": 365
+        },
+        {
+          "t": 10,
+          "soc": 38.1,
+          "kw": 81,
+          "v": 370
+        },
+        {
+          "t": 11,
+          "soc": 39.9,
+          "kw": 81,
+          "v": 370
+        },
+        {
+          "t": 12,
+          "soc": 42.3,
+          "kw": 81,
+          "v": 370
+        },
+        {
+          "t": 13,
+          "soc": 44.2,
+          "kw": 81,
+          "v": 375
+        },
+        {
+          "t": 14,
+          "soc": 46.5,
+          "kw": 81,
+          "v": 375
+        },
+        {
+          "t": 15,
+          "soc": 48.4,
+          "kw": 79,
+          "v": 375
+        },
+        {
+          "t": 16,
+          "soc": 50.8,
+          "kw": 73,
+          "v": 375
+        },
+        {
+          "t": 17,
+          "soc": 52.2,
+          "kw": 71,
+          "v": 380
+        },
+        {
+          "t": 18,
+          "soc": 56.2,
+          "kw": 73,
+          "v": 380
+        },
+        {
+          "t": 19,
+          "soc": 58.4,
+          "kw": 71,
+          "v": 380
+        },
+        {
+          "t": 20,
+          "soc": 61.3,
+          "kw": 73,
+          "v": 385
+        },
+        {
+          "t": 21,
+          "soc": 63.6,
+          "kw": 73,
+          "v": 385
+        },
+        {
+          "t": 22,
+          "soc": 65.4,
+          "kw": 71,
+          "v": 385
+        },
+        {
+          "t": 23,
+          "soc": 68.8,
+          "kw": 66,
+          "v": 390
+        },
+        {
+          "t": 24,
+          "soc": 69.8,
+          "kw": 64,
+          "v": 390
+        },
+        {
+          "t": 25,
+          "soc": 71.7,
+          "kw": 62,
+          "v": 390
+        },
+        {
+          "t": 26,
+          "soc": 73.7,
+          "kw": 62,
+          "v": 395
+        },
+        {
+          "t": 27,
+          "soc": 77.1,
+          "kw": 60,
+          "v": 395
+        },
+        {
+          "t": 28,
+          "soc": 78.3,
+          "kw": 57,
+          "v": 395
+        },
+        {
+          "t": 29,
+          "soc": 80.0,
+          "kw": 55,
+          "v": 395
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "site": "Florence, AL",
+      "label": "Cox Creek Parkway",
+      "date": "2026-09-04",
+      "sec": 1336,
+      "soc_start": 32,
+      "soc_end": 79,
+      "kwh": 33.7,
+      "range_added": 134.6,
+      "peak_kw": 164,
+      "avg_kw": 90.9,
+      "cost": 15.14,
+      "per_kwh": 0.4495,
+      "temp_f": 82.4,
+      "note": "Twenty-two minutes for 47% of the pack.",
+      "curve": [
+        {
+          "t": 0,
+          "soc": 31.8,
+          "kw": 12,
+          "v": 372
+        },
+        {
+          "t": 1,
+          "soc": 34.4,
+          "kw": 12,
+          "v": 372
+        },
+        {
+          "t": 2,
+          "soc": 37.5,
+          "kw": 146,
+          "v": 377
+        },
+        {
+          "t": 3,
+          "soc": 39.4,
+          "kw": 146,
+          "v": 377
+        },
+        {
+          "t": 4,
+          "soc": 42.2,
+          "kw": 134,
+          "v": 377
+        },
+        {
+          "t": 5,
+          "soc": 44.1,
+          "kw": 134,
+          "v": 377
+        },
+        {
+          "t": 6,
+          "soc": 45.3,
+          "kw": 125,
+          "v": 382
+        },
+        {
+          "t": 7,
+          "soc": 47.6,
+          "kw": 116,
+          "v": 382
+        },
+        {
+          "t": 8,
+          "soc": 50.5,
+          "kw": 111,
+          "v": 382
+        },
+        {
+          "t": 9,
+          "soc": 51.7,
+          "kw": 111,
+          "v": 382
+        },
+        {
+          "t": 10,
+          "soc": 52.6,
+          "kw": 104,
+          "v": 382
+        },
+        {
+          "t": 11,
+          "soc": 53.7,
+          "kw": 104,
+          "v": 382
+        },
+        {
+          "t": 12,
+          "soc": 56.2,
+          "kw": 99,
+          "v": 382
+        },
+        {
+          "t": 13,
+          "soc": 58.1,
+          "kw": 95,
+          "v": 387
+        },
+        {
+          "t": 14,
+          "soc": 60.0,
+          "kw": 91,
+          "v": 387
+        },
+        {
+          "t": 15,
+          "soc": 62.4,
+          "kw": 84,
+          "v": 387
+        },
+        {
+          "t": 16,
+          "soc": 63.7,
+          "kw": 84,
+          "v": 387
+        },
+        {
+          "t": 17,
+          "soc": 65.8,
+          "kw": 75,
+          "v": 387
+        },
+        {
+          "t": 18,
+          "soc": 66.6,
+          "kw": 75,
+          "v": 387
+        },
+        {
+          "t": 19,
+          "soc": 68.2,
+          "kw": 70,
+          "v": 392
+        },
+        {
+          "t": 20,
+          "soc": 69.8,
+          "kw": 68,
+          "v": 392
+        },
+        {
+          "t": 21,
+          "soc": 71.9,
+          "kw": 66,
+          "v": 392
+        },
+        {
+          "t": 22,
+          "soc": 73.4,
+          "kw": 62,
+          "v": 392
+        },
+        {
+          "t": 23,
+          "soc": 74.1,
+          "kw": 62,
+          "v": 392
+        },
+        {
+          "t": 24,
+          "soc": 77.4,
+          "kw": 57,
+          "v": 397
+        },
+        {
+          "t": 25,
+          "soc": 79.0,
+          "kw": 57,
+          "v": 397
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "site": "Florence, AL",
+      "label": "Cox Creek Parkway, second session",
+      "date": "2026-09-04",
+      "sec": 1196,
+      "soc_start": 79,
+      "soc_end": 95,
+      "kwh": 11.6,
+      "range_added": 45.8,
+      "peak_kw": 56,
+      "avg_kw": 34.9,
+      "cost": 0.0,
+      "per_kwh": 0.0,
+      "temp_f": 82.4,
+      "note": "The lesson of the whole trip. Almost the same twenty minutes as the session before it, for a third of the energy.",
+      "curve": []
+    },
+    {
+      "n": 4,
+      "site": "Birmingham, AL",
+      "label": "U.S. 280",
+      "date": "2026-09-05",
+      "sec": 1200,
+      "soc_start": 41,
+      "soc_end": 80,
+      "kwh": 28.0,
+      "range_added": 109.8,
+      "peak_kw": 128,
+      "avg_kw": 84.0,
+      "cost": 13.07,
+      "per_kwh": 0.4668,
+      "temp_f": null,
+      "note": "The most expensive electricity of the trip at 46.7 cents.",
+      "curve": []
+    },
+    {
+      "n": 5,
+      "site": "Athens, AL",
+      "label": "Athens-Limestone",
+      "date": "2026-09-05",
+      "sec": 1367,
+      "soc_start": 34,
+      "soc_end": 80,
+      "kwh": 33.2,
+      "range_added": 132.5,
+      "peak_kw": 145,
+      "avg_kw": 85.9,
+      "cost": 12.56,
+      "per_kwh": 0.3783,
+      "temp_f": 98.6,
+      "note": "The cheapest plug of the trip at 37.8 cents, and the last one needed.",
+      "curve": [
+        {
+          "t": 0,
+          "soc": 33.8,
+          "kw": 6,
+          "v": 361
+        },
+        {
+          "t": 1,
+          "soc": 34.3,
+          "kw": 6,
+          "v": 361
+        },
+        {
+          "t": 2,
+          "soc": 39.0,
+          "kw": 145,
+          "v": 377
+        },
+        {
+          "t": 3,
+          "soc": 40.4,
+          "kw": 145,
+          "v": 377
+        },
+        {
+          "t": 4,
+          "soc": 43.2,
+          "kw": 142,
+          "v": 377
+        },
+        {
+          "t": 5,
+          "soc": 45.1,
+          "kw": 134,
+          "v": 382
+        },
+        {
+          "t": 6,
+          "soc": 48.9,
+          "kw": 116,
+          "v": 382
+        },
+        {
+          "t": 7,
+          "soc": 51.3,
+          "kw": 109,
+          "v": 382
+        },
+        {
+          "t": 8,
+          "soc": 53.9,
+          "kw": 105,
+          "v": 382
+        },
+        {
+          "t": 9,
+          "soc": 55.1,
+          "kw": 105,
+          "v": 382
+        },
+        {
+          "t": 10,
+          "soc": 57.3,
+          "kw": 101,
+          "v": 382
+        },
+        {
+          "t": 11,
+          "soc": 58.3,
+          "kw": 97,
+          "v": 387
+        },
+        {
+          "t": 12,
+          "soc": 60.3,
+          "kw": 92,
+          "v": 387
+        },
+        {
+          "t": 13,
+          "soc": 61.3,
+          "kw": 92,
+          "v": 387
+        },
+        {
+          "t": 14,
+          "soc": 63.1,
+          "kw": 88,
+          "v": 387
+        },
+        {
+          "t": 15,
+          "soc": 65.5,
+          "kw": 85,
+          "v": 387
+        },
+        {
+          "t": 16,
+          "soc": 67.2,
+          "kw": 79,
+          "v": 387
+        },
+        {
+          "t": 17,
+          "soc": 68.1,
+          "kw": 79,
+          "v": 387
+        },
+        {
+          "t": 18,
+          "soc": 68.9,
+          "kw": 76,
+          "v": 392
+        },
+        {
+          "t": 19,
+          "soc": 69.7,
+          "kw": 72,
+          "v": 392
+        },
+        {
+          "t": 20,
+          "soc": 71.3,
+          "kw": 70,
+          "v": 392
+        },
+        {
+          "t": 21,
+          "soc": 72.1,
+          "kw": 70,
+          "v": 392
+        },
+        {
+          "t": 22,
+          "soc": 74.3,
+          "kw": 68,
+          "v": 392
+        },
+        {
+          "t": 23,
+          "soc": 75.0,
+          "kw": 65,
+          "v": 392
+        },
+        {
+          "t": 24,
+          "soc": 76.4,
+          "kw": 61,
+          "v": 397
+        },
+        {
+          "t": 25,
+          "soc": 76.7,
+          "kw": 61,
+          "v": 397
+        },
+        {
+          "t": 26,
+          "soc": 77.4,
+          "kw": 58,
+          "v": 397
+        },
+        {
+          "t": 27,
+          "soc": 78.0,
+          "kw": 56,
+          "v": 397
+        },
+        {
+          "t": 28,
+          "soc": 79.0,
+          "kw": 56,
+          "v": 397
+        },
+        {
+          "t": 29,
+          "soc": 80.0,
+          "kw": 54,
+          "v": 397
+        }
+      ]
+    }
+  ],
+  "withheld": "Peak speed on one leg is held back on purpose. It is in the telemetry and it is not going on a public page."
+}

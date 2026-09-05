@@ -98,13 +98,34 @@ the real sessions.</p>
   published, here or anywhere on this site.</p>
 </section>
 
-<section class="g g-0">
-  <h2>Charge loss, pending</h2>
-  <p style="margin:0">An earlier version of this site published a 9.4% figure for energy
-  lost between the plug and the pack. This pull does not return the energy drawn against energy
-  added fields needed to recompute it, so the number is withdrawn rather than restated from
-  memory. It comes back when the Fleet API billing records support it.</p>
+<section class="g">
+  <h2>What the plug charges you for, and what the battery keeps</h2>
+  <p class="prose">Tesla's invoice bills the energy drawn from the charger. The car reports the
+  energy that actually reached the pack. Those are not the same number, and neither source
+  publishes the gap. Reconciling 11 sessions against their invoices
+  measures it.</p>
+  <div class="row row-2-1" style="margin-top:14px">
+    <div class="g g-2 cmd" style="border-radius:14px">
+      <p class="k">Charge loss, measured</p>
+      <p class="v">8.8%</p>
+      <p class="sub">422.6 kWh drawn from chargers,
+      385.3 kWh into the pack.
+      37.3 kWh paid for and never stored.</p>
+    </div>
+    <div class="g g-0">
+      <h3>What it does to the rate</h3>
+      <p style="margin:0 0 .6em">Billed rate 37.8¢ a kWh.</p>
+      <p style="margin:0"><strong>Rate for energy that actually reaches the battery
+      41.5¢.</strong> Every published
+      cost per mile on this site already includes that loss, because it is priced from the
+      invoice, not from the dash.</p>
+    </div>
+  </div>
+  <p class="chart-note"><span class="chip chip-m">measured</span> across 11 reconciled sessions. Per session
+  the loss runs 4.27% to 13.98%.
+  Two free Level 2 sessions have no Tesla invoice and are excluded rather than guessed at.</p>
 </section>
+
 <div class="rulebar">
   <span><span class="chip chip-m">measured</span> invoice or sensor</span>
   <span><span class="chip chip-mo">modeled</span> derived, and says so</span>
@@ -144,7 +165,8 @@ the real sessions.</p>
   </div>
   <div class="pg-f-bottom">
    <p class="pg-f-legend">Figures are labeled measured or modeled. Measured means an invoice or a
-   sensor. Data pulled 2026-09-03 from TezLab and the Tesla Fleet API. Not affiliated with,
+   sensor. Pulled 2026-09-03: TezLab for drives and pack-side energy, the Tesla Fleet
+   API for billing invoices and live state. Not affiliated with,
    endorsed by, or sponsored by Tesla, Inc. Tesla, Model Y, Supercharger and Full Self-Driving are
    trademarks of Tesla, Inc.</p>
   </div>

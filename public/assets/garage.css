@@ -252,11 +252,38 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
 .legacy figcaption,.legacy .cap{ font-size:.76rem; color:var(--ink-3); margin:0 0 14px }
 .legacy .tbl-wrap,.legacy .scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch }
 
+/* ---------- figures ------------------------------------------------------- */
+.fig{ margin:0 }
+.fig + .fig{ margin-top:var(--gap) }
+.fig img{ width:100%; height:auto; display:block; border-radius:12px;
+          border:1px solid var(--hairline,rgba(229,231,235,.1)) }
+.fig figcaption{ font-size:.76rem; color:var(--ink-3); line-height:1.5; margin-top:9px;
+                 display:flex; flex-wrap:wrap; gap:6px; align-items:baseline }
+.gallery{ display:grid; gap:var(--gap); grid-template-columns:1fr }
+@media(min-width:640px){ .gallery{ grid-template-columns:repeat(2,minmax(0,1fr)) } }
+.gallery .fig + .fig{ margin-top:0 }
+
 /* ---------- footnote / rule ----------------------------------------------- */
 .rulebar{ display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center;
   margin-top:14px; padding-top:16px; border-top:1px solid var(--hairline,rgba(229,231,235,.1));
   font-size:.74rem; color:var(--ink-3) }
 .rulebar .sp{ margin-left:auto }
+
+/* ---------- backdrop plate, mobile art direction --------------------------
+   glass.css veils the plate for desktop. On a portrait phone a 2.39:1 plate
+   under `cover` becomes a narrow centre slice, so it stops reading as a
+   photograph. Anchor it to the top and lift the veil on small screens. */
+@media(max-width:720px){
+  body::before{
+    background-size:auto 62vh, auto 62vh, cover;
+    background-position:center top;
+    background-image:
+      radial-gradient(140% 70% at 50% 0%, rgba(5,7,13,0) 30%, rgba(5,7,13,.42) 100%),
+      linear-gradient(180deg, rgba(5,7,13,.34) 0%, rgba(5,7,13,.30) 22%,
+                              rgba(5,7,13,.72) 58%, var(--g-black) 88%),
+      var(--page-bg) !important;
+  }
+}
 
 /* ---------- motion -------------------------------------------------------- */
 @media(prefers-reduced-motion:no-preference){

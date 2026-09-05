@@ -28,6 +28,15 @@ def pct(v, d=0):  return f"{v:.{d}f}%"
 M  = '<span class="chip chip-m">measured</span>'
 MO = '<span class="chip chip-mo">modeled</span>'
 
+
+def fig(src, alt, cap, *, stock=False):
+    """Inline figure. `stock` marks an image that is not this car, so the page
+    never implies a photo of the actual vehicle when it isn't one."""
+    note = ('<span class="chip chip-p">illustrative</span> ' if stock else "")
+    return (f'<figure class="fig"><img src="{src}" alt="{html.escape(alt)}" '
+            f'loading="lazy" decoding="async">'
+            f'<figcaption>{note}{cap}</figcaption></figure>')
+
 # ── chart primitives ────────────────────────────────────────────────────────
 # One series = one hue, no legend (the title names it). Marks are thin with a
 # 4px rounded top anchored to the baseline and a 2px gap between bars.
@@ -417,6 +426,14 @@ what happens, roughly in the order it happens to you.</p>
 <ol class="chapters">
 {''.join(out)}
 </ol>
+<section class="row row-2">
+  <div class="g">
+    <h2>What the first week feels like</h2>
+    {fig("/img/car/interior-35942a.jpg","2024 Model Y Long Range AWD in Solid Black, side profile","Solid Black, seven seats, tow hitch. The trim that had to earn its place.",stock=True)}
+  </div>
+  <div class="g legacy">{frag("appliance")}</div>
+</section>
+
 <section class="g g-0">
   <h2>It does not finish</h2>
   <p class="prose" style="margin:0">Every Monday the data gets pulled again, compared against what
@@ -527,6 +544,13 @@ def page_drive():
   Sentry {lc['sentry_mins']}.</p>
 </section>
 
+<section class="g legacy">{frag('uc-commute')}</section>
+
+<section class="row row-2">
+  <div class="g legacy">{frag('uc-roadtrip')}</div>
+  <div class="g legacy">{frag('uc-winter')}</div>
+</section>
+
 <section class="g g-0">
   <h2>Not here yet</h2>
   <p style="margin:0">Two modules are built and empty on purpose. Road trips: {D['empty_modules']['road_trips']}
@@ -584,6 +608,11 @@ the real sessions.</p>
         fmt=lambda v: f"${v:.0f}" if v else "")}
   <p class="chart-note">{M}. Flat days are days it did not need charging, or days it charged on
   the free plug. Eight of {D['window']['days']} days cost nothing at all.</p>
+</section>
+
+<section class="g">
+  <h2>Where it plugs in</h2>
+  {fig("/img/car/wheels-f02697.jpg","A Solid Black Model Y on a home charger","Level 2 at home is the cheapest electricity in the mix. Three of nine sessions came off a private plug and cost nothing.",stock=True)}
 </section>
 
 <section class="g">
@@ -681,6 +710,12 @@ themselves into vehicles they cannot afford.</p>
   </div>
 </section>
 
+<section class="g legacy">{frag('uc-alternatives')}</section>
+<section class="row row-2">
+  <div class="g legacy">{frag('uc-insurance')}</div>
+  <div class="g legacy">{frag('uc-threejobs')}</div>
+</section>
+
 <div class="legacy g">{frag('costs')}</div>
 <div class="legacy g">{frag('resale')}</div>
 {rulebar()}
@@ -761,8 +796,9 @@ It deserves a real answer with real numbers, including the parts that are still 
 
 def page_car():
     v = D["vehicle"]
-    tabs = [("vin", "Verified"), ("specs", "Spec sheet"), ("juniper", "Juniper"),
-            ("software", "Software"), ("fun", "Toybox"), ("accessories", "Accessories")]
+    tabs = [("vin", "Verified"), ("specs", "Spec sheet"), ("lineup", "The lineup"),
+            ("juniper", "Juniper"), ("software", "Software"), ("fun", "Toybox"),
+            ("accessories", "Accessories")]
     btns = "".join(
         f'<li><button role="tab" id="t-{k}" aria-controls="p-{k}" '
         f'aria-selected="{"true" if i==0 else "false"}">{t}</button></li>'
@@ -785,9 +821,32 @@ images. Everything below was verified against the car, not copied from a brochur
 {livestrip()}
 
 <section class="g">
+  {fig("/img/car/plate-0-f5d0bf.jpg","2024 Tesla Model Y Long Range AWD in Solid Black",
+       "Solid Black, 19 inch wheels, seven seats and a tow hitch. Built " + D["vehicle"]["build"] + ".",
+       stock=True)}
+</section>
+
+<section class="g">
   <h2>Specification</h2>
   <ul class="tabs" role="tablist" aria-label="Specification sections">{btns}</ul>
   {panels}
+</section>
+
+<section class="g">
+  <h2>Inside</h2>
+  <div class="gallery">
+    {fig("/img/car/screen-hw4-f10ad9.jpg","Model Y dashboard and 15.4 inch centre screen",
+         "One 15.4 inch screen runs everything. No instrument cluster, no start button.", stock=True)}
+    {fig("/img/car/plate-6-95a847.jpg","Model Y front seats and centre console",
+         "Front row. Shown in a white car with the lighter interior; this one is black on black.",
+         stock=True)}
+    {fig("/img/car/interior-e5d001.jpg","Model Y second and third row seating",
+         "Seven seats. The third row is the reason this trim was chosen over the five seat car.",
+         stock=True)}
+    {fig("/img/car/screen-17280a.jpg","Model Y cabin looking rearward under the glass roof",
+         "Glass roof, flat floor. The cabin that makes a 42 mile run tolerable twice a day.",
+         stock=True)}
+  </div>
 </section>
 
 <section class="g">
@@ -854,6 +913,8 @@ itself, so the car has to prove it belongs.</p>
   <p class="chart-note">{MO} at {usd(D['gas']['price_per_gal'])} a gallon. The Sequoia lasted
   fifteen days, which is its own small lesson about buying under pressure.</p>
 </section>
+
+<section class="g legacy">{frag('fleet')}</section>
 
 <section class="g">
   <h2>Why used, and why the credit never applied</h2>

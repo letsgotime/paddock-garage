@@ -13,6 +13,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 PUB = ROOT / "public"
 D = json.loads((ROOT / "data" / "telemetry.json").read_text())
 LOG = json.loads((ROOT / "data" / "log.json").read_text())
+W = json.loads((ROOT / "data" / "work.json").read_text())
 LEGACY = ROOT / "content" / "legacy"
 
 def frag(name):
@@ -27,6 +28,7 @@ def pct(v, d=0):  return f"{v:.{d}f}%"
 
 M  = '<span class="chip chip-m">measured</span>'
 MO = '<span class="chip chip-mo">modeled</span>'
+R  = '<span class="chip chip-r">reported</span>'
 
 
 def fig(src, alt, cap, *, stock=False):
@@ -144,8 +146,9 @@ def corridor_map():
     return "".join(out)
 
 # ── shell ───────────────────────────────────────────────────────────────────
-NAV = [("/switch/", "The Switch"), ("/drive/", "Drive"), ("/charge/", "Charge"),
-       ("/ledger/", "Ledger"), ("/battery/", "Battery"), ("/car/", "The Car")]
+NAV = [("/work/", "The Work"), ("/switch/", "The Switch"), ("/drive/", "Drive"),
+       ("/charge/", "Charge"), ("/ledger/", "Ledger"), ("/battery/", "Battery"),
+       ("/car/", "The Car")]
 
 FOOTER_LINKS = NAV + [("/driver/", "The Driver")]
 
@@ -207,7 +210,7 @@ FOOTER = f"""</main>
    <div class="pg-f-col pg-f-connect">
     <p class="pg-f-h">Connect</p>
     <a href="https://github.com/letsgotime" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a>
-    <a href="https://www.linkedin.com/in/gavinbrooks-leader/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span></a>
+    <a href="https://paddock20.com" target="_blank" rel="noopener noreferrer"><span>Paddock20</span></a>
    </div>
    <div class="pg-f-col pg-f-community">
     <p class="pg-f-h">Owner resources</p>
@@ -257,14 +260,108 @@ def rulebar():
 </div>"""
 
 # ── pages ───────────────────────────────────────────────────────────────────
+
+def page_work():
+    c = D["cost"]
+    out = []
+    for t in W["tracks"]:
+        stats = "".join(
+            f'<li><b>{html.escape(v)}</b> {html.escape(k)}</li>' for v, k in t["stats"])
+        prods = "".join(
+            f'<tr><td>{html.escape(n)}</td><td>{html.escape(d)}</td></tr>'
+            for n, d in t["products"])
+        prod_block = (f'<div class="tw" style="margin-top:12px"><table><tbody>{prods}'
+                      f'</tbody></table></div>') if prods else ""
+        eng = "".join(
+            f'<li><b>{html.escape(n)}</b> {html.escape(d)}</li>' for n, d in t["engage"])
+        eng_block = f'<ul class="data" style="margin-top:12px">{eng}</ul>' if eng else ""
+        link = (f'<p style="margin:12px 0 0"><a href="{t["url"]}" target="_blank" '
+                f'rel="noopener">{t["url"].replace("https://","")}</a></p>') if t["url"] else ""
+        badge = ('<span class="chip chip-w">the lead</span>' if t["lead"]
+                 else f'<span class="chip chip-p">track {t["rank"]:02d}</span>')
+        out.append(f"""<li class="chapter{' now' if t['lead'] else ''}">
+  <p class="ch-n">{t['rank']:02d}</p>
+  <div class="g{' g-2' if t['lead'] else ''} body">
+    <h2>{html.escape(t['name'])} {badge}</h2>
+    <p class="lede" style="margin-bottom:.5em">{html.escape(t['line'])}</p>
+    <p><strong>{html.escape(t['role'])}.</strong> {html.escape(t['what'])}</p>
+    <ul class="data">{stats}</ul>
+    {prod_block}
+    {eng_block}
+    <p class="chart-note" style="margin-top:12px"><strong>What it asks of the car:</strong>
+    {html.escape(t['vehicle_need'])}</p>
+    <p class="chart-note">{R} source: {html.escape(t['source'])}</p>
+    {link}
+  </div>
+</li>""")
+    body = f"""<p class="eyebrow">Live case study &middot; updated {D['pulled_at']}</p>
+<h1>One car. <span>Three jobs</span>.</h1>
+<p class="lede prose">{html.escape(W['thesis'])} This page is the reason the rest of this site
+counts every mile: a cost per mile is only interesting if something is riding on it.</p>
+{livestrip()}
+
+<section class="row row-2-1">
+  <div class="g g-2 cmd">
+    <p class="k">The denominator, measured</p>
+    <p class="v">{cents(c['per_mile_cents'])}<em>/mi</em></p>
+    <p class="sub">Every mile below runs at this cost. It is the number all three tracks are
+    charged against, and the reason the gig track is worth taking at all.
+    Working: <a href="/ledger/">the Ledger</a>.</p>
+  </div>
+  <div class="g">
+    <h2>Read the order</h2>
+    <p>The tracks are ranked, not listed. Software is the lead and the destination. Sourcing and
+    the audience carry the miles today. The gig work is the bridge, and it is labeled that way on
+    purpose.</p>
+    <p style="margin:0">No personal name, home address or work address appears on this site. The
+    operator is in {html.escape(W['operator']['city'])}.</p>
+  </div>
+</section>
+
+<ol class="chapters">
+{''.join(out)}
+</ol>
+
+<section class="g">
+  <h2>The car is the advertisement <span class="chip chip-mo">planned</span></h2>
+  <p class="prose">{html.escape(W['decals']['what'])}</p>
+  <p class="prose">{html.escape(W['decals']['note'])}</p>
+  <p class="prose" style="margin:0">The vehicle already goes where the buyers are. Adding a code
+  to the sheet metal turns miles that tracks two and three are paying for into lead generation
+  for track one, at no extra cost per mile.</p>
+</section>
+
+<section class="g g-0">
+  <h2>What this page is not</h2>
+  <p style="margin:0">Not an income report. Per track earnings, rates and hours stay private, as
+  do the vehicle's financing terms. What is published here is what a vehicle costs to operate and
+  what it is being asked to carry, which are facts about a car and a workload.</p>
+</section>
+{rulebar()}
+"""
+    return write("/work/", "One Car, Three Jobs",
+                 "A live case study: one measured vehicle as the denominator under three income "
+                 "tracks, with a software studio as the lead.",
+                 "tex-carbon.jpg", body)
+
 def page_home():
     c, b, f = D["cost"], D["battery"], D["fsd"]
     body = f"""<p class="eyebrow">Nashville, TN &middot; updated {D['pulled_at']}</p>
 <h1>Gas to electric,<br>measured from <span>the car up</span>.</h1>
-<p class="lede prose">This is one owner's running record of switching from gas to electric for
-the first time: every mile, every charge, every dollar, pulled from the car itself and from
-paid invoices. Forty-five, single, rebuilding after a divorce, which is why every dollar here
-has to justify itself. The car has to prove it belongs.</p>
+<p class="lede prose">A live case study. One vehicle carries three income tracks: a software
+studio, vehicle sourcing with an owner audience, and gig delivery as the bridge. Every mile,
+every charge and every dollar comes from the car itself and from paid invoices. Forty-five,
+single, rebuilding after a divorce, which is why every dollar here has to justify itself. The
+car has to prove it belongs, and it is now advertising the track it is funding.</p>
+
+<section class="g">
+  <h2>What the miles are for</h2>
+  <p class="prose">The vehicle economics on this site are not an academic exercise. This car is
+  the denominator under a software studio in Nashville, a vehicle sourcing practice with an
+  audience of owners, and the gig work bridging the two until the first one carries the bills.</p>
+  <p class="prose" style="margin:0"><a href="/work/">Read the case study</a>, or go straight to
+  the studio at <a href="https://paddock20.com" target="_blank" rel="noopener">paddock20.com</a>.</p>
+</section>
 
 <section class="row row-2-1">
   <div class="g g-2 cmd">
@@ -309,15 +406,15 @@ has to justify itself. The car has to prove it belongs.</p>
 <section>
   <h2>Start here</h2>
   <ul class="doors">
-    <li class="g door"><a class="door" href="/switch/"><span class="k">The story</span>
-      <h3>The Switch</h3><p>Gas to electric in seven chapters, from the fleet it replaced
-      to the battery. Each one opens with a data checkpoint.</p></a></li>
+    <li class="g door"><a class="door" href="/work/"><span class="k">The case study</span>
+      <h3>One car, three jobs</h3><p>What the vehicle is actually carrying: a software studio
+      first, then sourcing and an owner audience, then the gig work funding both.</p></a></li>
     <li class="g door"><a class="door" href="/ledger/"><span class="k">The money</span>
       <h3>Ledger</h3><p>Cost per mile against three gas vehicles, what the car earns across
       three jobs, and what it is worth today.</p></a></li>
-    <li class="g door"><a class="door" href="/drive/"><span class="k">The data</span>
-      <h3>Drive</h3><p>Where the car actually goes, {pct(f['pct'],1)} of miles on FSD,
-      and how it compares to {D['efficiency_vs_region']['sample']} other Model Ys nearby.</p></a></li>
+    <li class="g door"><a class="door" href="/switch/"><span class="k">The story</span>
+      <h3>The Switch</h3><p>Gas to electric in seven chapters, from the fleet it replaced to
+      the battery. Each one opens with a data checkpoint.</p></a></li>
   </ul>
 </section>
 {rulebar()}
@@ -651,6 +748,15 @@ denominator and the numerator on the same page, because separating them is how p
 themselves into vehicles they cannot afford.</p>
 {livestrip()}
 
+<section class="g">
+  <h2>What the miles are for</h2>
+  <p class="prose">The vehicle economics on this site are not an academic exercise. This car is
+  the denominator under a software studio in Nashville, a vehicle sourcing practice with an
+  audience of owners, and the gig work bridging the two until the first one carries the bills.</p>
+  <p class="prose" style="margin:0"><a href="/work/">Read the case study</a>, or go straight to
+  the studio at <a href="https://paddock20.com" target="_blank" rel="noopener">paddock20.com</a>.</p>
+</section>
+
 <section class="row row-2-1">
   <div class="g g-2 cmd">
     <p class="k">Cost per mile, measured</p>
@@ -940,7 +1046,7 @@ itself, so the car has to prove it belongs.</p>
 
 # ── run ─────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    built = [page_home(), page_switch(), page_drive(), page_charge(),
+    built = [page_home(), page_work(), page_switch(), page_drive(), page_charge(),
              page_ledger(), page_battery(), page_car(), page_driver()]
     # Static rules first, then dynamic, and the more specific prefix before the
     # looser one: Cloudflare applies the top-most match and always follows a
@@ -959,7 +1065,7 @@ if __name__ == "__main__":
         "/case-study/*    /ledger/  301\n"
         "/log/model-y/*   /car/     301\n"
         "/log/*           /switch/  301\n")
-    urls = ["/", "/switch/", "/drive/", "/charge/", "/ledger/", "/battery/", "/car/", "/driver/"]
+    urls = ["/", "/work/", "/switch/", "/drive/", "/charge/", "/ledger/", "/battery/", "/car/", "/driver/"]
     today = datetime.date.today().isoformat()
     (PUB / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'

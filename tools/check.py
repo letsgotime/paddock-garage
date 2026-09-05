@@ -12,6 +12,9 @@ FORBIDDEN = {
     "VIN serial":         r"7SAYGAEE8RF\d{6}|169869",
     "street address":     r"Alligood",
     "private coordinate": r"36\.17\d{4}|35\.9679\d*|-86\.8235|-86\.2953",
+    # the operator's legal name and personal profile stay off this site. The
+    # PaddockGavin brand and its domain are deliberately allowed.
+    "legal name":         r"Gavin\s+Brooks|linkedin\.com/in/gavinbrooks",
 }
 for p in pages:
     t = p.read_text()

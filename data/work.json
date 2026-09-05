@@ -1,0 +1,168 @@
+{
+  "pulled_at": "2026-09-03",
+  "thesis": "One vehicle is the denominator under three income tracks. Software is the one the other two are funding.",
+  "operator": {
+    "label": "The operator",
+    "city": "Nashville, Tennessee",
+    "note": "Named on the linked properties, not on this site."
+  },
+  "tracks": [
+    {
+      "rank": 1,
+      "key": "software",
+      "lead": true,
+      "name": "Paddock20",
+      "url": "https://paddock20.com",
+      "role": "Agentic engineering studio",
+      "line": "Race teams prep here before they win. We build your software the same way.",
+      "what": "Custom software and automation, built by one architect with no handoffs. Also courses and a one-day Nashville build session.",
+      "stats": [
+        [
+          "$125M+/mo",
+          "processed through client builds"
+        ],
+        [
+          "14 apps",
+          "in production right now"
+        ],
+        [
+          "4 to 12 wks",
+          "scope to ship"
+        ],
+        [
+          "1",
+          "architect, every build"
+        ]
+      ],
+      "products": [
+        [
+          "DRX Lot Assistant",
+          "Daily lot operations for a $125M+/mo exotic dealership. In production."
+        ],
+        [
+          "Supercar IQ",
+          "Vehicle identification from a photo. Launching September 2026."
+        ],
+        [
+          "iGot Receipts",
+          "Mod and mileage tracking for collectors."
+        ],
+        [
+          "Paddock Mail",
+          "Internal comms for a team that lives on the move."
+        ]
+      ],
+      "engage": [
+        [
+          "Custom builds",
+          "from $749, 4 to 12 weeks"
+        ],
+        [
+          "Courses",
+          "$49 each, $799 all access"
+        ],
+        [
+          "AI Mastermind, Nashville",
+          "$499, VIP $999"
+        ]
+      ],
+      "vehicle_need": "Client sites and the Nashville build day. Low miles, high presentation. This is the track the decals advertise.",
+      "source": "paddock20.com"
+    },
+    {
+      "rank": 2,
+      "key": "audience",
+      "lead": false,
+      "name": "PaddockGavin",
+      "url": "https://paddockgavin.com",
+      "role": "Vehicle sourcing and an owner audience",
+      "line": "I find cars for people.",
+      "what": "Concierge broker and vehicle sourcer, retail or wholesale, shopping with a dealer's licence so every auction is open. Plus the vertical video audience that brand deals are sold against.",
+      "stats": [
+        [
+          "78",
+          "cars found for other people"
+        ],
+        [
+          "8,088",
+          "Instagram followers, checked 2026-09-03"
+        ],
+        [
+          "~1M",
+          "views a month, reported"
+        ],
+        [
+          "200+",
+          "events run"
+        ]
+      ],
+      "products": [
+        [
+          "Sourcing",
+          "Retail or wholesale, every auction open with a dealer's licence."
+        ],
+        [
+          "Consignment",
+          "The retail lane."
+        ],
+        [
+          "Brand deals",
+          "An audience of owners and collectors, sound off, captions on."
+        ],
+        [
+          "Events",
+          "Private floor bookings and event days."
+        ]
+      ],
+      "engage": [
+        [
+          "Find me a car",
+          "concierge sourcing"
+        ],
+        [
+          "Sell my exotic car",
+          "intake"
+        ],
+        [
+          "Pitch a brand deal",
+          "affiliate and paid, disclosed on the piece"
+        ]
+      ],
+      "vehicle_need": "Lot days and event days on a fixed corridor, plus hauling gear. This is the track that puts the most miles on the odometer.",
+      "source": "paddockgavin.com and instagram.com/itspaddockgavin"
+    },
+    {
+      "rank": 3,
+      "key": "gig",
+      "lead": false,
+      "name": "Instacart",
+      "url": null,
+      "role": "The bridge",
+      "line": "Until software, events and brand deals pay the bills.",
+      "what": "Gig delivery, run deliberately as a bridge rather than a business. It converts spare hours and an already owned vehicle into cash flow while the other two tracks mature.",
+      "stats": [
+        [
+          "Bridge",
+          "not the destination"
+        ],
+        [
+          "Variable",
+          "hours, by week"
+        ],
+        [
+          "No published figures",
+          "yet"
+        ]
+      ],
+      "products": [],
+      "engage": [],
+      "vehicle_need": "Stop and go miles, cargo space, and a cost per mile low enough that the run is still worth taking. This is the track the cost per mile was built to answer.",
+      "source": "stated by the operator"
+    }
+  ],
+  "decals": {
+    "status": "planned",
+    "what": "Vinyl decals advertising Paddock20.com with a QR code, so the vehicle doing the miles for tracks two and three advertises track one.",
+    "note": "The car is already the most seen asset in the operation: lot days, event days and deliveries put it in front of exactly the people who buy custom software."
+  }
+}

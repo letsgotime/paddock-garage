@@ -148,6 +148,8 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
 .chip-mo{ color:var(--sky); border-color:rgba(87,180,230,.35); background:rgba(87,180,230,.1) }
 .chip-p{ color:var(--steel); border-color:rgba(154,160,170,.32); background:rgba(154,160,170,.09) }
 .chip-w{ color:var(--ignition); border-color:rgba(244,81,30,.45); background:rgba(244,81,30,.12) }
+/* reported: published by a named source, neither an invoice nor a derivation */
+.chip-r{ color:var(--sky); border-color:rgba(87,180,230,.28); background:rgba(87,180,230,.07) }
 
 /* ---------- live strip ---------------------------------------------------- */
 .live{ display:flex; flex-wrap:wrap; gap:10px 20px; align-items:baseline;
@@ -195,6 +197,7 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
 .chapter.now .ch-n{ color:var(--ignition) }
 .chapter .body{ padding:18px var(--pad) }
 .chapter .data{ display:flex; flex-wrap:wrap; gap:8px; margin-top:11px; padding:0; list-style:none }
+.chapter .tw{ margin-top:12px }
 .chapter .data li{ font-size:.8rem; color:var(--ink-2); font-variant-numeric:tabular-nums;
                    padding:6px 11px; border-radius:9px; background:rgba(255,255,255,.035);
                    border:1px solid rgba(229,231,235,.07) }

@@ -255,6 +255,26 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
 .legacy figcaption,.legacy .cap{ font-size:.76rem; color:var(--ink-3); margin:0 0 14px }
 .legacy .tbl-wrap,.legacy .scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch }
 
+/* ---------- spec lists + skill grid --------------------------------------- */
+.spec{ margin:0; display:grid; gap:0 }
+.spec dt{ font-size:.63rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase;
+          color:var(--ignition); margin-top:16px }
+.spec dt:first-child{ margin-top:0 }
+.spec dd{ margin:5px 0 0; color:var(--ink-2); line-height:1.62; font-size:.92rem }
+@media(min-width:760px){
+  .spec{ grid-template-columns:170px 1fr; gap:0 22px; align-items:baseline }
+  .spec dt{ margin-top:14px; text-align:right }
+  .spec dd{ margin-top:14px }
+  .spec dt:first-child,.spec dt:first-child + dd{ margin-top:0 }
+}
+.skills{ list-style:none; margin:0; padding:0; display:grid; gap:8px;
+         grid-template-columns:1fr }
+@media(min-width:560px){ .skills{ grid-template-columns:repeat(2,minmax(0,1fr)) } }
+@media(min-width:900px){ .skills{ grid-template-columns:repeat(3,minmax(0,1fr)) } }
+.skills li{ font-size:.86rem; color:var(--ink-2); padding:9px 12px; border-radius:9px;
+            background:rgba(255,255,255,.035); border:1px solid rgba(229,231,235,.07);
+            border-left:2px solid rgba(244,81,30,.5) }
+
 /* ---------- figures ------------------------------------------------------- */
 .fig{ margin:0 }
 .fig + .fig{ margin-top:var(--gap) }

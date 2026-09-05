@@ -78,7 +78,7 @@
   "fleet": [
     {
       "name": "2015 Chevrolet Express 2500",
-      "role": "Detail van, DuPont runs",
+      "role": "Detail van, dealership runs",
       "mpg": 13,
       "cents_per_mi": 28.0,
       "held": "Sep 2025 to Jul 2026"

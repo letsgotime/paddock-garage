@@ -15,6 +15,10 @@ FORBIDDEN = {
     # the operator's legal name and personal profile stay off this site. The
     # PaddockGavin brand and its domain are deliberately allowed.
     "legal name":         r"Gavin\s+Brooks|linkedin\.com/in/gavinbrooks",
+    # former employer: the role ended 2026-09-04. Client is referred to only by
+    # description. "DRX" was that engagement's product prefix and is retired.
+    "former employer":    r"(?i)du\s?pont",
+    "retired product":    r"(?i)\bdrx\b",
 }
 for p in pages:
     t = p.read_text()

@@ -14,6 +14,7 @@ PUB = ROOT / "public"
 D = json.loads((ROOT / "data" / "telemetry.json").read_text())
 LOG = json.loads((ROOT / "data" / "log.json").read_text())
 W = json.loads((ROOT / "data" / "work.json").read_text())
+C = json.loads((ROOT / "data" / "colophon.json").read_text())
 LEGACY = ROOT / "content" / "legacy"
 
 def frag(name):
@@ -263,6 +264,13 @@ def rulebar():
 
 def page_work():
     c = D["cost"]
+    probs = "".join(
+        '<li class="chapter"><p class="ch-n">%02d</p><div class="g body">'
+        '<h3 style="font-size:1.02rem">%s</h3>'
+        '<p><strong>Symptom.</strong> %s</p>'
+        '<p style="margin:0"><strong>Fix.</strong> %s</p></div></li>'
+        % (i + 1, html.escape(t), html.escape(sym), html.escape(fix))
+        for i, (t, sym, fix) in enumerate(C["problems"]))
     out = []
     for t in W["tracks"]:
         stats = "".join(
@@ -336,6 +344,49 @@ counts every mile: a cost per mile is only interesting if something is riding on
   <p style="margin:0">Not an income report. Per track earnings, rates and hours stay private, as
   do the vehicle's financing terms. What is published here is what a vehicle costs to operate and
   what it is being asked to carry, which are facts about a car and a workload.</p>
+</section>
+
+<section id="colophon">
+  <p class="eyebrow"><b>Colophon</b> &middot; how this site was built</p>
+  <h2 style="font-size:clamp(1.4rem,5.2vw,2.1rem)">The build behind the numbers.</h2>
+  <p class="lede prose">{html.escape(C['intro'])}</p>
+</section>
+
+<section class="g">
+  <h2>Stack</h2>
+  <dl class="spec">
+    {''.join(f'<dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd>' for k, v in C['stack'])}
+  </dl>
+</section>
+
+<section class="g">
+  <h2>What is original here</h2>
+  <p class="prose">Four pieces were designed for this build rather than adopted from a template.
+  They are the parts that transfer to client work.</p>
+  <dl class="spec">
+    {''.join(f'<dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd>' for k, v in C['ip'])}
+  </dl>
+</section>
+
+<section>
+  <p class="eyebrow">What went wrong, and what it cost</p>
+  <ol class="chapters">{probs}</ol>
+</section>
+
+<section class="g">
+  <h2>What this build exercised</h2>
+  <ul class="skills">
+    {''.join(f'<li>{html.escape(k)}</li>' for k in C['skills'])}
+  </ul>
+  <p class="chart-note" style="margin-top:14px">{html.escape(C['close'])}</p>
+</section>
+
+<section class="g g-2">
+  <h2>This is what an engagement produces</h2>
+  <p class="prose">Everything above came out of one build. If there is a part of your week that
+  should not exist any more, the studio scopes it, prices it in writing, and ships it.</p>
+  <p class="prose" style="margin:0"><a href="https://paddock20.com" target="_blank" rel="noopener">
+  paddock20.com</a> &middot; custom builds from $749, four to twelve weeks.</p>
 </section>
 {rulebar()}
 """

@@ -1,0 +1,89 @@
+{
+  "intro": "This site is a production artifact, not a portfolio mock. What follows is the engineering behind it, including the parts that went wrong, because a build log that only lists wins is a brochure.",
+  "stack": [
+    [
+      "Delivery",
+      "Cloudflare Workers static assets on a custom domain. Edge 301s via a _redirects manifest, evaluated before asset resolution. No server, no runtime dependency, no external request at view time."
+    ],
+    [
+      "Generation",
+      "A deterministic Python static site generator. One JSON snapshot renders every page, so a figure cannot be current on one page and stale on another. No framework, no hydration, no client bundle."
+    ],
+    [
+      "Data plane",
+      "Vehicle telemetry and charging records via MCP connectors, normalised into a dedicated Postgres schema on Neon, then baked to a versioned JSON snapshot at build time."
+    ],
+    [
+      "Identity",
+      "Tesla Fleet API partner authentication: OAuth 2.0 client credentials for the partner token, authorization code flow for user scope, and an EC prime256v1 public key pinned at a well-known path inside the vehicle pairing chain of trust."
+    ],
+    [
+      "Presentation",
+      "A depth-graded glass design system on three elevations, with backdrop filtering, film grain over a full-bleed plate, and per-breakpoint art direction. Mobile first with safe-area insets and a 16px input floor."
+    ],
+    [
+      "Visualisation",
+      "Charts generated as SVG at build time. No charting library ships to the browser."
+    ]
+  ],
+  "ip": [
+    [
+      "Provenance typing",
+      "Every published figure is typed at the source: measured from an invoice or a sensor, modeled from a derivation, or reported by a named third party. The type travels with the value into the render, so an estimate cannot be presented as a measurement by accident. This is the credibility model the whole site rests on."
+    ],
+    [
+      "Privacy-preserving aggregation",
+      "Raw per-drive coordinates resolve to a residence and a workplace within a few metres. They are generalised to city-pair corridors weighted by trip count before they reach the build, and departure timestamps are dropped entirely, because a departure pattern discloses when a property is unoccupied."
+    ],
+    [
+      "Policy as code",
+      "A pre-deploy gate encodes the editorial and privacy rules as executable checks rather than documentation: identifier redaction, address and coordinate patterns, internal link resolution, page weight ceilings, and a house typographic standard. The build fails rather than shipping a violation."
+    ],
+    [
+      "Perceptual palette derivation",
+      "Brand hues are re-derived per surface rather than reused. Chart marks are stepped into the dark-mode OKLCH lightness band and validated programmatically for protanopia, deuteranopia and tritanopia separation before a chart is drawn."
+    ]
+  ],
+  "problems": [
+    [
+      "A 1 MB page that was mostly one photograph",
+      "The legacy vehicle profile was 1,054 KB. Ninety per cent of it was base64 image data pasted inline, including one 70 KB photograph repeated three times in the same document.",
+      "Content-addressed extraction with SHA-1 deduplication moved every image to a real file and rewrote the references. The heaviest page fell from 1,054 KB to 37 KB and the images became cacheable for the first time."
+    ],
+    [
+      "A stylesheet that was only ever an overlay",
+      "Each legacy page carried its own CSS reset inline, so the shared stylesheet had never needed one. Generated pages inherited no reset at all: the body fell back to a serif, and the layout gained a horizontal scrollbar on every screen.",
+      "Diagnosed by measuring documentElement.scrollWidth against clientWidth rather than by eye, which located the missing box-sizing rule in one pass. The base layer now lives in the shared stylesheet where it can never be page-local again."
+    ],
+    [
+      "SVG text does not scale like HTML text",
+      "Charts authored in a 720 unit viewBox rendered at 309 CSS pixels on a phone, which shrank nine pixel labels to roughly four. The charts were technically correct and practically unreadable on the primary platform.",
+      "Label sizes are now expressed in user units and tuned per breakpoint so they resolve near ten pixels on screen at every width, and a value label that overflowed the viewBox on the longest bar was caught by measuring getBBox against the box rather than trusting the layout."
+    ],
+    [
+      "Art direction that survived the desktop and died on the phone",
+      "Backdrop plates are 2.39:1. Under background-size cover on a portrait phone the browser scaled them to roughly 1939 pixels wide against a 375 pixel viewport, presenting a nineteen per cent centre slice under a veil running to eighty-two per cent black. The photography read as a gradient.",
+      "The plate is now anchored and scaled per breakpoint with the veil lifted on small screens, so the composition survives the crop instead of being destroyed by it."
+    ],
+    [
+      "A 3D preview built from an invented shape",
+      "A wrap previewer was built on hand-authored extrusion coordinates rather than a real vehicle mesh. The engine underneath was sound, the geometry was a fabrication, and it shipped before that distinction was taken seriously.",
+      "Pulled from production the same day and held until a correctly licensed mesh is in hand. The standing rule that came out of it: when a reference asset exists, use the asset or stop, never approximate it and never present the approximation as the thing."
+    ]
+  ],
+  "skills": [
+    "Static site generation and data-driven templating",
+    "Edge deployment and edge redirect policy",
+    "OAuth 2.0 client credentials and authorization code flows",
+    "Asymmetric key provisioning and well-known endpoint pinning",
+    "MCP connector integration",
+    "ETL and privacy-preserving spatial aggregation",
+    "Relational schema design and multi-tenant separation",
+    "Information architecture and content migration at scale",
+    "Accessible data visualisation, CVD-validated",
+    "Responsive art direction and progressive enhancement",
+    "Policy as code and pre-deploy gating",
+    "PII redaction and geoprivacy"
+  ],
+  "close": "None of the above is unusual on its own. The point is that one operator carried it from telemetry ingestion to typographic standard without a handoff, which is the same shape every client build takes."
+}

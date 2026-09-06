@@ -275,6 +275,74 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
             background:rgba(255,255,255,.035); border:1px solid rgba(229,231,235,.07);
             border-left:2px solid rgba(244,81,30,.5) }
 
+/* ---------- hero, copied from the paddock20.com / paddockgavin.com pattern --
+   Both sites run the same opening: eyebrow, a short two-line headline, a short
+   intro paragraph, one solid accent button with a ghost link beside it, then a
+   four-cell stat strip. The proof sits immediately under the headline instead
+   of below a wall of prose. */
+.hero{ position:relative }
+.hero-panel{
+  background:linear-gradient(100deg,rgba(10,14,25,.93) 0%,rgba(10,14,25,.88) 52%,
+             rgba(10,14,25,.62) 100%);
+  border:1px solid var(--hairline,rgba(229,231,235,.10));
+  border-radius:18px;
+  padding:clamp(26px,5vw,54px) clamp(20px,4vw,48px);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  max-width:760px;
+}
+.hero-eyebrow{ font-size:.68rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--amber); margin:0 0 1.1em }
+.hero h1{ font-family:var(--display); font-size:clamp(2.4rem,8.4vw,4.15rem); line-height:.98;
+  letter-spacing:-.028em; color:var(--ink); margin:0 0 .5em; text-wrap:balance }
+.hero h1 em{ font-style:normal; color:var(--ignition) }
+.hero-blob{ color:var(--ink-2); font-size:clamp(.98rem,2.4vw,1.08rem); line-height:1.62;
+  max-width:52ch; margin:0 0 1.7em }
+.hero-cta{ display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center }
+.btn-primary{ display:inline-flex; align-items:center; min-height:52px; padding:0 26px;
+  border-radius:10px; background:var(--ignition); color:#fff !important; font-weight:800;
+  font-size:.82rem; letter-spacing:.13em; text-transform:uppercase;
+  border:0 !important; text-decoration:none }
+.btn-primary:hover{ background:#FF6A38 }
+.btn-ghost{ display:inline-flex; align-items:center; gap:9px; min-height:52px;
+  color:var(--ink) !important; font-weight:800; font-size:.76rem; letter-spacing:.15em;
+  text-transform:uppercase; border-bottom:0 !important; text-decoration:none }
+.btn-ghost span{ color:var(--ignition) }
+
+/* four-cell stat strip, divided by hairlines, numbers first */
+.statstrip{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin:18px 0 0;
+  padding:0; list-style:none; border:1px solid var(--hairline,rgba(229,231,235,.10));
+  border-radius:14px; overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 46%),
+             var(--g-fill-1,rgba(13,18,32,.58));
+  -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px) }
+@media(min-width:760px){ .statstrip{ grid-template-columns:repeat(4,minmax(0,1fr)) } }
+.statstrip li{ padding:16px clamp(14px,2.2vw,22px);
+  border-right:1px solid var(--hairline,rgba(229,231,235,.10));
+  border-bottom:1px solid var(--hairline,rgba(229,231,235,.10)) }
+.statstrip li:nth-child(2n){ border-right:0 }
+@media(min-width:760px){
+  .statstrip li{ border-bottom:0 }
+  .statstrip li:nth-child(2n){ border-right:1px solid var(--hairline,rgba(229,231,235,.10)) }
+  .statstrip li:last-child{ border-right:0 }
+}
+.statstrip li:nth-last-child(-n+2){ border-bottom:0 }
+.statstrip .v{ font-family:var(--display); font-size:clamp(1.5rem,5vw,2.05rem); line-height:1;
+  letter-spacing:-.022em; color:var(--ink); font-variant-numeric:tabular-nums; margin:0 }
+.statstrip .v.hot{ color:var(--ignition) }
+.statstrip .v.cool{ color:var(--sky) }
+.statstrip .k{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.6rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:9px 0 0 }
+
+/* the landing plate is the ground, not a texture: much lighter veil */
+body.lp::before{
+  background-image:
+    linear-gradient(180deg,rgba(5,7,13,.42) 0%,rgba(5,7,13,.30) 34%,
+                            rgba(5,7,13,.80) 78%,var(--g-black) 100%),
+    var(--page-bg) !important;
+  background-size:cover,cover !important;
+  background-position:center 22% !important;
+}
+
 /* ---------- road trip: route, state of charge, charging curves ------------- */
 .rt-map{ display:block; width:100%; height:auto; overflow:visible }
 .rt-line{ fill:none; stroke:var(--m2); stroke-width:2.5; stroke-linecap:round;

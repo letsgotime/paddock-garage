@@ -157,7 +157,7 @@ NAV = [("/trip/", "Road Trip"), ("/work/", "The Work"), ("/switch/", "The Switch
 
 FOOTER_LINKS = NAV + [("/driver/", "The Driver")]
 
-def head(title, desc, path, plate, extra=""):
+def head(title, desc, path, plate, extra="", bodycls=""):
     cur = ' aria-current="page"'
     nav = "\n".join(
         '      <a href="%s"%s>%s</a>' % (h, cur if h == path else "", t)
@@ -184,7 +184,7 @@ def head(title, desc, path, plate, extra=""):
 <style>:root{{--page-bg:url('/img/{plate}')}}</style>
 {extra}
 </head>
-<body>
+<body{bodycls}>
 <header class="pg-nav">
   <div class="pg-nav-inner">
     <a class="pg-nav-logo" href="/" aria-label="Paddock Garage home"><img src="/img/wordmark.png" alt="Paddock20"></a>
@@ -238,10 +238,10 @@ FOOTER = f"""</main>
 </html>
 """
 
-def write(path, title, desc, plate, body, extra=""):
+def write(path, title, desc, plate, body, extra="", bodycls=""):
     out = PUB / path.strip("/") / "index.html" if path != "/" else PUB / "index.html"
     out.parent.mkdir(parents=True, exist_ok=True)
-    doc = head(title, desc, path, plate, extra) + body + FOOTER
+    doc = head(title, desc, path, plate, extra, bodycls) + body + FOOTER
     if "—" in doc or "&mdash;" in doc:
         raise SystemExit(f"em dash found in {path}")
     out.write_text(doc)
@@ -571,85 +571,83 @@ measured and published. Nothing on this page is an estimate.</p>
                  "hero-ev-road.jpg", body)
 
 def page_home():
-    c, b, f = D["cost"], D["battery"], D["fsd"]
-    body = f"""<p class="eyebrow">Nashville, TN &middot; updated {D['pulled_at']}</p>
-<h1>Gas to electric,<br>measured from <span>the car up</span>.</h1>
-<p class="lede prose">A live case study. One vehicle carries three income tracks: a software
-studio, vehicle sourcing with an owner audience, and gig delivery as the bridge. Every mile,
-every charge and every dollar comes from the car itself and from paid invoices. Forty-five,
-single, rebuilding after a divorce, which is why every dollar here has to justify itself. The
-car has to prove it belongs, and it is now advertising the track it is funding.</p>
-
-<section class="g">
-  <h2>What the miles are for</h2>
-  <p class="prose">The vehicle economics on this site are not an academic exercise. This car is
-  the denominator under a software studio in Nashville, a vehicle sourcing practice with an
-  audience of owners, and the gig work bridging the two until the first one carries the bills.</p>
-  <p class="prose" style="margin:0"><a href="/work/">Read the case study</a>, or go straight to
-  the studio at <a href="https://paddock20.com" target="_blank" rel="noopener">paddock20.com</a>.</p>
+    c, b, f, fl = D["cost"], D["battery"], D["fsd"], D["fleet"][0]
+    saves = fl["cents_per_mi"] - c["per_mile_cents"]
+    body = f"""<section class="hero">
+  <div class="hero-panel">
+    <p class="hero-eyebrow">Nashville, Tennessee</p>
+    <h1>I measure<br>every <em>mile</em>.</h1>
+    <p class="hero-blob">A 2024 Model Y that pays for itself, and proves it. Every mile, every
+    charge and every dollar comes from the car and from paid invoices, published as it happens.
+    Nothing here is an estimate.</p>
+    <div class="hero-cta">
+      <a class="btn-primary" href="/ledger/">See the numbers</a>
+      <a class="btn-ghost" href="/trip/">The last road trip <span>&rarr;</span></a>
+    </div>
+  </div>
+  <ul class="statstrip">
+    <li><p class="v hot">{cents(c['per_mile_cents'])}</p><p class="k">Per mile, measured</p></li>
+    <li><p class="v">{cents(fl['cents_per_mi'])}</p><p class="k">The van it replaced</p></li>
+    <li><p class="v cool">{pct(f['pct'],1)}</p><p class="k">Driven by the car</p></li>
+    <li><p class="v">{pct(b['degradation_pct'])}</p><p class="k">Battery degradation</p></li>
+  </ul>
 </section>
 
-<section class="row row-2-1">
-  <div class="g g-2 cmd">
-    <p class="k">Cost per mile, measured</p>
-    <p class="v">{cents(c['per_mile_cents'])}<em>/mi</em></p>
-    <p class="sub">{usd(D['charging']['cost'])} of charging across {mi(D['driving']['distance'],1)} miles
-    and {D['charging']['sessions']} sessions. The van it replaced cost
-    {cents(D['fleet'][0]['cents_per_mi'])} a mile at the same pump.</p>
-  </div>
-  <div class="g">
-    <h2>The rule</h2>
-    <p>A number here is either {M} from an invoice or a sensor, or it is {MO} and says so.
-    There is no third category. Modeled figures get replaced as real data arrives.</p>
-    <p style="margin:0">That rule is the whole point. It is also why the unflattering numbers
-    stay on the page.</p>
-  </div>
+<section>
+  <h2>Same driver, same roads, same pump.</h2>
+  <p class="prose">The three vehicles below were actually owned and driven, not national averages
+  for a car nobody has. Electricity is priced from the invoice, so it already includes the
+  {pct(D['charge_loss']['pct'],1)} that never reaches the battery.</p>
+  {hbars([("2024 Model Y (this car)", c['per_mile_cents'], "measured"),
+          (D['fleet'][0]['name'], D['fleet'][0]['cents_per_mi'], f"{D['fleet'][0]['mpg']} mpg"),
+          (D['fleet'][1]['name'], D['fleet'][1]['cents_per_mi'], f"{D['fleet'][1]['mpg']} mpg"),
+          (D['fleet'][2]['name'], D['fleet'][2]['cents_per_mi'], f"{D['fleet'][2]['mpg']} mpg")])}
+  <p class="chart-note">Electric figure {M}. Gas figures {MO}: each vehicle's measured fuel
+  economy at {usd(D['gas']['price_per_gal'])} a gallon ({D['gas']['source']},
+  {D['gas']['as_of']}). The difference is {cents(saves)} on every mile driven.</p>
 </section>
 
-<section class="stats">
-  <div class="g stat"><p class="v">{pct(b['degradation_pct'])}</p><p class="k">Battery degradation</p></div>
-  <div class="g stat"><p class="v">{pct(f['pct'],1)}</p><p class="k">Miles driven on FSD</p></div>
-  <div class="g stat"><p class="v">{mi(D['vehicle']['odometer'],0)}</p><p class="k">Odometer</p></div>
-  <div class="g stat"><p class="v">{D['driving']['wh_per_mi']:.0f}<small>Wh/mi</small></p><p class="k">Real consumption</p></div>
+<section>
+  <h2>Where it actually goes.</h2>
+  <p class="prose">{D['driving']['drives']} drives, {mi(D['driving']['distance'],1)} miles,
+  aggregated to city level on purpose.</p>
+  {corridor_map()}
+  <p class="chart-note">{M}. Line weight is trip count, orange rings mark places it has charged.
+  Per drive coordinates and departure times are held back: the clusters resolve to a home and a
+  workplace.</p>
 </section>
 
 {livestrip()}
 
-<section class="g">
-  <h2>What it costs against what it replaced</h2>
-  <p class="prose">Same driver, same roads, same Tennessee pump price of
-  {usd(D['gas']['price_per_gal'])} a gallon. The three gas vehicles are the ones actually owned
-  and driven, not national averages for a car nobody has.</p>
-  {hbars([("2024 Model Y (this car)", D['cost']['per_mile_cents'], "measured"),
-          (D['fleet'][0]['name'], D['fleet'][0]['cents_per_mi'], f"{D['fleet'][0]['mpg']} mpg"),
-          (D['fleet'][1]['name'], D['fleet'][1]['cents_per_mi'], f"{D['fleet'][1]['mpg']} mpg"),
-          (D['fleet'][2]['name'], D['fleet'][2]['cents_per_mi'], f"{D['fleet'][2]['mpg']} mpg")])}
-  <p class="chart-note">Electric figure {M}. Gas figures {MO}: measured fuel economy for each
-  vehicle, priced at {usd(D['gas']['price_per_gal'])} a gallon
-  ({D['gas']['source']}, {D['gas']['as_of']}).</p>
-</section>
-
 <section>
-  <h2>Start here</h2>
+  <h2>Three ways in.</h2>
   <ul class="doors">
     <li class="g door"><a class="door" href="/work/"><span class="k">The case study</span>
-      <h3>One car, three jobs</h3><p>What the vehicle is actually carrying: a software studio
-      first, then sourcing and an owner audience, then the gig work funding both.</p></a></li>
-    <li class="g door"><a class="door" href="/ledger/"><span class="k">The money</span>
-      <h3>Ledger</h3><p>Cost per mile against three gas vehicles, what the car earns across
-      three jobs, and what it is worth today.</p></a></li>
-    <li class="g door"><a class="door" href="/switch/"><span class="k">The story</span>
-      <h3>The Switch</h3><p>Gas to electric in seven chapters, from the fleet it replaced to
-      the battery. Each one opens with a data checkpoint.</p></a></li>
+      <h3>One car, three jobs</h3><p>A software studio, vehicle sourcing with an owner audience,
+      and gig delivery as the bridge. This car is the denominator under all three.</p></a></li>
+    <li class="g door"><a class="door" href="/trip/"><span class="k">The fun one</span>
+      <h3>439 miles, two states</h3><p>Real charging curves sampled by the car, per leg energy,
+      and the eighty per cent rule proven on a single plug.</p></a></li>
+    <li class="g door"><a class="door" href="/charge/"><span class="k">The one nobody has</span>
+      <h3>{pct(D['charge_loss']['pct'],1)} charge loss</h3><p>What the plug bills against what
+      the battery keeps, reconciled across {D['charge_loss']['sessions']} invoices.</p></a></li>
   </ul>
+</section>
+
+<section class="g">
+  <h2>The rule this runs on</h2>
+  <p class="prose" style="margin:0">A number here is either {M} from an invoice or a sensor, or
+  it is {MO} and says so. There is no third category, and the build fails rather than publish a
+  figure that cannot be sourced. That rule is why the unflattering numbers, depreciation, charge
+  loss, cold range, are still on the page.</p>
 </section>
 {rulebar()}
 """
     return write("/", "Paddock Garage",
-                 f"One owner's measured record of going gas to electric: {cents(c['per_mile_cents'])} "
-                 f"per mile across {mi(D['driving']['distance'],1)} miles, {pct(b['degradation_pct'])} "
-                 f"battery degradation, {pct(f['pct'],1)} of miles on FSD.",
-                 "hero-ev-road.jpg", body)
+                 f"A 2024 Model Y that pays for itself and proves it: {cents(c['per_mile_cents'])} "
+                 f"a mile measured against the van it replaced, {pct(b['degradation_pct'])} battery "
+                 f"degradation, {pct(f['pct'],1)} of miles driven by the car.",
+                 "hero-ev-road.jpg", body, bodycls=' class="lp"')
 
 def page_switch():
     f, b, ch, c = D["fsd"], D["battery"], D["charging"], D["cost"]

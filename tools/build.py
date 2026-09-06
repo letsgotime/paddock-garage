@@ -508,6 +508,68 @@ raw drives.</p>
                  f"charging curves, per-leg energy, and {pct(t['fsd_pct'],1)} of it driven by the car.",
                  "hero-highway.jpg", body)
 
+
+def page_scan():
+    c, b, f = D["cost"], D["battery"], D["fsd"]
+    body = f"""<p class="eyebrow"><b>You scanned the car</b> &middot; live figures, updated {D['pulled_at']}</p>
+<h1>This car pays for <span>itself</span>. Here is the receipt.</h1>
+<p class="lede prose">You are standing next to a 2024 Model Y that is also a running experiment.
+Every mile it has driven, every kilowatt hour it has bought and every dollar it has spent is
+measured and published. Nothing on this page is an estimate.</p>
+
+<section class="row row-2-1">
+  <div class="g g-2 cmd">
+    <p class="k">What a mile actually costs</p>
+    <p class="v">{cents(c['per_mile_cents'])}<em>/mi</em></p>
+    <p class="sub">{usd(D['charging']['cost'])} of charging across {mi(D['driving']['distance'],1)}
+    measured miles. The van it replaced cost {cents(D['fleet'][0]['cents_per_mi'])} a mile at the
+    same pump.</p>
+  </div>
+  <div class="g">
+    <h2>Why a car has a website</h2>
+    <p>Because the same person who built this measurement system builds software for other
+    businesses, and a working system is a better argument than a brochure.</p>
+    <p style="margin:0">The site you are on ingests two telemetry sources, reconciles them
+    against invoices, and fails its own deploy if a number cannot be sourced.</p>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="g stat"><p class="v">{pct(b['degradation_pct'])}</p><p class="k">Battery degradation</p></div>
+  <div class="g stat"><p class="v">{pct(f['pct'],1)}</p><p class="k">Miles driven by the car</p></div>
+  <div class="g stat"><p class="v">{pct(D['charge_loss']['pct'],1)}</p><p class="k">Charge loss, measured</p></div>
+  <div class="g stat"><p class="v">{mi(D['vehicle']['odometer'],0)}</p><p class="k">Odometer</p></div>
+</section>
+
+<section>
+  <ul class="doors">
+    <li class="g door"><a class="door" href="/work/"><span class="k">Start here</span>
+      <h3>One car, three jobs</h3><p>What this vehicle actually carries, and which of the three
+      is the one being funded.</p></a></li>
+    <li class="g door"><a class="door" href="/trip/"><span class="k">The fun one</span>
+      <h3>A 439 mile road trip</h3><p>Real charging curves, per leg energy, and the eighty per
+      cent rule proven on one plug.</p></a></li>
+    <li class="g door"><a class="door" href="/ledger/"><span class="k">The money</span>
+      <h3>The Ledger</h3><p>Cost per mile against three gas vehicles that were actually
+      owned.</p></a></li>
+  </ul>
+</section>
+
+<section class="g g-2">
+  <h2>If you build things, or need something built</h2>
+  <p class="prose">Paddock20 is an agentic engineering studio in Nashville. Custom software and
+  automation, scoped and priced in writing, four to twelve weeks, and you own every line.</p>
+  <p class="prose" style="margin:0"><a href="https://paddock20.com" target="_blank" rel="noopener">
+  <strong>paddock20.com</strong></a> &middot; or read
+  <a href="/work/#colophon">how this site was built</a>, including what went wrong.</p>
+</section>
+{rulebar()}
+"""
+    return write("/scan/", "You Scanned the Car",
+                 "The live measured figures for the vehicle you are standing next to: cost per "
+                 "mile, battery health, and how the site behind it was built.",
+                 "hero-ev-road.jpg", body)
+
 def page_home():
     c, b, f = D["cost"], D["battery"], D["fsd"]
     body = f"""<p class="eyebrow">Nashville, TN &middot; updated {D['pulled_at']}</p>
@@ -1274,7 +1336,7 @@ itself, so the car has to prove it belongs.</p>
 
 # ── run ─────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    built = [page_home(), page_trip(), page_work(), page_switch(), page_drive(), page_charge(),
+    built = [page_home(), page_scan(), page_trip(), page_work(), page_switch(), page_drive(), page_charge(),
              page_ledger(), page_battery(), page_car(), page_driver()]
     # Static rules first, then dynamic, and the more specific prefix before the
     # looser one: Cloudflare applies the top-most match and always follows a
@@ -1293,7 +1355,7 @@ if __name__ == "__main__":
         "/case-study/*    /ledger/  301\n"
         "/log/model-y/*   /car/     301\n"
         "/log/*           /switch/  301\n")
-    urls = ["/", "/trip/", "/work/", "/switch/", "/drive/", "/charge/", "/ledger/", "/battery/", "/car/", "/driver/"]
+    urls = ["/", "/scan/", "/trip/", "/work/", "/switch/", "/drive/", "/charge/", "/ledger/", "/battery/", "/car/", "/driver/"]
     today = datetime.date.today().isoformat()
     (PUB / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'

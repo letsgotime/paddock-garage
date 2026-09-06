@@ -115,6 +115,39 @@ p.add_argument("--miles", type=float)
 p.add_argument("--deliveries", type=int)
 p.add_argument("--city"); p.add_argument("--note")
 p.set_defaults(fn=add)
+def prompt(a):
+    """Ask for a shift one field at a time. Blank skips an optional field."""
+    print("Log a shift. Enter skips anything optional.\n")
+    keys = list(PLATFORMS)
+    for i, k in enumerate(keys, 1):
+        print(f"  {i}. {PLATFORMS[k]}")
+    while True:
+        pick = input("\nPlatform (number or name): ").strip().lower()
+        if pick.isdigit() and 1 <= int(pick) <= len(keys):
+            plat = keys[int(pick) - 1]; break
+        if pick in PLATFORMS:
+            plat = pick; break
+        print("  not one of those")
+    def num(label, cast=float, required=False):
+        while True:
+            v = input(f"{label}: ").strip().replace("$", "").replace(",", "")
+            if not v:
+                if required: print("  needed"); continue
+                return None
+            try: return cast(v)
+            except ValueError: print("  numbers only")
+    today = datetime.date.today().isoformat()
+    date = input(f"Date [{today}]: ").strip() or today
+    ns = argparse.Namespace(
+        platform=plat, date=date,
+        gross=num("Base pay $", required=True), tips=num("Tips $") or 0,
+        net=None, hours=num("Hours worked"), miles=num("Miles driven"),
+        deliveries=num("Deliveries", int), city=input("City (optional): ").strip() or None,
+        note=input("Note (optional): ").strip() or None)
+    print()
+    add(ns)
+
+sub.add_parser("prompt", help="log a shift interactively").set_defaults(fn=prompt)
 sub.add_parser("report", help="totals by platform").set_defaults(fn=report)
 sub.add_parser("dash", help="render the private dashboard").set_defaults(fn=dash)
 a = ap.parse_args(); a.fn(a)

@@ -1,0 +1,11 @@
+#!/bin/bash
+# Log a gig shift, interactively. No flags, no long one-liner, no env to remember.
+#   ./tools/shift          log a shift
+#   ./tools/shift report   totals by platform
+#   ./tools/shift dash     rebuild the private dashboard
+set -e
+cd "$(dirname "$0")/.."
+set -a; . ~/.garage/db.env; set +a
+[ "$1" = "report" ] && exec python3 tools/income.py report
+[ "$1" = "dash" ]   && exec python3 tools/income.py dash
+exec python3 tools/income.py prompt

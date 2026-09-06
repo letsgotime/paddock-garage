@@ -111,11 +111,16 @@ def charge_curve(C):
              f'L{sx(pts[0]["soc"]):.1f},{sy(0):.1f} Z"/>')
     o.append(f'<path class="rt-curveline" d="{d}"/>')
     pk = max(pts, key=lambda p: p["kw"])
-    o.append(f'<circle class="rt-pk" cx="{sx(pk["soc"]):.1f}" cy="{sy(pk["kw"]):.1f}" r="4.5"/>')
-    o.append(f'<text class="val" x="{sx(pk["soc"])+9:.1f}" y="{sy(pk["kw"])-7:.1f}">'
+    px = sx(pk["soc"])
+    o.append(f'<circle class="rt-pk" cx="{px:.1f}" cy="{sy(pk["kw"]):.1f}" r="4.5"/>')
+    # flip the peak label inward when the peak sits near the right edge
+    flip = px > W * 0.66
+    o.append(f'<text class="val" x="{px + (-9 if flip else 9):.1f}" '
+             f'y="{sy(pk["kw"])-7:.1f}" text-anchor="{"end" if flip else "start"}">'
              f'{pk["kw"]:.0f} kW peak</text>')
-    for p in (pts[0], pts[-1]):
-        o.append(f'<text class="lab" x="{sx(p["soc"]):.1f}" y="{H-24}" text-anchor="middle">'
+    # axis end labels anchor inward so they cannot leave the box
+    for p, anc in ((pts[0], "start"), (pts[-1], "end")):
+        o.append(f'<text class="lab" x="{sx(p["soc"]):.1f}" y="{H-24}" text-anchor="{anc}">'
                  f'{p["soc"]:.0f}%</text>')
     o.append(f'<text class="lab" x="{W/2:.1f}" y="{H-6}" text-anchor="middle">'
              f'state of charge</text>')

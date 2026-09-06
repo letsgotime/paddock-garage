@@ -275,6 +275,57 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
             background:rgba(255,255,255,.035); border:1px solid rgba(229,231,235,.07);
             border-left:2px solid rgba(244,81,30,.5) }
 
+/* ---------- road trip: route, state of charge, charging curves ------------- */
+.rt-map{ display:block; width:100%; height:auto; overflow:visible }
+.rt-line{ fill:none; stroke:var(--m2); stroke-width:2.5; stroke-linecap:round;
+          stroke-linejoin:round; opacity:.32 }
+.rt-line-lead{ stroke:var(--m1); stroke-width:3.5; opacity:.95;
+               stroke-dasharray:2400; stroke-dashoffset:2400 }
+.rt-city circle{ transform-box:fill-box; transform-origin:center }
+.rt-dot{ fill:var(--ink) }
+.rt-dot-c{ fill:var(--m1) }
+.rt-pulse{ fill:var(--m1); opacity:.22 }
+.rt-cl{ font-family:var(--display); font-size:19px; fill:var(--ink); letter-spacing:.01em }
+.rt-legmi{ font-family:var(--display); font-size:18px; fill:var(--ink) }
+.rt-legwh{ font-family:Arial,sans-serif; font-size:15px; font-weight:700; fill:var(--ink-3) }
+@media(min-width:600px){
+  .rt-cl{ font-size:13px } .rt-legmi{ font-size:12.5px } .rt-legwh{ font-size:10.5px }
+}
+.rt-soc{ overflow:visible }
+.rt-socline{ fill:none; stroke:var(--m1); stroke-width:2.5; stroke-linejoin:round }
+.rt-socfill{ fill:var(--m1); opacity:.10 }
+.rt-socchg{ fill:var(--m2); opacity:.13 }
+.rt-socl{ font-family:var(--display); font-size:15px; fill:var(--ink) }
+.rt-socs{ font-family:Arial,sans-serif; font-size:13px; font-weight:700; fill:var(--ink-3) }
+@media(min-width:600px){ .rt-socl{ font-size:10.5px } .rt-socs{ font-size:9.5px } }
+.rt-curve{ overflow:visible }
+.rt-curveline{ fill:none; stroke:var(--m3); stroke-width:2.5; stroke-linejoin:round;
+               stroke-linecap:round }
+.rt-curvefill{ fill:var(--m3); opacity:.12 }
+.rt-pk{ fill:var(--m1); stroke:var(--g-black,#05070D); stroke-width:2 }
+
+@media(prefers-reduced-motion:no-preference){
+  .rt-line-lead{ animation:rt-draw 2.6s cubic-bezier(.3,.7,.3,1) .25s forwards }
+  @keyframes rt-draw{ to{ stroke-dashoffset:0 } }
+  .rt-pulse{ animation:rt-pulse 2.6s ease-out infinite }
+  @keyframes rt-pulse{ 0%{ transform:scale(.72); opacity:.30 }
+                       70%{ transform:scale(1.5); opacity:0 }
+                       100%{ transform:scale(1.5); opacity:0 } }
+  .rt-city{ opacity:0; animation:rt-in .5s ease-out forwards;
+            animation-delay:calc(.5s + var(--i,0) * .32s) }
+  .rt-leg{ opacity:0; animation:rt-in .5s ease-out forwards;
+           animation-delay:calc(.9s + var(--i,0) * .32s) }
+  @keyframes rt-in{ from{ opacity:0; transform:translateY(5px) } to{ opacity:1; transform:none } }
+  .rt-socline{ stroke-dasharray:2000; stroke-dashoffset:2000;
+               animation:rt-draw 2.2s cubic-bezier(.3,.7,.3,1) .2s forwards }
+  .rt-curveline{ stroke-dasharray:1400; stroke-dashoffset:1400;
+                 animation:rt-draw 1.8s cubic-bezier(.3,.7,.3,1) .15s forwards }
+}
+@media(prefers-reduced-motion:reduce){
+  .rt-line-lead,.rt-socline,.rt-curveline{ stroke-dashoffset:0 }
+  .rt-city,.rt-leg{ opacity:1 }
+}
+
 /* ---------- figures ------------------------------------------------------- */
 .fig{ margin:0 }
 .fig + .fig{ margin-top:var(--gap) }

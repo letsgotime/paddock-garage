@@ -7,7 +7,7 @@ a hand-typed number that can go stale behind the data.
 
     python3 tools/build.py
 """
-import json, pathlib, re, html, datetime
+import json, pathlib, re, html, datetime, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PUB = ROOT / "public"
@@ -15,6 +15,10 @@ D = json.loads((ROOT / "data" / "telemetry.json").read_text())
 LOG = json.loads((ROOT / "data" / "log.json").read_text())
 W = json.loads((ROOT / "data" / "work.json").read_text())
 C = json.loads((ROOT / "data" / "colophon.json").read_text())
+T = json.loads((ROOT / "data" / "roadtrip.json").read_text())
+G = json.loads((ROOT / "data" / "charging.json").read_text())
+sys.path.insert(0, str(ROOT / "tools"))
+import trip as TR
 LEGACY = ROOT / "content" / "legacy"
 
 def frag(name):
@@ -147,7 +151,7 @@ def corridor_map():
     return "".join(out)
 
 # ── shell ───────────────────────────────────────────────────────────────────
-NAV = [("/work/", "The Work"), ("/switch/", "The Switch"), ("/drive/", "Drive"),
+NAV = [("/trip/", "Road Trip"), ("/work/", "The Work"), ("/switch/", "The Switch"), ("/drive/", "Drive"),
        ("/charge/", "Charge"), ("/ledger/", "Ledger"), ("/battery/", "Battery"),
        ("/car/", "The Car")]
 
@@ -395,6 +399,114 @@ counts every mile: a cost per mile is only interesting if something is riding on
                  "A live case study: one measured vehicle as the denominator under three income "
                  "tracks, with a software studio as the lead.",
                  "tex-carbon.jpg", body)
+
+
+def page_trip():
+    t = T["totals"]
+    legs = "".join(
+        '<li class="chapter"><p class="ch-n">Leg %d</p><div class="g body">'
+        '<h2>%s to %s</h2><p>%s</p><ul class="data">'
+        '<li><b>%.1f mi</b> distance</li><li><b>%d Wh/mi</b> consumption</li>'
+        '<li><b>%d%%</b> on FSD</li><li><b>%.1f mph</b> average</li>'
+        '<li><b>%d%% to %d%%</b> charge</li><li><b>%s ft</b> climbed</li>'
+        '<li><b>%.1f mi</b> regenerated</li><li><b>%.0f to %.0f&deg;F</b></li>'
+        '</ul></div></li>'
+        % (L["n"], html.escape(L["from"].split(",")[0]), html.escape(L["to"].split(",")[0]),
+           html.escape(L["note"]), L["mi"], L["wh_mi"], L["fsd_pct"], L["avg_mph"],
+           L["soc_start"], L["soc_end"], f'{L["climbed_ft"]:,}', L["regen_mi"],
+           L["temp_min"], L["temp_max"])
+        for L in T["legs"])
+    curves = "".join(
+        '<div class="g"><h3>%s <span class="chip chip-p">%d%% to %d%%</span></h3>'
+        '<p class="chart-note" style="margin:.4em 0 .6em">%s</p>%s'
+        '<p class="chart-note">%.1f kWh added in %d min, peak %d kW, %s.</p></div>'
+        % (html.escape(c["site"].split(",")[0] + ", " + c["label"]), c["soc_start"], c["soc_end"],
+           html.escape(c["note"]), TR.charge_curve(c), c["kwh"], c["sec"] // 60, c["peak_kw"],
+           ("no charge, this one was free" if c["cost"] == 0
+            else f'{cents(c["per_kwh"]*100,1)} a kWh'))
+        for c in T["charges"] if c["curve"])
+    recs = "".join(
+        '<li class="g stat"><p class="v">%s</p><p class="k">%s</p>'
+        '<p class="chart-note" style="margin-top:8px">%s</p></li>'
+        % (html.escape(r["v"]), html.escape(r["k"]), html.escape(r["d"]))
+        for r in G["fsd"]["records"])
+    body = f"""<p class="eyebrow"><b>Road trip</b> &middot; {T['dates']['start']} to {T['dates']['end']} &middot; two states</p>
+<h1>{html.escape(T['title'])}</h1>
+<p class="lede prose">Brentwood to Florence to Birmingham to Athens and home.
+{t['distance_long_legs']:.1f} highway miles on four legs, five plugs, and every second of it
+recorded by the car. TezLab does not classify this as a road trip, so it was rebuilt from the
+raw drives.</p>
+{livestrip()}
+
+<section class="g">
+  <h2>The route</h2>
+  {TR.route_map(T)}
+  <p class="chart-note">{M}. Line labels are the measured distance and consumption of each leg.
+  Orange rings mark the places it charged. City centres, not the car's own coordinates.</p>
+</section>
+
+<section class="stats">
+  <div class="g stat"><p class="v">{t['distance_long_legs']:.0f}<small>mi</small></p><p class="k">Highway miles</p></div>
+  <div class="g stat"><p class="v">{pct(t['fsd_pct'],1)}</p><p class="k">Driven by the car</p></div>
+  <div class="g stat"><p class="v">{t['climbed_ft']:,}<small>ft</small></p><p class="k">Climbed</p></div>
+  <div class="g stat"><p class="v">{cents(t['cents_per_mile'])}</p><p class="k">Per mile, measured</p></div>
+</section>
+
+<section class="g">
+  <h2>Charge, drained, charged again</h2>
+  <p class="prose">The whole trip as one line. Falling stretches are driving, shaded columns are
+  charging stops.</p>
+  {TR.soc_trace(T)}
+  <p class="chart-note">{M}. {t['energy_used_kwh']:.1f} kWh used driving,
+  {t['energy_added_kwh']:.1f} kWh put back in, {usd(t['spend'])} spent, over
+  {t['drive_sec']//3600}h {t['drive_sec']%3600//60}m of driving and
+  {t['charge_sec']//3600}h {t['charge_sec']%3600//60}m plugged in.</p>
+</section>
+
+<section>
+  <p class="eyebrow">The four legs</p>
+  <ol class="chapters">{legs}</ol>
+</section>
+
+<section>
+  <p class="eyebrow">What the charging curve actually looks like</p>
+  <h2>Power falls as the battery fills.</h2>
+  <p class="lede prose">Three sessions, recorded by the car at roughly one sample a minute. This
+  is the shape that decides how long a road trip takes.</p>
+  <div class="row row-2" style="margin-top:16px">{curves}</div>
+</section>
+
+<section class="g g-2">
+  <h2>The eighty per cent rule, in one comparison</h2>
+  <p class="prose">At Florence the car charged twice, back to back, on the same plug.</p>
+  <div class="row row-2" style="margin-top:12px">
+    <div class="g g-0"><h3>32% to 79%</h3><p style="margin:0"><strong>33.7 kWh</strong> in
+    <strong>22.3 minutes</strong>, peaking at 164 kW.</p></div>
+    <div class="g g-0"><h3>79% to 95%</h3><p style="margin:0"><strong>11.6 kWh</strong> in
+    <strong>19.9 minutes</strong>, peaking at 56 kW.</p></div>
+  </div>
+  <p class="chart-note" style="margin-top:12px">Nearly the same time on the clock. A third of the
+  energy. {M} on {T['charges'][1]['date']}. This is why a road trip stops at 80% and drives on.</p>
+</section>
+
+<section>
+  <p class="eyebrow">FSD records</p>
+  <h2>What the car drove by itself.</h2>
+  <ul class="stats" style="list-style:none;margin:14px 0 0;padding:0">{recs}</ul>
+  <p class="chart-note">{html.escape(G['fsd']['note'])}</p>
+</section>
+
+<section class="g g-0">
+  <h2>One number held back</h2>
+  <p style="margin:0">Peak speed on one leg is in the telemetry and is not published here.
+  Everything else on this page is exactly what the car recorded.</p>
+</section>
+{rulebar()}
+"""
+    return write("/trip/", "Two States, Four Legs",
+                 f"A {t['distance_long_legs']:.0f} mile road trip recorded end to end: real "
+                 f"charging curves, per-leg energy, and {pct(t['fsd_pct'],1)} of it driven by the car.",
+                 "hero-highway.jpg", body)
 
 def page_home():
     c, b, f = D["cost"], D["battery"], D["fsd"]
@@ -714,6 +826,33 @@ def page_drive():
 
 def page_charge():
     ch = D["charging"]
+    plays = "".join(
+        '<div class="g"><h3>%s <span class="chip %s">%s</span></h3><p style="margin:0;font-size:.9rem">%s</p></div>'
+        % (html.escape(x["h"]),
+           "chip-m" if x["tag"] == "measured" else "chip-p",
+           "measured here" if x["tag"] == "measured" else "practice",
+           html.escape(x["b"]))
+        for x in G["playbook"])
+    def _badges(v):
+        b = []
+        if v.get("stalls"): b.append(f'<li><b>{v["stalls"]}</b> stalls</li>')
+        if v.get("kw"):     b.append(f'<li><b>{v["kw"]} kW</b> site</li>')
+        if v.get("rating"): b.append(f'<li><b>{v["rating"]}</b> rating</li>')
+        if v.get("safety"): b.append(f'<li><b>{v["safety"]}/10</b> safety</li>')
+        b.append(f'<li><b>{v["visits"]}</b> visit{"s" if v["visits"]!=1 else ""}</li>')
+        b.append(f'<li><b>{cents(v["cheapest"]*100,0)}</b> best rate</li>')
+        return "".join(b)
+    sitecards = "".join(
+        '<div class="g"><h3>%s <span class="chip chip-p">%s</span></h3>'
+        '<ul class="data" style="margin:.5em 0 .8em">%s</ul>'
+        '<p style="margin:0 0 .6em;font-size:.9rem">%s</p>'
+        '<p style="margin:0 0 .6em;font-size:.9rem"><strong>Worth knowing.</strong> %s</p>'
+        '%s</div>'
+        % (html.escape(v["name"]), html.escape(v["label"]), _badges(v),
+           html.escape(v["amenity"]), html.escape(v["tip"]),
+           (f'<p class="chart-note" style="margin:0">{html.escape(v["tool"])}</p>' if v.get("tool") else ""))
+        for v in G["sites"])
+
     days = [{**r, "lab": r["d"][5:].replace("-", "/")} for r in D["daily"]]
     rows = "".join(
         f'<tr><td>{html.escape(c["name"])}</td><td>{html.escape(c["kind"])}</td>'
@@ -762,6 +901,22 @@ the real sessions.</p>
 <section class="g">
   <h2>Where it plugs in</h2>
   {fig("/img/car/wheels-f02697.jpg","A Solid Black Model Y on a home charger","Level 2 at home is the cheapest electricity in the mix. Three of nine sessions came off a private plug and cost nothing.",stock=True)}
+</section>
+
+<section>
+  <p class="eyebrow">The playbook</p>
+  <h2>Charging tricks worth knowing.</h2>
+  <p class="lede prose">Half of these come out of this car's own telemetry rather than a forum.
+  Where a claim is measured here, it says so.</p>
+  <div class="row row-2" style="margin-top:16px">{plays}</div>
+</section>
+
+<section>
+  <p class="eyebrow">Site guide &middot; every plug this car has used</p>
+  <h2>Where to stop, and what to do while you wait.</h2>
+  <div class="row row-2" style="margin-top:16px">{sitecards}</div>
+  <p class="chart-note">Stall counts, ratings and safety scores from TezLab's charger database;
+  nearby food from its place lookup. Rates are {M} from this car's own invoices.</p>
 </section>
 
 <section class="g">
@@ -1119,7 +1274,7 @@ itself, so the car has to prove it belongs.</p>
 
 # ── run ─────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    built = [page_home(), page_work(), page_switch(), page_drive(), page_charge(),
+    built = [page_home(), page_trip(), page_work(), page_switch(), page_drive(), page_charge(),
              page_ledger(), page_battery(), page_car(), page_driver()]
     # Static rules first, then dynamic, and the more specific prefix before the
     # looser one: Cloudflare applies the top-most match and always follows a
@@ -1138,7 +1293,7 @@ if __name__ == "__main__":
         "/case-study/*    /ledger/  301\n"
         "/log/model-y/*   /car/     301\n"
         "/log/*           /switch/  301\n")
-    urls = ["/", "/work/", "/switch/", "/drive/", "/charge/", "/ledger/", "/battery/", "/car/", "/driver/"]
+    urls = ["/", "/trip/", "/work/", "/switch/", "/drive/", "/charge/", "/ledger/", "/battery/", "/car/", "/driver/"]
     today = datetime.date.today().isoformat()
     (PUB / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'

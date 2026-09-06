@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Two States, Four Legs</title>
+<meta name="description" content="A 439 mile road trip recorded end to end: real charging curves, per-leg energy, and 98.5% of it driven by the car.">
+<link rel="canonical" href="https://garage.paddock20.com/trip/">
+<meta name="theme-color" content="#05070D">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Paddock Garage">
+<meta property="og:url" content="https://garage.paddock20.com/trip/">
+<meta property="og:title" content="Two States, Four Legs">
+<meta property="og:description" content="A 439 mile road trip recorded end to end: real charging curves, per-leg energy, and 98.5% of it driven by the car.">
+<meta property="og:image" content="https://garage.paddock20.com/og/garage.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/glass.css">
+<link rel="stylesheet" href="/assets/garage.css">
+<style>:root{--page-bg:url('/img/hero-highway.jpg')}</style>
+
+</head>
+<body>
+<header class="pg-nav">
+  <div class="pg-nav-inner">
+    <a class="pg-nav-logo" href="/" aria-label="Paddock Garage home"><img src="/img/wordmark.png" alt="Paddock20"></a>
+    <span class="pg-nav-sp"></span>
+    <input type="checkbox" id="pg-menu-t" class="pg-menu-t">
+    <label for="pg-menu-t" class="pg-burger" role="button" aria-label="Menu" tabindex="0"><span></span><span></span><span></span></label>
+    <nav class="pg-menu" aria-label="Site">
+      <a href="/trip/" aria-current="page">Road Trip</a>
+      <a href="/work/">The Work</a>
+      <a href="/switch/">The Switch</a>
+      <a href="/drive/">Drive</a>
+      <a href="/charge/">Charge</a>
+      <a href="/ledger/">Ledger</a>
+      <a href="/battery/">Battery</a>
+      <a href="/car/">The Car</a>
+    </nav>
+  </div>
+</header>
+<main class="gx">
+<p class="eyebrow"><b>Road trip</b> &middot; 2026-09-04 to 2026-09-05 &middot; two states</p>
+<h1>Two states, four legs, five plugs</h1>
+<p class="lede prose">Brentwood to Florence to Birmingham to Athens and home.
+439.2 highway miles on four legs, five plugs, and every second of it
+recorded by the car. TezLab does not classify this as a road trip, so it was rebuilt from the
+raw drives.</p>
+<div class="g g-0 live">
+  <span>Odometer <b>20,409.4 mi</b></span>
+  <span>Per mile <b>10.1¢</b></span>
+  <span>Degradation <b>0%</b></span>
+  <span>On FSD <b>97.1%</b></span>
+  <span class="src">Snapshot 2026-09-03, baked at deploy. This page makes no live requests.</span>
+</div>
+
+<section class="g">
+  <h2>The route</h2>
+  <svg class="rt-map" viewBox="0 0 720 560" role="img" aria-label="Route: Brentwood to Florence to Birmingham to Athens to Franklin"><path class="rt-line" d="M642.0,78.0 L78.0,276.2 L624.6,482.0 L522.6,275.7 L587.7,95.4"/><path class="rt-line rt-line-lead" d="M642.0,78.0 L78.0,276.2 L624.6,482.0 L522.6,275.7 L587.7,95.4"/><g class="rt-leg" style="--i:0"><text class="rt-legmi" x="360.0" y="169.1" text-anchor="middle">120.4 mi</text><text class="rt-legwh" x="360.0" y="189.1" text-anchor="middle">256 Wh/mi</text></g><g class="rt-leg" style="--i:1"><text class="rt-legmi" x="351.3" y="371.1" text-anchor="middle">130.6 mi</text><text class="rt-legwh" x="351.3" y="391.1" text-anchor="middle">260 Wh/mi</text></g><g class="rt-leg" style="--i:2"><text class="rt-legmi" x="573.6" y="370.8" text-anchor="middle">103.0 mi</text><text class="rt-legwh" x="573.6" y="390.8" text-anchor="middle">307 Wh/mi</text></g><g class="rt-leg" style="--i:3"><text class="rt-legmi" x="555.1" y="177.5" text-anchor="middle">85.2 mi</text><text class="rt-legwh" x="555.1" y="197.5" text-anchor="middle">280 Wh/mi</text></g><g class="rt-city" style="--i:0"><circle class="rt-pulse" cx="642.0" cy="78.0" r="14"/><circle class="rt-dot rt-dot-c" cx="642.0" cy="78.0" r="7"/><text class="rt-cl" x="626.0" y="83.0" text-anchor="end">Brentwood</text></g><g class="rt-city" style="--i:1"><circle class="rt-pulse" cx="78.0" cy="276.2" r="14"/><circle class="rt-dot rt-dot-c" cx="78.0" cy="276.2" r="7"/><text class="rt-cl" x="94.0" y="281.2" text-anchor="start">Florence</text></g><g class="rt-city" style="--i:2"><circle class="rt-pulse" cx="624.6" cy="482.0" r="14"/><circle class="rt-dot rt-dot-c" cx="624.6" cy="482.0" r="7"/><text class="rt-cl" x="608.6" y="487.0" text-anchor="end">Birmingham</text></g><g class="rt-city" style="--i:3"><circle class="rt-pulse" cx="522.6" cy="275.7" r="14"/><circle class="rt-dot rt-dot-c" cx="522.6" cy="275.7" r="7"/><text class="rt-cl" x="506.6" y="280.7" text-anchor="end">Athens</text></g><g class="rt-city" style="--i:4"><circle class="rt-dot" cx="587.7" cy="95.4" r="7"/><text class="rt-cl" x="571.7" y="100.4" text-anchor="end">Franklin</text></g></svg>
+  <p class="chart-note"><span class="chip chip-m">measured</span>. Line labels are the measured distance and consumption of each leg.
+  Orange rings mark the places it charged. City centres, not the car's own coordinates.</p>
+</section>
+
+<section class="stats">
+  <div class="g stat"><p class="v">439<small>mi</small></p><p class="k">Highway miles</p></div>
+  <div class="g stat"><p class="v">98.5%</p><p class="k">Driven by the car</p></div>
+  <div class="g stat"><p class="v">22,876<small>ft</small></p><p class="k">Climbed</p></div>
+  <div class="g stat"><p class="v">14.4¢</p><p class="k">Per mile, measured</p></div>
+</section>
+
+<section class="g">
+  <h2>Charge, drained, charged again</h2>
+  <p class="prose">The whole trip as one line. Falling stretches are driving, shaded columns are
+  charging stops.</p>
+  <svg class="chart rt-soc" viewBox="0 0 720 250" role="img" aria-label="State of charge across the trip"><line class="axis" x1="0" y1="206.0" x2="720" y2="206.0"/><text class="lab" x="2" y="202.0">0%</text><line class="axis" x1="0" y1="116.0" x2="720" y2="116.0"/><text class="lab" x="2" y="112.0">50%</text><line class="axis" x1="0" y1="26.0" x2="720" y2="26.0"/><text class="lab" x="2" y="22.0">100%</text><path class="rt-socfill" d="M0.0,204.2 L32.9,62.0 L185.2,141.2 L218.1,63.8 L251.0,35.0 L416.2,125.0 L449.1,62.0 L579.3,144.8 L612.2,62.0 L720.0,123.2 L720,206.0 L0,206.0 Z"/><path class="rt-socline" d="M0.0,204.2 L32.9,62.0 L185.2,141.2 L218.1,63.8 L251.0,35.0 L416.2,125.0 L449.1,62.0 L579.3,144.8 L612.2,62.0 L720.0,123.2"/><rect class="rt-socchg" x="0.0" y="26" width="32.9" height="180"/><text class="rt-socl" x="16.4" y="226" text-anchor="middle">Brentwood</text><text class="rt-socs" x="16.4" y="239" text-anchor="middle">+57 kWh</text><text class="rt-socl" x="109.0" y="226" text-anchor="middle">Florence</text><text class="rt-socs" x="109.0" y="239" text-anchor="middle">120 mi</text><rect class="rt-socchg" x="185.2" y="26" width="32.9" height="180"/><text class="rt-socl" x="201.6" y="226" text-anchor="middle">Florence</text><text class="rt-socs" x="201.6" y="239" text-anchor="middle">+34 kWh</text><rect class="rt-socchg" x="218.1" y="26" width="32.9" height="180"/><text class="rt-socl" x="234.5" y="226" text-anchor="middle">Florence</text><text class="rt-socs" x="234.5" y="239" text-anchor="middle">+12 kWh</text><text class="rt-socl" x="333.6" y="226" text-anchor="middle">Birmingham</text><text class="rt-socs" x="333.6" y="239" text-anchor="middle">131 mi</text><rect class="rt-socchg" x="416.2" y="26" width="32.9" height="180"/><text class="rt-socl" x="432.6" y="226" text-anchor="middle">Birmingham</text><text class="rt-socs" x="432.6" y="239" text-anchor="middle">+28 kWh</text><text class="rt-socl" x="514.2" y="226" text-anchor="middle">Athens</text><text class="rt-socs" x="514.2" y="239" text-anchor="middle">103 mi</text><rect class="rt-socchg" x="579.3" y="26" width="32.9" height="180"/><text class="rt-socl" x="595.8" y="226" text-anchor="middle">Athens</text><text class="rt-socs" x="595.8" y="239" text-anchor="middle">+33 kWh</text><text class="rt-socl" x="666.1" y="226" text-anchor="middle">Franklin</text><text class="rt-socs" x="666.1" y="239" text-anchor="middle">85 mi</text></svg>
+  <p class="chart-note"><span class="chip chip-m">measured</span>. 120.4 kWh used driving,
+  163.2 kWh put back in, $66.21 spent, over
+  7h 16m of driving and
+  2h 6m plugged in.</p>
+</section>
+
+<section>
+  <p class="eyebrow">The four legs</p>
+  <ol class="chapters"><li class="chapter"><p class="ch-n">Leg 1</p><div class="g body"><h2>Brentwood to Florence</h2><p>Every mile of it on FSD. Not most. All of it.</p><ul class="data"><li><b>120.4 mi</b> distance</li><li><b>256 Wh/mi</b> consumption</li><li><b>100%</b> on FSD</li><li><b>54.7 mph</b> average</li><li><b>80% to 36%</b> charge</li><li><b>6,089 ft</b> climbed</li><li><b>61.0 mi</b> regenerated</li><li><b>81 to 108&deg;F</b></li></ul></div></li><li class="chapter"><p class="ch-n">Leg 2</p><div class="g body"><h2>Florence to Birmingham</h2><p>The longest leg, run after dark. Climbed 6,663 feet and finished 30 feet higher than it started.</p><ul class="data"><li><b>130.6 mi</b> distance</li><li><b>260 Wh/mi</b> consumption</li><li><b>97%</b> on FSD</li><li><b>62.7 mph</b> average</li><li><b>94% to 45%</b> charge</li><li><b>6,663 ft</b> climbed</li><li><b>56.7 mi</b> regenerated</li><li><b>79 to 90&deg;F</b></li></ul></div></li><li class="chapter"><p class="ch-n">Leg 3</p><div class="g body"><h2>Birmingham to Athens</h2><p>The expensive one. 307 Wh a mile against 256 on the way down, in 105 degree heat with the climate system fighting it.</p><ul class="data"><li><b>103.0 mi</b> distance</li><li><b>307 Wh/mi</b> consumption</li><li><b>100%</b> on FSD</li><li><b>58.5 mph</b> average</li><li><b>79% to 34%</b> charge</li><li><b>5,459 ft</b> climbed</li><li><b>46.1 mi</b> regenerated</li><li><b>95 to 106&deg;F</b></li></ul></div></li><li class="chapter"><p class="ch-n">Leg 4</p><div class="g body"><h2>Athens to Franklin</h2><p>Fastest average of the trip at 68 mph, and the last 85 miles home.</p><ul class="data"><li><b>85.2 mi</b> distance</li><li><b>280 Wh/mi</b> consumption</li><li><b>98%</b> on FSD</li><li><b>68.1 mph</b> average</li><li><b>80% to 46%</b> charge</li><li><b>4,665 ft</b> climbed</li><li><b>39.3 mi</b> regenerated</li><li><b>97 to 100&deg;F</b></li></ul></div></li></ol>
+</section>
+
+<section>
+  <p class="eyebrow">What the charging curve actually looks like</p>
+  <h2>Power falls as the battery fills.</h2>
+  <p class="lede prose">Three sessions, recorded by the car at roughly one sample a minute. This
+  is the shape that decides how long a road trip takes.</p>
+  <div class="row row-2" style="margin-top:16px"><div class="g"><h3>Brentwood, Old Hickory Boulevard <span class="chip chip-p">1% to 80%</span></h3><p class="chart-note" style="margin:.4em 0 .6em">Rolled in on 1%. Peak 221 kW, the fastest session of the trip, because an empty pack takes charge hardest.</p><svg class="chart rt-curve" viewBox="0 0 720 210" role="img" aria-label="Charging power against state of charge at Brentwood, TN"><line class="axis" x1="34" y1="170.0" x2="720" y2="170.0"/><text class="lab" x="0" y="167.0">0 kW</text><line class="axis" x1="34" y1="98.3" x2="720" y2="98.3"/><text class="lab" x="0" y="95.3">109 kW</text><line class="axis" x1="34" y1="26.0" x2="720" y2="26.0"/><text class="lab" x="0" y="23.0">219 kW</text><path class="rt-curvefill" d="M34.0,166.1 L64.4,26.0 L122.7,26.0 L181.8,26.7 L218.3,68.1 L252.2,99.6 L267.8,112.1 L281.7,116.7 L295.6,116.7 L326.1,116.7 L347.8,116.7 L363.4,116.7 L384.3,116.7 L400.8,116.7 L420.8,116.7 L437.3,118.1 L458.2,122.0 L470.4,123.3 L505.1,122.0 L524.2,123.3 L549.5,122.0 L569.4,122.0 L585.1,123.3 L614.6,126.6 L623.3,127.9 L639.9,129.2 L657.2,129.2 L686.8,130.5 L697.2,132.5 L712.0,133.8 L712.0,170.0 L34.0,170.0 Z"/><path class="rt-curveline" d="M34.0,166.1 L64.4,26.0 L122.7,26.0 L181.8,26.7 L218.3,68.1 L252.2,99.6 L267.8,112.1 L281.7,116.7 L295.6,116.7 L326.1,116.7 L347.8,116.7 L363.4,116.7 L384.3,116.7 L400.8,116.7 L420.8,116.7 L437.3,118.1 L458.2,122.0 L470.4,123.3 L505.1,122.0 L524.2,123.3 L549.5,122.0 L569.4,122.0 L585.1,123.3 L614.6,126.6 L623.3,127.9 L639.9,129.2 L657.2,129.2 L686.8,130.5 L697.2,132.5 L712.0,133.8"/><circle class="rt-pk" cx="64.4" cy="26.0" r="4.5"/><text class="val" x="73.4" y="19.0" text-anchor="start">219 kW peak</text><text class="lab" x="34.0" y="186" text-anchor="start">2%</text><text class="lab" x="712.0" y="186" text-anchor="end">80%</text><text class="lab" x="360.0" y="204" text-anchor="middle">state of charge</text></svg><p class="chart-note">56.7 kWh added in 41 min, peak 221 kW, 44.9¢ a kWh.</p></div><div class="g"><h3>Florence, Cox Creek Parkway <span class="chip chip-p">32% to 79%</span></h3><p class="chart-note" style="margin:.4em 0 .6em">Twenty-two minutes for 47% of the pack.</p><svg class="chart rt-curve" viewBox="0 0 720 210" role="img" aria-label="Charging power against state of charge at Florence, AL"><line class="axis" x1="34" y1="170.0" x2="720" y2="170.0"/><text class="lab" x="0" y="167.0">0 kW</text><line class="axis" x1="34" y1="98.0" x2="720" y2="98.0"/><text class="lab" x="0" y="95.0">73 kW</text><line class="axis" x1="34" y1="26.0" x2="720" y2="26.0"/><text class="lab" x="0" y="23.0">146 kW</text><path class="rt-curvefill" d="M34.0,158.2 L71.3,158.2 L115.9,26.0 L143.2,26.0 L183.4,37.8 L210.7,37.8 L227.9,46.7 L261.0,55.6 L302.6,60.5 L319.9,60.5 L332.8,67.4 L348.6,67.4 L384.5,72.4 L411.8,76.3 L439.1,80.2 L473.6,87.2 L492.2,87.2 L522.4,96.0 L533.9,96.0 L556.9,101.0 L579.8,102.9 L610.0,104.9 L631.6,108.8 L641.6,108.8 L689.0,113.8 L712.0,113.8 L712.0,170.0 L34.0,170.0 Z"/><path class="rt-curveline" d="M34.0,158.2 L71.3,158.2 L115.9,26.0 L143.2,26.0 L183.4,37.8 L210.7,37.8 L227.9,46.7 L261.0,55.6 L302.6,60.5 L319.9,60.5 L332.8,67.4 L348.6,67.4 L384.5,72.4 L411.8,76.3 L439.1,80.2 L473.6,87.2 L492.2,87.2 L522.4,96.0 L533.9,96.0 L556.9,101.0 L579.8,102.9 L610.0,104.9 L631.6,108.8 L641.6,108.8 L689.0,113.8 L712.0,113.8"/><circle class="rt-pk" cx="115.9" cy="26.0" r="4.5"/><text class="val" x="124.9" y="19.0" text-anchor="start">146 kW peak</text><text class="lab" x="34.0" y="186" text-anchor="start">32%</text><text class="lab" x="712.0" y="186" text-anchor="end">79%</text><text class="lab" x="360.0" y="204" text-anchor="middle">state of charge</text></svg><p class="chart-note">33.7 kWh added in 22 min, peak 164 kW, 45.0¢ a kWh.</p></div><div class="g"><h3>Athens, Athens-Limestone <span class="chip chip-p">34% to 80%</span></h3><p class="chart-note" style="margin:.4em 0 .6em">The cheapest plug of the trip at 37.8 cents, and the last one needed.</p><svg class="chart rt-curve" viewBox="0 0 720 210" role="img" aria-label="Charging power against state of charge at Athens, AL"><line class="axis" x1="34" y1="170.0" x2="720" y2="170.0"/><text class="lab" x="0" y="167.0">0 kW</text><line class="axis" x1="34" y1="98.5" x2="720" y2="98.5"/><text class="lab" x="0" y="95.5">72 kW</text><line class="axis" x1="34" y1="26.0" x2="720" y2="26.0"/><text class="lab" x="0" y="23.0">145 kW</text><path class="rt-curvefill" d="M34.0,164.0 L41.3,164.0 L110.3,26.0 L130.9,26.0 L171.9,29.0 L199.8,36.9 L255.6,54.8 L290.8,61.8 L329.0,65.7 L346.6,65.7 L378.9,69.7 L393.5,73.7 L422.9,78.6 L437.6,78.6 L464.0,82.6 L499.2,85.6 L524.2,91.5 L537.4,91.5 L549.1,94.5 L560.8,98.5 L584.3,100.5 L596.1,100.5 L628.4,102.5 L638.6,105.4 L659.2,109.4 L663.6,109.4 L673.8,112.4 L682.6,114.4 L697.3,114.4 L712.0,116.4 L712.0,170.0 L34.0,170.0 Z"/><path class="rt-curveline" d="M34.0,164.0 L41.3,164.0 L110.3,26.0 L130.9,26.0 L171.9,29.0 L199.8,36.9 L255.6,54.8 L290.8,61.8 L329.0,65.7 L346.6,65.7 L378.9,69.7 L393.5,73.7 L422.9,78.6 L437.6,78.6 L464.0,82.6 L499.2,85.6 L524.2,91.5 L537.4,91.5 L549.1,94.5 L560.8,98.5 L584.3,100.5 L596.1,100.5 L628.4,102.5 L638.6,105.4 L659.2,109.4 L663.6,109.4 L673.8,112.4 L682.6,114.4 L697.3,114.4 L712.0,116.4"/><circle class="rt-pk" cx="110.3" cy="26.0" r="4.5"/><text class="val" x="119.3" y="19.0" text-anchor="start">145 kW peak</text><text class="lab" x="34.0" y="186" text-anchor="start">34%</text><text class="lab" x="712.0" y="186" text-anchor="end">80%</text><text class="lab" x="360.0" y="204" text-anchor="middle">state of charge</text></svg><p class="chart-note">33.2 kWh added in 22 min, peak 145 kW, 37.8¢ a kWh.</p></div></div>
+</section>
+
+<section class="g g-2">
+  <h2>The eighty per cent rule, in one comparison</h2>
+  <p class="prose">At Florence the car charged twice, back to back, on the same plug.</p>
+  <div class="row row-2" style="margin-top:12px">
+    <div class="g g-0"><h3>32% to 79%</h3><p style="margin:0"><strong>33.7 kWh</strong> in
+    <strong>22.3 minutes</strong>, peaking at 164 kW.</p></div>
+    <div class="g g-0"><h3>79% to 95%</h3><p style="margin:0"><strong>11.6 kWh</strong> in
+    <strong>19.9 minutes</strong>, peaking at 56 kW.</p></div>
+  </div>
+  <p class="chart-note" style="margin-top:12px">Nearly the same time on the clock. A third of the
+  energy. <span class="chip chip-m">measured</span> on 2026-09-04. This is why a road trip stops at 80% and drives on.</p>
+</section>
+
+<section>
+  <p class="eyebrow">FSD records</p>
+  <h2>What the car drove by itself.</h2>
+  <ul class="stats" style="list-style:none;margin:14px 0 0;padding:0"><li class="g stat"><p class="v">120.4 mi</p><p class="k">Longest drive with every mile on FSD</p><p class="chart-note" style="margin-top:8px">Brentwood to Florence, 2026-09-04. 120.4 of 120.4 miles. Not 97%, not 99%. All of it.</p></li><li class="g stat"><p class="v">126.5 mi</p><p class="k">Longest single FSD distance</p><p class="chart-note" style="margin-top:8px">Florence to Birmingham, 2026-09-04, 97% of a 130.6 mile leg run after dark.</p></li><li class="g stat"><p class="v">98.5%</p><p class="k">Best road-trip share</p><p class="chart-note" style="margin-top:8px">432.7 of 439.2 highway miles across four legs and two states.</p></li><li class="g stat"><p class="v">4</p><p class="k">Consecutive legs at 97% or better</p><p class="chart-note" style="margin-top:8px">Every long leg of the trip, Brentwood to Florence to Birmingham to Athens to home.</p></li><li class="g stat"><p class="v">68.1 mph</p><p class="k">Fastest average on FSD</p><p class="chart-note" style="margin-top:8px">Athens to Franklin, 85.2 miles, 98% on FSD.</p></li></ul>
+  <p class="chart-note">The hundred mile mark fell on the first leg. FSD share is reported by the car per drive; these are the maxima across every recorded drive, not a highlight reel.</p>
+</section>
+
+<section class="g g-0">
+  <h2>One number held back</h2>
+  <p style="margin:0">Peak speed on one leg is in the telemetry and is not published here.
+  Everything else on this page is exactly what the car recorded.</p>
+</section>
+<div class="rulebar">
+  <span><span class="chip chip-m">measured</span> invoice or sensor</span>
+  <span><span class="chip chip-mo">modeled</span> derived, and says so</span>
+  <span class="sp">Pulled 2026-09-03 &middot; VIN serial masked &middot; no addresses</span>
+</div>
+</main>
+<footer class="pg-footer" role="contentinfo">
+ <div class="pg-footer-inner">
+  <div class="pg-f-cols">
+   <div class="pg-f-brand">
+    <img src="/img/stacked.png" alt="Paddock20, Digest. Develop. Deliver." style="height:104px;width:auto;display:block" loading="lazy" decoding="async">
+    <p>One owner's live record of going from gas to electric. Every mile, every charge, every dollar, measured from the car and from real invoices. Nashville, TN.</p>
+   </div>
+   <nav class="pg-f-nav" aria-label="Footer navigation">
+    <a href="/trip/">Road Trip</a>
+    <a href="/work/">The Work</a>
+    <a href="/switch/">The Switch</a>
+    <a href="/drive/">Drive</a>
+    <a href="/charge/">Charge</a>
+    <a href="/ledger/">Ledger</a>
+    <a href="/battery/">Battery</a>
+    <a href="/car/">The Car</a>
+    <a href="/driver/">The Driver</a>
+    <a href="https://paddock20.com">Paddock20 Main Site</a>
+   </nav>
+   <div class="pg-f-col pg-f-connect">
+    <p class="pg-f-h">Connect</p>
+    <a href="https://github.com/letsgotime" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a>
+    <a href="https://paddock20.com" target="_blank" rel="noopener noreferrer"><span>Paddock20</span></a>
+   </div>
+   <div class="pg-f-col pg-f-community">
+    <p class="pg-f-h">Owner resources</p>
+    <a href="https://teslamotorsclub.com" target="_blank" rel="noopener noreferrer"><span>Tesla Motors Club</span></a>
+    <a href="https://abetterrouteplanner.com" target="_blank" rel="noopener noreferrer"><span>A Better Routeplanner</span></a>
+    <a href="https://tezlabapp.com" target="_blank" rel="noopener noreferrer"><span>TezLab</span></a>
+    <a href="https://www.recurrentauto.com" target="_blank" rel="noopener noreferrer"><span>Recurrent</span></a>
+   </div>
+  </div>
+  <div class="pg-f-bottom">
+   <p class="pg-f-legend">Figures are labeled measured or modeled. Measured means an invoice or a
+   sensor. Pulled 2026-09-03: TezLab for drives and pack-side energy, the Tesla Fleet
+   API for billing invoices and live state. Not affiliated with,
+   endorsed by, or sponsored by Tesla, Inc. Tesla, Model Y, Supercharger and Full Self-Driving are
+   trademarks of Tesla, Inc.</p>
+  </div>
+ </div>
+</footer>
+</body>
+</html>

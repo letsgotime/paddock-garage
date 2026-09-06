@@ -1,0 +1,180 @@
+{
+  "fsd": {
+    "records": [
+      {
+        "k": "Longest drive with every mile on FSD",
+        "v": "120.4 mi",
+        "d": "Brentwood to Florence, 2026-09-04. 120.4 of 120.4 miles. Not 97%, not 99%. All of it."
+      },
+      {
+        "k": "Longest single FSD distance",
+        "v": "126.5 mi",
+        "d": "Florence to Birmingham, 2026-09-04, 97% of a 130.6 mile leg run after dark."
+      },
+      {
+        "k": "Best road-trip share",
+        "v": "98.5%",
+        "d": "432.7 of 439.2 highway miles across four legs and two states."
+      },
+      {
+        "k": "Consecutive legs at 97% or better",
+        "v": "4",
+        "d": "Every long leg of the trip, Brentwood to Florence to Birmingham to Athens to home."
+      },
+      {
+        "k": "Fastest average on FSD",
+        "v": "68.1 mph",
+        "d": "Athens to Franklin, 85.2 miles, 98% on FSD."
+      }
+    ],
+    "note": "The hundred mile mark fell on the first leg. FSD share is reported by the car per drive; these are the maxima across every recorded drive, not a highlight reel."
+  },
+  "sites": [
+    {
+      "name": "Brentwood, TN",
+      "label": "Old Hickory Boulevard",
+      "stalls": 24,
+      "kw": 325,
+      "rating": 4.5,
+      "safety": 9.8,
+      "visits": 2,
+      "cheapest": 0.4,
+      "amenity": "Sits in a well-lit Target lot. Target, Panera Bread and Longhorn Steakhouse are all on foot.",
+      "tip": "24 stalls means it effectively never queues. This is the one to leave from on a road trip: arrive low, take the full 80%, and the first leg is free of stops.",
+      "tool": "Target's app will have your pickup order staged before the taper starts."
+    },
+    {
+      "name": "Nashville, TN",
+      "label": "Thompson Lane",
+      "stalls": 24,
+      "kw": 325,
+      "rating": 4.8,
+      "safety": 10.0,
+      "visits": 3,
+      "cheapest": 0.34,
+      "amenity": "Restaurants, parks and green space within walking distance.",
+      "tip": "Highest rated and a perfect 10 safety score of anywhere on this list, and 24 stalls. The default Nashville stop after dark.",
+      "tool": "Green space on foot makes this the best of the Nashville sites for actually walking, not just sitting."
+    },
+    {
+      "name": "Nashville, TN",
+      "label": "Percy Priest Drive",
+      "stalls": 8,
+      "kw": 500,
+      "rating": null,
+      "safety": null,
+      "visits": 2,
+      "cheapest": 0.25,
+      "amenity": "Restrooms, a cafe, restaurants and lodging, open 24 hours.",
+      "tip": "The cheapest electricity measured anywhere on this list at 25 cents a kWh, and a 500 kW site. Only 8 stalls, so it is worth checking availability before committing.",
+      "tool": "24 hour access plus lodging next door makes this the one to plan a late arrival around."
+    },
+    {
+      "name": "Brentwood, TN",
+      "label": "Moores Lane",
+      "stalls": 8,
+      "kw": 325,
+      "rating": null,
+      "safety": null,
+      "visits": 3,
+      "cheapest": 0.46,
+      "amenity": "Wi-Fi and restrooms on site, shopping and dining within walking distance.",
+      "tip": "The most expensive electricity measured on this list, twice hitting 56 cents a kWh. Convenient, but it is the wrong place to fill from empty if Old Hickory is an option.",
+      "tool": "On-site Wi-Fi makes this the one to take a call from."
+    },
+    {
+      "name": "Smyrna, TN",
+      "label": "Smyrna",
+      "stalls": null,
+      "kw": 250,
+      "rating": null,
+      "safety": null,
+      "visits": 1,
+      "cheapest": 0.34,
+      "amenity": "Highway-adjacent stop on the Murfreesboro run.",
+      "tip": "A waypoint rather than a destination. Useful on the way south, not worth a detour.",
+      "tool": null
+    },
+    {
+      "name": "Florence, AL",
+      "label": "Cox Creek Parkway",
+      "stalls": 16,
+      "kw": 325,
+      "rating": null,
+      "safety": null,
+      "visits": 1,
+      "cheapest": 0.32,
+      "amenity": "Restrooms, restaurants, cafes and shopping on foot.",
+      "tip": "16 stalls and cheap at 32 cents. Taziki's Mediterranean is the closest good food, roughly half a mile on Cox Creek Parkway itself.",
+      "tool": "Sam's Place and Lil Capone's are both a few minutes out if you have a full session to burn."
+    },
+    {
+      "name": "Birmingham, AL",
+      "label": "U.S. 280",
+      "stalls": 16,
+      "kw": 250,
+      "rating": 4.8,
+      "safety": 10.0,
+      "visits": 1,
+      "cheapest": 0.42,
+      "amenity": "Well-lit, near green space, shops and restaurants on foot.",
+      "tip": "4.8 rating and a perfect safety score, but the priciest stop of the road trip at 42 cents. Saigon Noodle House is the closest strong option, essentially across the road.",
+      "tool": "Surin 280 and Yum Yai Street Thai are both inside a 20 minute charge window."
+    },
+    {
+      "name": "Athens, AL",
+      "label": "Athens-Limestone",
+      "stalls": null,
+      "kw": 250,
+      "rating": null,
+      "safety": null,
+      "visits": 1,
+      "cheapest": 0.36,
+      "amenity": "Just off US-72, close to the Athens town square.",
+      "tip": "The cheapest plug of the whole road trip at 37.8 cents effective, and the last one needed before home. Fill to 80% here and Nashville is comfortable.",
+      "tool": "The square is a short hop: Ro's Grille and LawLers Barbecue both sit near it, and 306 Barbecue is on US-72 itself."
+    }
+  ],
+  "playbook": [
+    {
+      "h": "Arrive empty, leave at 80%",
+      "b": "The pack takes charge hardest when it is nearly flat. Rolling into Old Hickory on 1% pulled 221 kW, the fastest session recorded on this car. By 46% it had settled to 81 kW, and by 80% it was down to 55 kW.",
+      "tag": "measured"
+    },
+    {
+      "h": "The last 20% costs you a whole session",
+      "b": "At Florence, 32% to 79% took 22.3 minutes and added 33.7 kWh. The very next session, 79% to 95%, took 19.9 minutes and added 11.6 kWh. Nearly the same time on the clock for a third of the energy. Unless the next leg genuinely needs it, stopping at 80% and driving on is faster.",
+      "tag": "measured"
+    },
+    {
+      "h": "Price varies more than you expect",
+      "b": "Across the sites on this list the rate ran 25 cents a kWh to 56 cents, a 2.2 times spread, sometimes between two chargers a few miles apart. Checking the rate in the app before committing is worth real money on a full session.",
+      "tag": "measured"
+    },
+    {
+      "h": "You pay for more energy than you keep",
+      "b": "Reconciled against Tesla's own invoices, 8.82% of what gets billed never reaches the pack. Budget for the billed rate, not the dash figure.",
+      "tag": "measured"
+    },
+    {
+      "h": "Stall count is a queue risk, not a speed rating",
+      "b": "A 500 kW site with 8 stalls can cost more waiting than a 325 kW site with 24. Percy Priest is the cheapest and fastest per stall on this list, and also the easiest to arrive at behind three other cars.",
+      "tag": "practice"
+    },
+    {
+      "h": "Precondition on the way in",
+      "b": "Navigating to the Supercharger in the car rather than on your phone warms the pack before arrival, which protects the early high-power part of the curve. It is the single free thing that makes a session shorter.",
+      "tag": "practice"
+    },
+    {
+      "h": "Plan the stop around the taper, not the meal",
+      "b": "A 20 minute session is a walk and a restroom. A 40 minute session is sit-down food. Match the stop to the charge you actually need, and the trip stops feeling like waiting.",
+      "tag": "practice"
+    },
+    {
+      "h": "Heat is a tax at both ends",
+      "b": "The Birmingham to Athens leg ran 307 Wh a mile against 256 on the way down, in 105 degree heat with the climate system working. Summer road trips need a wider margin than the range estimate suggests.",
+      "tag": "measured"
+    }
+  ]
+}

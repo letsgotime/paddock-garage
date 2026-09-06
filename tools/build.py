@@ -396,8 +396,8 @@ counts every mile: a cost per mile is only interesting if something is riding on
 {rulebar()}
 """
     return write("/work/", "One Car, Three Jobs",
-                 "A live case study: one measured vehicle as the denominator under three income "
-                 "tracks, with a software studio as the lead.",
+                 "One car, three income tracks, and the studio they fund. If you are weighing "
+                 "whether to hire, this site is the work sample.",
                  "car/interior-e5d001.jpg", body)
 
 
@@ -504,8 +504,8 @@ raw drives.</p>
 {rulebar()}
 """
     return write("/trip/", "Two States, Four Legs",
-                 f"A {t['distance_long_legs']:.0f} mile road trip recorded end to end: real "
-                 f"charging curves, per-leg energy, and {pct(t['fsd_pct'],1)} of it driven by the car.",
+                 f"What a {t['distance_long_legs']:.0f} mile road trip actually cost: real charging "
+                 f"curves, how long each stop took, and what stopping at eighty per cent saves.",
                  "car/screen-hw4-f10ad9.jpg", body)
 
 
@@ -543,13 +543,13 @@ measured and published. Nothing on this page is an estimate.</p>
 
 <section>
   <ul class="doors">
-    <li class="g door"><a class="door" href="/work/"><span class="k">Start here</span>
+    <li class="g door"><a class="door" href="/work/"><span class="k">If you are hiring</span>
       <h3>One car, three jobs</h3><p>What this vehicle actually carries, and which of the three
       is the one being funded.</p></a></li>
-    <li class="g door"><a class="door" href="/trip/"><span class="k">The fun one</span>
-      <h3>A 439 mile road trip</h3><p>Real charging curves, per leg energy, and the eighty per
-      cent rule proven on one plug.</p></a></li>
-    <li class="g door"><a class="door" href="/ledger/"><span class="k">The money</span>
+    <li class="g door"><a class="door" href="/trip/"><span class="k">If you are driving far</span>
+      <h3>A 439 mile road trip</h3><p>What the stops cost, how long they took, and what stopping
+      at eighty per cent saves you.</p></a></li>
+    <li class="g door"><a class="door" href="/ledger/"><span class="k">If you are pricing one</span>
       <h3>The Ledger</h3><p>Cost per mile against three gas vehicles that were actually
       owned.</p></a></li>
   </ul>
@@ -577,9 +577,10 @@ def page_home():
   <div class="hero-panel">
     <p class="hero-eyebrow">Nashville, Tennessee</p>
     <h1>Let&rsquo;s <em>measure</em><br>the miles.</h1>
-    <p class="hero-blob">A 2024 Model Y that pays for itself, and proves it. Every mile, every
-    charge and every dollar comes from the car and from paid invoices, published as it happens.
-    Nothing here is an estimate.</p>
+    <p class="hero-blob">If you want to know what an electric car really costs to run, the
+    number is {cents(c['per_mile_cents'])} a mile. Every charge behind it is here, with the
+    invoice, so you can check the figure instead of trusting it. And if you are weighing the
+    switch, the three gas vehicles it replaced are priced the same way.</p>
     <div class="hero-cta">
       <a class="btn-primary" href="/ledger/">See the numbers</a>
       <a class="btn-ghost" href="/trip/">The last road trip <span>&rarr;</span></a>
@@ -620,17 +621,17 @@ def page_home():
 {livestrip()}
 
 <section>
-  <h2>Three ways in.</h2>
+  <h2>Start where you are.</h2>
   <ul class="doors">
-    <li class="g door"><a class="door" href="/work/"><span class="k">The case study</span>
-      <h3>One car, three jobs</h3><p>A software studio, vehicle sourcing with an owner audience,
-      and gig delivery as the bridge. This car is the denominator under all three.</p></a></li>
-    <li class="g door"><a class="door" href="/trip/"><span class="k">The fun one</span>
-      <h3>439 miles, two states</h3><p>Real charging curves sampled by the car, per leg energy,
-      and the eighty per cent rule proven on a single plug.</p></a></li>
-    <li class="g door"><a class="door" href="/charge/"><span class="k">The one nobody has</span>
-      <h3>{pct(D['charge_loss']['pct'],1)} charge loss</h3><p>What the plug bills against what
-      the battery keeps, reconciled across {D['charge_loss']['sessions']} invoices.</p></a></li>
+    <li class="g door"><a class="door" href="/work/"><span class="k">If you are hiring</span>
+      <h3>One car, three jobs</h3><p>The studio, the sourcing and the gig work that pay for each
+      other. You are already looking at what the studio builds.</p></a></li>
+    <li class="g door"><a class="door" href="/trip/"><span class="k">If you are driving far</span>
+      <h3>439 miles, two states</h3><p>What the stops actually cost, how long each one really
+      took, and what stopping at eighty per cent saves you on a long leg.</p></a></li>
+    <li class="g door"><a class="door" href="/charge/"><span class="k">If you are pricing a charge</span>
+      <h3>{pct(D['charge_loss']['pct'],1)} charge loss</h3><p>You pay for what the plug delivers,
+      not what the battery keeps. Here is the gap, across {D['charge_loss']['sessions']} invoices.</p></a></li>
   </ul>
 </section>
 
@@ -644,9 +645,9 @@ def page_home():
 {rulebar()}
 """
     return write("/", "Paddock Garage",
-                 f"A 2024 Model Y that pays for itself and proves it: {cents(c['per_mile_cents'])} "
-                 f"a mile measured against the van it replaced, {pct(b['degradation_pct'])} battery "
-                 f"degradation, {pct(f['pct'],1)} of miles driven by the car.",
+                 f"See what an electric car really costs to run: {cents(c['per_mile_cents'])} a mile "
+                 f"measured against the van it replaced, {pct(b['degradation_pct'])} battery degradation, "
+                 f"and every figure traceable to an invoice.",
                  "car/screen-17280a.jpg", body, bodycls=' class="lp"')
 
 def page_switch():
@@ -768,8 +769,8 @@ what happens, roughly in the order it happens to you.</p>
 {rulebar()}
 """
     return write("/switch/", "The Switch",
-                 "Gas to electric in seven chapters, each opening with measured data: the fleet "
-                 "replaced, the decision, the first week, living electric, FSD, the ledger, the battery.",
+                 "If you are deciding whether to leave gas, here is the whole switch in seven "
+                 "chapters, each one opening with what it actually measured.",
                  "car/interior-35942a.jpg", body)
 
 def page_drive():
@@ -880,8 +881,8 @@ def page_drive():
 {rulebar()}
 """
     return write("/drive/", "Drive",
-                 f"{mi(dr['distance'],1)} measured miles across {dr['drives']} drives, "
-                 f"{pct(f['pct'],1)} of them driven by the car, mapped to city level.",
+                 f"Where {mi(dr['distance'],1)} measured miles actually went across {dr['drives']} "
+                 f"drives, {pct(f['pct'],1)} of them driven by the car, mapped to city level.",
                  "hero-highway.jpg", body)
 
 def page_charge():
@@ -1021,9 +1022,9 @@ the real sessions.</p>
 {rulebar()}
 """
     return write("/charge/", "Charge",
-                 f"{ch['sessions']} measured charging sessions across five locations. Blended "
-                 f"{cents(ch['blended_per_kwh']*100,1)} per kWh, Supercharger only "
-                 f"{cents(ch['paid_per_kwh']*100,1)}.",
+                 f"What you would actually pay to charge: {ch['sessions']} measured sessions, a blended "
+                 f"{cents(ch['blended_per_kwh']*100,1)} per kWh, and {cents(ch['paid_per_kwh']*100,1)} "
+                 f"once charge loss is counted.",
                  "car/wheels-f02697.jpg", body)
 
 def page_ledger():
@@ -1115,8 +1116,8 @@ themselves into vehicles they cannot afford.</p>
 {rulebar()}
 """
     return write("/ledger/", "Ledger",
-                 f"Measured cost per mile of {cents(c['per_mile_cents'])} against three gas "
-                 f"vehicles actually owned, plus value, warranty and what the car earns.",
+                 f"What a Model Y costs per mile, {cents(c['per_mile_cents'])} measured against three "
+                 f"gas vehicles actually owned, plus what it is worth now and what it earns back.",
                  "tex-carbon.jpg", body)
 
 def page_battery():
@@ -1184,8 +1185,9 @@ It deserves a real answer with real numbers, including the parts that are still 
 {rulebar()}
 """
     return write("/battery/", "Battery",
-                 f"{pct(b['degradation_pct'])} measured degradation at {b['cycles']} cycles and "
-                 f"{mi(D['vehicle']['odometer'],0)} miles, plus phantom drain and warranty floor.",
+                 f"Whether the battery holds up: {pct(b['degradation_pct'])} measured degradation at "
+                 f"{b['cycles']} cycles and {mi(D['vehicle']['odometer'],0)} miles, plus phantom drain "
+                 f"and where the warranty floor sits.",
                  "hero-charge.jpg", body)
 
 def page_car():
@@ -1271,8 +1273,8 @@ document.addEventListener('click',function(e){
 });
 </script>"""
     return write("/car/", "The Car",
-                 f"{v['year']} {v['model']} in {v['color']}: verified VIN decode, full spec sheet, "
-                 f"Juniper differences, and six Tesla Paint Shop wrap files.",
+                 f"Everything on this {v['year']} {v['model']}, verified: VIN decode, full spec sheet, "
+                 f"Juniper differences, and six Tesla Paint Shop wrap files you can download.",
                  "car/plate-0-f5d0bf.jpg", body, extra)
 
 def page_driver():

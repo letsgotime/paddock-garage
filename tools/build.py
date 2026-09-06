@@ -576,7 +576,7 @@ def page_home():
     body = f"""<section class="hero">
   <div class="hero-panel">
     <p class="hero-eyebrow">Nashville, Tennessee</p>
-    <h1>I measure<br>every <em>mile</em>.</h1>
+    <h1>Let&rsquo;s <em>measure</em><br>the miles.</h1>
     <p class="hero-blob">A 2024 Model Y that pays for itself, and proves it. Every mile, every
     charge and every dollar comes from the car and from paid invoices, published as it happens.
     Nothing here is an estimate.</p>

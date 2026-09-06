@@ -19,6 +19,10 @@ FORBIDDEN = {
     # description. "DRX" was that engagement's product prefix and is retired.
     "former employer":    r"(?i)du\s?pont",
     "retired product":    r"(?i)\bdrx\b",
+    # The driver carve-out: naming the tracks is public (Gavin's call), the
+    # MONEY is not. This blocks earnings figures, not platform names.
+    "gig earnings":       r"(?i)\$[\d,]+(\.\d\d)?\s*(an hour|/ ?hr|per hour|a shift|per shift|per delivery)"
+                          r"|(?i)(earned|earnings|took home|netted)\s*\$[\d,]+",
 }
 for p in pages:
     t = p.read_text()

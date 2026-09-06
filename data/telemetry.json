@@ -1,57 +1,57 @@
 {
-  "pulled_at": "2026-09-03",
+  "pulled_at": "2026-09-05",
   "source": "TezLab for drives, pack-side energy and battery health; Tesla Fleet API for billing-grade charging invoices and live vehicle state",
   "window": {
     "start": "2026-08-25",
-    "end": "2026-09-03",
-    "days": 10,
-    "note": "TezLab account window opens 2026-07-26; first recorded drive 2026-08-25."
+    "end": "2026-09-05",
+    "days": 12,
+    "note": "TezLab account window opens 2026-07-26; first recorded drive 2026-08-25. Tesla's billing history reaches back to 2026-08-23."
   },
   "vehicle": {
     "name": "PADDOCK MOBILE",
     "year": 2024,
     "model": "Model Y Long Range AWD",
     "color": "Solid Black",
-    "odometer": 20409.4,
+    "odometer": 20953.8,
     "vin_descriptor": "7SAYGAEE8RF",
     "delivered": "2026-08-22",
     "build": "January 2024, Fremont"
   },
   "driving": {
-    "distance": 925.4,
-    "drives": 79,
-    "avg_efficiency_pct": 93,
-    "avg_speed": 45,
-    "duration_sec": 74128,
-    "wh_per_mi": 270.4
+    "distance": 1469.5,
+    "drives": 100,
+    "avg_efficiency_pct": 91,
+    "avg_speed": 48,
+    "duration_sec": 109427,
+    "wh_per_mi": 281.3
   },
   "fsd": {
-    "miles": 898.4,
-    "of_miles": 924.8,
-    "pct": 97.1,
-    "drives": 51,
-    "of_drives": 61
+    "miles": 1430.1,
+    "of_miles": 1468.8,
+    "pct": 97.4,
+    "drives": 61,
+    "of_drives": 77
   },
   "charging": {
-    "energy_kwh": 250.2,
-    "sessions": 9,
-    "cost": 93.7,
-    "blended_per_kwh": 0.375,
-    "paid_per_kwh": 0.4217,
+    "energy_kwh": 413.4,
+    "sessions": 14,
+    "cost": 159.91,
+    "blended_per_kwh": 0.3868,
+    "paid_per_kwh": 0.4149,
     "free_kwh": 28.0,
-    "paid_kwh": 222.2,
-    "charge_time_sec": 18127
+    "paid_kwh": 385.4,
+    "charge_time_sec": 25714
   },
   "cost": {
-    "per_mile": 0.1012,
-    "per_mile_cents": 10.1
+    "per_mile": 0.1088,
+    "per_mile_cents": 10.9
   },
   "battery": {
     "health": "excellent",
     "oem_kwh": 79,
     "current_kwh": 79,
     "degradation_pct": 0,
-    "cycles": 103,
+    "cycles": 104,
     "vs_region_degradation": "low",
     "vs_region_cycles": "low",
     "recurrent_range_score": 96,
@@ -60,16 +60,16 @@
     "recurrent_trend_pct_mo": -1.35
   },
   "efficiency_vs_region": {
-    "mine_pct": 92,
-    "group_pct": 83,
-    "sample": 19,
-    "radius_km": 90
+    "mine_pct": 90,
+    "group_pct": 84,
+    "sample": 18,
+    "radius_km": 100
   },
   "idle_loss": {
-    "range_lost_mi": 100,
-    "days": 10
+    "range_lost_mi": 108.6,
+    "days": 12
   },
-  "savings_tezlab_modeled": 42.66,
+  "savings_tezlab_modeled": 56.79,
   "gas": {
     "price_per_gal": 3.64,
     "source": "AAA Tennessee",
@@ -408,5 +408,33 @@
     "sessions": 14,
     "reconciled": 11,
     "unreconciled_note": "Two free Level 2 sessions have no Tesla invoice, so they cannot be reconciled and are excluded."
+  },
+  "weekly": [
+    {
+      "w": "2026-08-24",
+      "mi": 500.8,
+      "drives": 41,
+      "eff": 90,
+      "fsd": 487.2,
+      "kwh": 165.2,
+      "cost": 48.67,
+      "idle": 70.7
+    },
+    {
+      "w": "2026-08-31",
+      "mi": 968.0,
+      "drives": 36,
+      "eff": 92,
+      "fsd": 942.9,
+      "kwh": 248.2,
+      "cost": 111.24,
+      "idle": 37.9
+    }
+  ],
+  "billing": {
+    "invoices": 14,
+    "kwh_billed": 505.04,
+    "spend": 198.27,
+    "note": "Tesla's own invoices, reaching back two days before TezLab's first recorded drive."
   }
 }

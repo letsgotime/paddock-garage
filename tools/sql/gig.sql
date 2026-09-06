@@ -69,7 +69,7 @@ create index if not exists gig_mail_received_idx on garage.gig_mail (received_at
 
 -- Why the car went somewhere is a recorded fact, never inferred in a view. Added 2026-09-06.
 alter table garage.drive
-  add column if not exists purpose        text,   -- shift | personal | charge | unknown
+  add column if not exists purpose        text,   -- shift | personal | charge | mixed | unknown
   add column if not exists purpose_source text,   -- corroborated-app | corroborated-soc | operator
   add column if not exists purpose_note   text;
 alter table garage.gig_batch

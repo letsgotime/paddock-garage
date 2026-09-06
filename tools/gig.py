@@ -273,6 +273,8 @@ sh as (select (started_at at time zone 'America/Chicago')::date occurred_on,
               count(*) filter (where purpose='charge') charge_drives,
               count(*) filter (where purpose='personal') personal_drives,
               sum(distance_mi) filter (where purpose='personal') personal_miles_labelled,
+              count(*) filter (where purpose='mixed') mixed_drives,
+              sum(distance_mi) filter (where purpose='mixed') mixed_miles,
               count(*) filter (where purpose is null or purpose='unknown') unsettled_drives
        from garage.drive group by 1)
 select b.occurred_on, b.platform, b.batches, b.orders, b.items,
@@ -293,7 +295,7 @@ select b.occurred_on, b.platform, b.batches, b.orders, b.items,
        sh.shift_drives, sh.shift_miles, sh.shift_drive_seconds, sh.shift_kwh,
        round(sh.shift_miles - b.route_miles, 1)                                  as dead_miles,
        round(sh.shift_miles * %(cpm)s, 2)                                        as energy_usd_shift,
-       sh.charge_drives, sh.personal_drives, sh.personal_miles_labelled, sh.unsettled_drives,
+       sh.charge_drives, sh.personal_drives, sh.personal_miles_labelled, sh.mixed_drives, sh.mixed_miles, sh.unsettled_drives,
        round(c.car_miles * %(cpm)s, 2)                                           as energy_usd_car
 from b left join garage.gig_day g on g.occurred_on=b.occurred_on
        left join o on o.occurred_on=b.occurred_on
@@ -403,7 +405,9 @@ def drives(a):
         for id_, s_, e, mi, why in unsettled: print(f"  {id_}  {s_:%H:%M}-{e:%H:%M}  {mi} mi   {why}")
 
 def mark(a):
-    """The operator's word on a drive. This is the only thing that can overwrite a corroborated label."""
+    """The operator's word on a drive. This is the only thing that can overwrite a corroborated label.
+    'mixed' is for a drive that changed purpose mid-way (a batch accepted while already driving):
+    its miles are reported but apportioned to neither side, because the split cannot be measured."""
     with db() as c, c.cursor() as cur:
         cur.execute("update garage.drive set purpose=%s, purpose_source='operator', purpose_note=%s where id = any(%s) returning id",
                     (a.purpose, a.note, a.ids))
@@ -485,6 +489,8 @@ def day(a):
               + (f", dead miles {d['dead_miles']} beyond the app's route" if d['dead_miles'] is not None else ", dead miles unknown (a route leg is missing)"))
     if d["charge_drives"]: print(f"  car, charge {d['charge_drives']} drive(s) to a charger")
     if d["personal_drives"]: print(f"  car, personal {d['personal_drives']} drives, {d['personal_miles_labelled']} mi, per the operator")
+    if d["mixed_drives"]:
+        print(f"  car, mixed  {d['mixed_drives']} drive(s), {d['mixed_miles']} mi, part personal and part shift per the operator; counted in neither")
     if d["unsettled_drives"]:
         print(f"  {d['unsettled_drives']} drive(s) on this date are not settled: run  gig.py drives {d['occurred_on']}  and mark them")
     if not d["shift_drives"] and d["car_drives"]:
@@ -502,7 +508,7 @@ p = sub.add_parser("day", help="the reconciled day"); p.add_argument("date"); p.
 p = sub.add_parser("drives", help="label a day's drives from the app's own timestamps; list what only you can settle")
 p.add_argument("date"); p.set_defaults(fn=drives)
 p = sub.add_parser("mark", help="your word on one or more drives: shift | personal | charge")
-p.add_argument("purpose", choices=["shift", "personal", "charge"]); p.add_argument("ids", type=int, nargs="+"); p.add_argument("--note"); p.set_defaults(fn=mark)
+p.add_argument("purpose", choices=["shift", "personal", "charge", "mixed"]); p.add_argument("ids", type=int, nargs="+"); p.add_argument("--note"); p.set_defaults(fn=mark)
 p = sub.add_parser("mail", help="Gmail get_message JSON files -> garage.gig_mail (idempotent)")
 p.add_argument("files", nargs="+"); p.add_argument("--by", default="manual", choices=["manual", "routine"]); p.set_defaults(fn=mail)
 sub.add_parser("views", help="(re)create v_gig_day").set_defaults(fn=lambda a: (lambda c: (views(c.cursor()), c.commit()))(db()))

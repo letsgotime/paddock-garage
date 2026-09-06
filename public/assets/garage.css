@@ -121,6 +121,20 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
 
 /* ---------- grids --------------------------------------------------------- */
 .row{ display:grid; gap:var(--gap); grid-template-columns:1fr }
+/* A run of like things is one instrument, not a row of boxes. The container
+   carries the glass and the cells are divided by hairlines, so eight charging
+   lessons or eight site profiles read as one set the eye can move down. The
+   grid is one column below 600px and two above it, which is why the edge
+   rules are cleared on the first row and the first column separately. */
+.cluster{ gap:0; overflow:hidden; padding:0 }
+.cluster > .cell{ padding:16px var(--pad); border-top:1px solid var(--hairline,rgba(229,231,235,.10)) }
+.cluster > .cell:first-child{ border-top:0 }
+@media(min-width:600px){
+  .cluster > .cell:nth-child(2){ border-top:0 }
+  .cluster > .cell:nth-child(even){ border-left:1px solid var(--hairline,rgba(229,231,235,.10)) }
+}
+.cluster > .cell > :last-child{ margin-bottom:0 }
+.cluster > .cell h3{ margin-top:0 }
 @media(min-width:600px){ .row-2{ grid-template-columns:repeat(2,minmax(0,1fr)) } }
 @media(min-width:860px){
   .row-3{ grid-template-columns:repeat(3,minmax(0,1fr)) }

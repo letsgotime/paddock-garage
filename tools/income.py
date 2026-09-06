@@ -18,7 +18,32 @@ import argparse, datetime, json, os, pathlib, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PRIV = ROOT / "private-src"
-COST_PER_MILE = 0.101   # measured, from data/telemetry.json
+# Measured, and read from the one file that measures it. Hard-coding this drifted
+# once already: the constant said 0.101 while telemetry.json said 0.1088, so every
+# shift understated its energy cost by 7.7%.
+COST_PER_MILE = json.loads((ROOT / "data" / "telemetry.json").read_text())["cost"]["per_mile"]
+
+VIEW_SQL = """
+create or replace view garage.v_gig_shift as
+select id, occurred_on, platform, city, hours, miles, deliveries,
+       gross_usd, tips_usd, amount_usd as net_usd,
+       case when hours > 0 then round(amount_usd / hours, 2) end            as per_hour,
+       case when miles > 0 then round(amount_usd / miles, 2) end            as per_mile,
+       case when miles > 0 then round(miles * %(cpm)s, 2) end               as energy_cost_usd,
+       case when miles > 0 then round(amount_usd - miles * %(cpm)s, 2) end  as after_energy_usd,
+       case when hours > 0 and miles > 0
+            then round((amount_usd - miles * %(cpm)s) / hours, 2) end       as after_energy_per_hour,
+       case when deliveries > 0 then round(amount_usd / deliveries, 2) end  as per_delivery
+from garage.income_event
+where kind = 'gig'
+order by occurred_on desc, id desc
+""" % {"cpm": repr(COST_PER_MILE)}
+
+
+def sync_view(cur):
+    """Keep the view's cost-per-mile in step with telemetry.json. Idempotent."""
+    cur.execute(VIEW_SQL)
+
 
 def db():
     import psycopg2
@@ -33,6 +58,7 @@ PLATFORMS = {"instacart": "Instacart", "doordash": "DoorDash", "uber": "Uber",
 def add(a):
     net = a.gross + (a.tips or 0) if a.net is None else a.net
     with db() as c, c.cursor() as cur:
+        sync_view(cur)
         cur.execute("""insert into garage.income_event
             (occurred_on, kind, platform, city, hours, miles, deliveries,
              gross_usd, tips_usd, amount_usd, note)
@@ -50,6 +76,7 @@ def add(a):
 
 def report(a):
     with db() as c, c.cursor() as cur:
+        sync_view(cur)
         cur.execute("select count(*) from garage.income_event where kind='gig'")
         if not cur.fetchone()[0]:
             print("No shifts logged yet. Add one with:  python3 tools/income.py add --help")

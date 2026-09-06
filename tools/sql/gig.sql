@@ -75,3 +75,14 @@ alter table garage.drive
 alter table garage.gig_batch
   add column if not exists store_arrival_at timestamptz,   -- the app's arrival time at the store
   add column if not exists store_miles      numeric;       -- the app's "your location -> store" leg
+
+-- One row per gig.py mail invocation, manual or scheduled, so a run that found nothing new is still a
+-- verifiable run. Added 2026-09-06 after a routine's first fire could not be confirmed from disk.
+create table if not exists garage.gig_mail_run (
+  id          bigserial primary key,
+  ran_at      timestamptz default now(),
+  captured_by text,
+  files_seen  int,
+  new_rows    int,
+  already     int
+);

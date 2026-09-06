@@ -48,3 +48,21 @@ create table if not exists garage.gig_day (
   true_active_seconds int,                 -- the operator's own read of time worked, recorded verbatim
   true_active_note    text
 );
+
+-- Raw shopper-platform email, captured weekly by a scheduled routine. Parsed lazily: the
+-- structured fields are filled only once a real statement format has been seen.
+create table if not exists garage.gig_mail (
+  id                bigserial primary key,
+  gmail_message_id  text unique not null,
+  gmail_thread_id   text,
+  received_at       timestamptz,
+  sender            text,
+  subject           text,
+  body_text         text,
+  kind              text,        -- statement | batch | tip | account | promo | other
+  parsed            jsonb,
+  parsed_ok         boolean,
+  captured_at       timestamptz default now(),
+  captured_by       text         -- routine | manual
+);
+create index if not exists gig_mail_received_idx on garage.gig_mail (received_at desc);

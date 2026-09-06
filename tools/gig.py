@@ -14,6 +14,8 @@ OCR is Apple Vision, on this machine, no network and no key (tools/ocr.swift).
   python3 tools/gig.py true 2026-09-06 3h14m --note "..."  # your own read of time actually worked
   python3 tools/gig.py day 2026-09-06                      # the reconciled day
   python3 tools/gig.py mail data/inbox/mail/*.json         # captured shopper email -> gig_mail
+  python3 tools/gig.py drives 2026-09-06                   # label drives from the app; list the unsettled ones
+  python3 tools/gig.py mark personal 80 --note "..."       # your word on a drive
 """
 import argparse, datetime as dt, json, os, pathlib, re, subprocess, sys
 
@@ -89,7 +91,7 @@ def parse_batch(rows, year):
     b = {"orders": None, "items": None, "units": None, "batch_pay_usd": None, "tips_usd": None,
          "tips_initial_usd": None, "total_usd": None, "heavy_pay": False, "boost_pay": False,
          "app_active_seconds": None, "route_miles": None, "store": None, "accepted_at": None,
-         "occurred_on": None, "legs": [], "order_tips": {}}
+         "occurred_on": None, "legs": [], "order_tips": {}, "store_arrival": None}
     flat = [" ".join(r) for r in rows]
     for i, t in enumerate(flat):
         m = DATE.search(t)
@@ -111,7 +113,7 @@ def parse_batch(rows, year):
         m = re.search(r"Distance:\s*([\d.]+)\s*miles?", t, re.I)
         if m: b["legs"].append(float(m.group(1)))
         if re.search(r"^Arrival:", t, re.I) and i + 1 < len(flat):
-            b["store"] = flat[i+1].strip()
+            b["store"] = flat[i+1].strip(); b["store_arrival"] = clock(t)
         if re.search(r"^Active hours", t, re.I):
             d = duration_s(t)
             if d: b["app_active_seconds"] = d
@@ -181,10 +183,13 @@ def classify(rows):
 def upsert_batch(cur, b, files):
     if not (b["occurred_on"] and b["accepted_at"] and b["store"]):
         print("  ! batch missing date/accepted/store, skipped:", {k: b[k] for k in ("occurred_on", "accepted_at", "store")}); return None
+    arrival = (dt.datetime.combine(b["occurred_on"], b["store_arrival"]).isoformat() if b.get("store_arrival") else None)
+    store_miles = b["legs"][0] if b["legs"] else None
     cur.execute("""insert into garage.gig_batch (occurred_on, accepted_at, store, orders, items, units,
                      batch_pay_usd, tips_usd, tips_initial_usd, total_usd, heavy_pay, boost_pay,
-                     app_active_seconds, route_miles, source_files)
-                   values (%s, %s::timestamp || %s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                     app_active_seconds, route_miles, source_files, store_arrival_at, store_miles)
+                   values (%s, %s::timestamp || %s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
+                           (%s::timestamp || %s)::timestamptz, %s)
                    on conflict (occurred_on, accepted_at, store) do update set
                      orders=coalesce(excluded.orders, gig_batch.orders), items=coalesce(excluded.items, gig_batch.items),
                      units=coalesce(excluded.units, gig_batch.units),
@@ -195,11 +200,13 @@ def upsert_batch(cur, b, files):
                      heavy_pay=gig_batch.heavy_pay or excluded.heavy_pay, boost_pay=gig_batch.boost_pay or excluded.boost_pay,
                      app_active_seconds=coalesce(excluded.app_active_seconds, gig_batch.app_active_seconds),
                      route_miles=coalesce(excluded.route_miles, gig_batch.route_miles),
-                     source_files=array(select distinct unnest(gig_batch.source_files || excluded.source_files))
+                     source_files=array(select distinct unnest(gig_batch.source_files || excluded.source_files)),
+                     store_arrival_at=coalesce(excluded.store_arrival_at, gig_batch.store_arrival_at),
+                     store_miles=coalesce(excluded.store_miles, gig_batch.store_miles)
                    returning id""",
                 (b["occurred_on"], b["accepted_at"].isoformat(), TZ, b["store"], b["orders"], b["items"], b["units"],
                  b["batch_pay_usd"], b["tips_usd"], b["tips_initial_usd"], b["total_usd"], b["heavy_pay"], b["boost_pay"],
-                 b["app_active_seconds"], b["route_miles"], files))
+                 b["app_active_seconds"], b["route_miles"], files, arrival, TZ, store_miles))
     bid = cur.fetchone()[0]
     sync_ledger(cur, bid)
     return bid
@@ -256,14 +263,18 @@ cs as (select d, count(*) charge_stops, sum(gap_s)::int charge_stop_seconds from
 w as (select b2.occurred_on, min(b2.accepted_at) first_accept, max(o2.delivered_at) last_delivery,
              extract(epoch from max(o2.delivered_at) - min(b2.accepted_at))::int wall_seconds
       from garage.gig_batch b2 join garage.gig_order o2 on o2.batch_id = b2.id group by b2.occurred_on),
--- the shift's own driving: drives that start between 20 min before the first accept and the last delivery.
--- A Kroger run after the last drop-off is the same car on the same date, but it is not the shift.
-sh as (select w2.occurred_on, count(*) shift_drives, sum(d.distance_mi) shift_miles,
-              sum(d.duration_sec) shift_drive_seconds, sum(d.energy_kwh) shift_kwh
-       from (select occurred_on, min(b3.accepted_at) - interval '20 minutes' t0, max(o3.delivered_at) t1
-             from garage.gig_batch b3 join garage.gig_order o3 on o3.batch_id = b3.id group by occurred_on) w2
-       join garage.drive d on d.started_at between w2.t0 and w2.t1
-       group by w2.occurred_on)
+-- the shift's driving is the drives labelled shift: corroborated against the app or marked by the operator.
+-- Nothing is inferred here. Unlabelled and unknown drives are counted so the day can say what is unsettled.
+sh as (select (started_at at time zone 'America/Chicago')::date occurred_on,
+              count(*) filter (where purpose='shift') shift_drives,
+              sum(distance_mi) filter (where purpose='shift') shift_miles,
+              sum(duration_sec) filter (where purpose='shift') shift_drive_seconds,
+              sum(energy_kwh) filter (where purpose='shift') shift_kwh,
+              count(*) filter (where purpose='charge') charge_drives,
+              count(*) filter (where purpose='personal') personal_drives,
+              sum(distance_mi) filter (where purpose='personal') personal_miles_labelled,
+              count(*) filter (where purpose is null or purpose='unknown') unsettled_drives
+       from garage.drive group by 1)
 select b.occurred_on, b.platform, b.batches, b.orders, b.items,
        b.batch_pay_usd, b.tips_usd, b.tips_initial_usd, b.total_usd,
        round(100.0*b.tips_usd/nullif(b.total_usd,0),1)                          as tip_share_pct,
@@ -282,7 +293,7 @@ select b.occurred_on, b.platform, b.batches, b.orders, b.items,
        sh.shift_drives, sh.shift_miles, sh.shift_drive_seconds, sh.shift_kwh,
        round(sh.shift_miles - b.route_miles, 1)                                  as dead_miles,
        round(sh.shift_miles * %(cpm)s, 2)                                        as energy_usd_shift,
-       round(c.car_miles - sh.shift_miles, 1)                                    as personal_miles,
+       sh.charge_drives, sh.personal_drives, sh.personal_miles_labelled, sh.unsettled_drives,
        round(c.car_miles * %(cpm)s, 2)                                           as energy_usd_car
 from b left join garage.gig_day g on g.occurred_on=b.occurred_on
        left join o on o.occurred_on=b.occurred_on
@@ -340,6 +351,64 @@ def mail(a):
           + (f"  ({', '.join(f'{v} {k}' for k, v in sorted(kinds.items()))})" if kinds else ""))
     if kinds.get("statement"):
         print("  a statement arrived and no parser exists yet: the raw text is in garage.gig_mail, build the parser against it")
+
+# ---------------------------------------------------------------- drive purpose
+def drives(a):
+    """Label a day's drives from what the app recorded, and list the ones only the operator can settle.
+
+    The car knows where and when, never why. A drive is corroborated shift driving when its distance
+    matches an app route leg within 0.2 mi and it ends within 10 minutes of that leg's arrival or
+    drop-off. A drive is a charge trip when the NEXT drive starts with the state of charge at least
+    10 points higher. Both are written with their evidence. Everything else stays unknown until the
+    operator marks it; an operator label is never overwritten by this command."""
+    with db() as c, c.cursor() as cur:
+        cur.execute("""select id, started_at at time zone 'America/Chicago', ended_at at time zone 'America/Chicago',
+                              distance_mi, soc_start, soc_end, purpose, purpose_source, purpose_note
+                       from garage.drive where (started_at at time zone 'America/Chicago')::date=%s order by started_at""", (a.date,))
+        D = cur.fetchall()
+        cur.execute("""select b.store, b.accepted_at at time zone 'America/Chicago', b.store_arrival_at at time zone 'America/Chicago',
+                              b.store_miles, o.label, o.delivered_at at time zone 'America/Chicago', o.drop_miles
+                       from garage.gig_batch b left join garage.gig_order o on o.batch_id=b.id
+                       where b.occurred_on=%s order by b.accepted_at, o.delivered_at""", (a.date,))
+        legs, accepts, drops = [], [], []
+        for store, acc, arr, smi, lab, dlv, dmi in cur.fetchall():
+            accepts.append(acc)
+            if dlv: drops.append(dlv)
+            if arr and smi is not None: legs.append(("arrival", store, arr, float(smi)))
+            if dlv and dmi is not None: legs.append(("drop-off", (store + " order " + lab) if lab else store, dlv, float(dmi)))
+        first_acc = min(accepts) if accepts else None
+        last_drop = max(drops) if drops else None      # every delivery counts, captured distance or not
+        print(f"{a.date}: {len(D)} drives, {len(legs)} app legs to match against\n")
+        print(f"{'id':<4}{'start-end':<13}{'mi':>6}  {'soc':<9}label")
+        unsettled = []
+        for i, (id_, s_, e, mi, s0, s1, purpose, src, note) in enumerate(D):
+            mi = float(mi); nxt = D[i + 1] if i + 1 < len(D) else None
+            if src == "operator":
+                print(f"{id_:<4}{s_:%H:%M}-{e:%H:%M}  {mi:5.1f}  {s0}->{s1:<4} {purpose.upper():<9} operator: {note or ''}"); continue
+            hit = next((l for l in legs if abs(mi - l[3]) <= 0.2 and abs((e - l[2]).total_seconds()) <= 600), None)
+            if hit:
+                label, source, why = "shift", "corroborated-app", f"{hit[1]} {hit[0]} {hit[2]:%H:%M}, app leg {hit[3]} mi"
+            elif nxt and nxt[4] is not None and s1 is not None and nxt[4] - s1 >= 10:
+                label, source, why = "charge", "corroborated-soc", f"state of charge {s1}% -> {nxt[4]}% before the next drive"
+            else:
+                label, source = "unknown", None
+                if first_acc and s_ < first_acc: why = "started before the first accept; looks personal, needs your word"
+                elif last_drop and s_ >= last_drop: why = "after the last delivery; looks personal, needs your word"
+                else: why = "between batches, not an app leg, not a charge: needs your word"
+                unsettled.append((id_, s_, e, mi, why))
+            cur.execute("update garage.drive set purpose=%s, purpose_source=%s, purpose_note=%s where id=%s", (label, source, why, id_))
+            print(f"{id_:<4}{s_:%H:%M}-{e:%H:%M}  {mi:5.1f}  {s0}->{s1:<4} {label.upper():<9} {why}")
+    if unsettled:
+        print("\nneeds your word (mark with:  gig.py mark <id> shift|personal|charge --note '...'):")
+        for id_, s_, e, mi, why in unsettled: print(f"  {id_}  {s_:%H:%M}-{e:%H:%M}  {mi} mi   {why}")
+
+def mark(a):
+    """The operator's word on a drive. This is the only thing that can overwrite a corroborated label."""
+    with db() as c, c.cursor() as cur:
+        cur.execute("update garage.drive set purpose=%s, purpose_source='operator', purpose_note=%s where id = any(%s) returning id",
+                    (a.purpose, a.note, a.ids))
+        n = len(cur.fetchall())
+    print(f"marked {n} drive(s) {a.purpose}" + (f": {a.note}" if a.note else ""))
 
 # ---------------------------------------------------------------- commands
 def ingest(a):
@@ -414,11 +483,13 @@ def day(a):
         print(f"  car, shift  {d['shift_drives']} drives, {d['shift_miles']} mi, {hm(d['shift_drive_seconds'])} driving, {d['shift_kwh']} kWh"
               f"  -> energy ${d['energy_usd_shift']}"
               + (f", dead miles {d['dead_miles']} beyond the app's route" if d['dead_miles'] is not None else ", dead miles unknown (a route leg is missing)"))
-        if d["personal_miles"]:
-            print(f"  car, other  {d['car_drives'] - d['shift_drives']} drives, {d['personal_miles']} mi on the same date outside the shift window (personal)")
-    elif d["car_drives"]:
-        print(f"  car: {d['car_drives']} drives, {d['car_miles']} mi on this date, none inside the shift window")
-    else:
+    if d["charge_drives"]: print(f"  car, charge {d['charge_drives']} drive(s) to a charger")
+    if d["personal_drives"]: print(f"  car, personal {d['personal_drives']} drives, {d['personal_miles_labelled']} mi, per the operator")
+    if d["unsettled_drives"]:
+        print(f"  {d['unsettled_drives']} drive(s) on this date are not settled: run  gig.py drives {d['occurred_on']}  and mark them")
+    if not d["shift_drives"] and d["car_drives"]:
+        print(f"  car: {d['car_drives']} drives on this date, none labelled shift yet")
+    if not d["car_drives"]:
         print("  car: no drives in the warehouse for this date yet (pull TezLab)")
 
 ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -428,6 +499,10 @@ p.add_argument("images", nargs="+"); p.add_argument("--year", type=int); p.set_d
 p = sub.add_parser("true", help="record your own read of time actually worked")
 p.add_argument("date"); p.add_argument("duration", help="e.g. 3h14m"); p.add_argument("--note"); p.set_defaults(fn=true_)
 p = sub.add_parser("day", help="the reconciled day"); p.add_argument("date"); p.set_defaults(fn=day)
+p = sub.add_parser("drives", help="label a day's drives from the app's own timestamps; list what only you can settle")
+p.add_argument("date"); p.set_defaults(fn=drives)
+p = sub.add_parser("mark", help="your word on one or more drives: shift | personal | charge")
+p.add_argument("purpose", choices=["shift", "personal", "charge"]); p.add_argument("ids", type=int, nargs="+"); p.add_argument("--note"); p.set_defaults(fn=mark)
 p = sub.add_parser("mail", help="Gmail get_message JSON files -> garage.gig_mail (idempotent)")
 p.add_argument("files", nargs="+"); p.add_argument("--by", default="manual", choices=["manual", "routine"]); p.set_defaults(fn=mail)
 sub.add_parser("views", help="(re)create v_gig_day").set_defaults(fn=lambda a: (lambda c: (views(c.cursor()), c.commit()))(db()))

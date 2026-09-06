@@ -130,9 +130,19 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
 .cmd .sub{ color:var(--ink-2); font-size:.92rem; margin:.35em 0 0; line-height:1.5 }
 
 /* stat tiles */
-.stats{ display:grid; gap:var(--gap); grid-template-columns:repeat(2,minmax(0,1fr)) }
+.stats{ display:grid; gap:0; grid-template-columns:repeat(2,minmax(0,1fr)); overflow:hidden }
 @media(min-width:760px){ .stats{ grid-template-columns:repeat(4,minmax(0,1fr)) } }
-.stat{ padding:15px var(--pad) }
+/* One instrument cluster, not four floating boxes: the section carries the
+   glass and the cells are divided by hairlines. */
+.stat{ padding:15px var(--pad); border-top:1px solid var(--hairline,rgba(229,231,235,.10));
+       border-left:1px solid var(--hairline,rgba(229,231,235,.10)) }
+.stats .stat:nth-child(-n+2){ border-top:0 }
+.stats .stat:nth-child(odd){ border-left:0 }
+@media(min-width:760px){
+  .stats .stat{ border-top:0 }
+  .stats .stat:nth-child(odd){ border-left:1px solid var(--hairline,rgba(229,231,235,.10)) }
+  .stats .stat:first-child{ border-left:0 }
+}
 .stat .v{ font-family:var(--display); font-size:clamp(1.45rem,5.6vw,2rem); line-height:1;
           letter-spacing:-.02em; color:var(--ink); font-variant-numeric:tabular-nums }
 .stat .v small{ font-family:Arial,sans-serif; font-size:.5em; font-weight:700;

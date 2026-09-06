@@ -888,7 +888,7 @@ def page_drive():
 def page_charge():
     ch = D["charging"]
     plays = "".join(
-        '<div class="g"><h3>%s <span class="chip %s">%s</span></h3><p style="margin:0;font-size:.9rem">%s</p></div>'
+        '<div class="cell"><h3>%s <span class="chip %s">%s</span></h3><p style="margin:0;font-size:.9rem">%s</p></div>'
         % (html.escape(x["h"]),
            "chip-m" if x["tag"] == "measured" else "chip-p",
            "measured here" if x["tag"] == "measured" else "practice",
@@ -904,7 +904,7 @@ def page_charge():
         b.append(f'<li><b>{cents(v["cheapest"]*100,0)}</b> best rate</li>')
         return "".join(b)
     sitecards = "".join(
-        '<div class="g"><h3>%s <span class="chip chip-p">%s</span></h3>'
+        '<div class="cell"><h3>%s <span class="chip chip-p">%s</span></h3>'
         '<ul class="data" style="margin:.5em 0 .8em">%s</ul>'
         '<p style="margin:0 0 .6em;font-size:.9rem">%s</p>'
         '<p style="margin:0 0 .6em;font-size:.9rem"><strong>Worth knowing.</strong> %s</p>'
@@ -969,13 +969,13 @@ the real sessions.</p>
   <h2>Charging tricks worth knowing.</h2>
   <p class="lede prose">Half of these come out of this car's own telemetry rather than a forum.
   Where a claim is measured here, it says so.</p>
-  <div class="row row-2" style="margin-top:16px">{plays}</div>
+  <div class="row row-2 g cluster" style="margin-top:16px">{plays}</div>
 </section>
 
 <section>
   <p class="eyebrow">Site guide &middot; every plug this car has used</p>
   <h2>Where to stop, and what to do while you wait.</h2>
-  <div class="row row-2" style="margin-top:16px">{sitecards}</div>
+  <div class="row row-2 g cluster" style="margin-top:16px">{sitecards}</div>
   <p class="chart-note">Stall counts, ratings and safety scores from TezLab's charger database;
   nearby food from its place lookup. Rates are {M} from this car's own invoices.</p>
 </section>

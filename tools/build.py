@@ -398,7 +398,7 @@ counts every mile: a cost per mile is only interesting if something is riding on
     return write("/work/", "One Car, Three Jobs",
                  "A live case study: one measured vehicle as the denominator under three income "
                  "tracks, with a software studio as the lead.",
-                 "tex-carbon.jpg", body)
+                 "car/interior-e5d001.jpg", body)
 
 
 def page_trip():
@@ -426,7 +426,7 @@ def page_trip():
             else f'{cents(c["per_kwh"]*100,1)} a kWh'))
         for c in T["charges"] if c["curve"])
     recs = "".join(
-        '<li class="g stat"><p class="v">%s</p><p class="k">%s</p>'
+        '<li class="stat"><p class="v">%s</p><p class="k">%s</p>'
         '<p class="chart-note" style="margin-top:8px">%s</p></li>'
         % (html.escape(r["v"]), html.escape(r["k"]), html.escape(r["d"]))
         for r in G["fsd"]["records"])
@@ -445,11 +445,11 @@ raw drives.</p>
   Orange rings mark the places it charged. City centres, not the car's own coordinates.</p>
 </section>
 
-<section class="stats">
-  <div class="g stat"><p class="v">{t['distance_long_legs']:.0f}<small>mi</small></p><p class="k">Highway miles</p></div>
-  <div class="g stat"><p class="v">{pct(t['fsd_pct'],1)}</p><p class="k">Driven by the car</p></div>
-  <div class="g stat"><p class="v">{t['climbed_ft']:,}<small>ft</small></p><p class="k">Climbed</p></div>
-  <div class="g stat"><p class="v">{cents(t['cents_per_mile'])}</p><p class="k">Per mile, measured</p></div>
+<section class="stats g">
+  <div class="stat"><p class="v">{t['distance_long_legs']:.0f}<small>mi</small></p><p class="k">Highway miles</p></div>
+  <div class="stat"><p class="v">{pct(t['fsd_pct'],1)}</p><p class="k">Driven by the car</p></div>
+  <div class="stat"><p class="v">{t['climbed_ft']:,}<small>ft</small></p><p class="k">Climbed</p></div>
+  <div class="stat"><p class="v">{cents(t['cents_per_mile'])}</p><p class="k">Per mile, measured</p></div>
 </section>
 
 <section class="g">
@@ -492,7 +492,7 @@ raw drives.</p>
 <section>
   <p class="eyebrow">FSD records</p>
   <h2>What the car drove by itself.</h2>
-  <ul class="stats" style="list-style:none;margin:14px 0 0;padding:0">{recs}</ul>
+  <ul class="stats g" style="list-style:none;margin:14px 0 0;padding:0">{recs}</ul>
   <p class="chart-note">{html.escape(G['fsd']['note'])}</p>
 </section>
 
@@ -506,7 +506,7 @@ raw drives.</p>
     return write("/trip/", "Two States, Four Legs",
                  f"A {t['distance_long_legs']:.0f} mile road trip recorded end to end: real "
                  f"charging curves, per-leg energy, and {pct(t['fsd_pct'],1)} of it driven by the car.",
-                 "hero-highway.jpg", body)
+                 "car/screen-hw4-f10ad9.jpg", body)
 
 
 def page_scan():
@@ -534,11 +534,11 @@ measured and published. Nothing on this page is an estimate.</p>
   </div>
 </section>
 
-<section class="stats">
-  <div class="g stat"><p class="v">{pct(b['degradation_pct'])}</p><p class="k">Battery degradation</p></div>
-  <div class="g stat"><p class="v">{pct(f['pct'],1)}</p><p class="k">Miles driven by the car</p></div>
-  <div class="g stat"><p class="v">{pct(D['charge_loss']['pct'],1)}</p><p class="k">Charge loss, measured</p></div>
-  <div class="g stat"><p class="v">{mi(D['vehicle']['odometer'],0)}</p><p class="k">Odometer</p></div>
+<section class="stats g">
+  <div class="stat"><p class="v">{pct(b['degradation_pct'])}</p><p class="k">Battery degradation</p></div>
+  <div class="stat"><p class="v">{pct(f['pct'],1)}</p><p class="k">Miles driven by the car</p></div>
+  <div class="stat"><p class="v">{pct(D['charge_loss']['pct'],1)}</p><p class="k">Charge loss, measured</p></div>
+  <div class="stat"><p class="v">{mi(D['vehicle']['odometer'],0)}</p><p class="k">Odometer</p></div>
 </section>
 
 <section>
@@ -647,7 +647,7 @@ def page_home():
                  f"A 2024 Model Y that pays for itself and proves it: {cents(c['per_mile_cents'])} "
                  f"a mile measured against the van it replaced, {pct(b['degradation_pct'])} battery "
                  f"degradation, {pct(f['pct'],1)} of miles driven by the car.",
-                 "hero-ev-road.jpg", body, bodycls=' class="lp"')
+                 "car/screen-17280a.jpg", body, bodycls=' class="lp"')
 
 def page_switch():
     f, b, ch, c = D["fsd"], D["battery"], D["charging"], D["cost"]
@@ -770,7 +770,7 @@ what happens, roughly in the order it happens to you.</p>
     return write("/switch/", "The Switch",
                  "Gas to electric in seven chapters, each opening with measured data: the fleet "
                  "replaced, the decision, the first week, living electric, FSD, the ledger, the battery.",
-                 "hero-highway.jpg", body)
+                 "car/interior-35942a.jpg", body)
 
 def page_drive():
     f, e, dr = D["fsd"], D["efficiency_vs_region"], D["driving"]
@@ -943,11 +943,11 @@ the real sessions.</p>
   </div>
 </section>
 
-<section class="stats">
-  <div class="g stat"><p class="v">{ch['sessions']}</p><p class="k">Sessions</p></div>
-  <div class="g stat"><p class="v">{ch['energy_kwh']:.0f}<small>kWh</small></p><p class="k">Energy added</p></div>
-  <div class="g stat"><p class="v">{usd(ch['cost'],0)}</p><p class="k">Total spend</p></div>
-  <div class="g stat"><p class="v">{ch['charge_time_sec']/3600:.1f}<small>hr</small></p><p class="k">Plugged in</p></div>
+<section class="stats g">
+  <div class="stat"><p class="v">{ch['sessions']}</p><p class="k">Sessions</p></div>
+  <div class="stat"><p class="v">{ch['energy_kwh']:.0f}<small>kWh</small></p><p class="k">Energy added</p></div>
+  <div class="stat"><p class="v">{usd(ch['cost'],0)}</p><p class="k">Total spend</p></div>
+  <div class="stat"><p class="v">{ch['charge_time_sec']/3600:.1f}<small>hr</small></p><p class="k">Plugged in</p></div>
 </section>
 
 <section class="g">
@@ -1024,7 +1024,7 @@ the real sessions.</p>
                  f"{ch['sessions']} measured charging sessions across five locations. Blended "
                  f"{cents(ch['blended_per_kwh']*100,1)} per kWh, Supercharger only "
                  f"{cents(ch['paid_per_kwh']*100,1)}.",
-                 "hero-charge.jpg", body)
+                 "car/wheels-f02697.jpg", body)
 
 def page_ledger():
     c, ch, b, fl = D["cost"], D["charging"], D["battery"], D["fleet"]
@@ -1146,11 +1146,11 @@ It deserves a real answer with real numbers, including the parts that are still 
   </div>
 </section>
 
-<section class="stats">
-  <div class="g stat"><p class="v">{b['current_kwh']}<small>kWh</small></p><p class="k">Usable capacity</p></div>
-  <div class="g stat"><p class="v">{b['cycles']}</p><p class="k">Battery cycles</p></div>
-  <div class="g stat"><p class="v">{b['recurrent_range_score']}<small>/100</small></p><p class="k">Recurrent Range Score</p></div>
-  <div class="g stat"><p class="v">{D['driving']['wh_per_mi']:.0f}<small>Wh/mi</small></p><p class="k">Real consumption</p></div>
+<section class="stats g">
+  <div class="stat"><p class="v">{b['current_kwh']}<small>kWh</small></p><p class="k">Usable capacity</p></div>
+  <div class="stat"><p class="v">{b['cycles']}</p><p class="k">Battery cycles</p></div>
+  <div class="stat"><p class="v">{b['recurrent_range_score']}<small>/100</small></p><p class="k">Recurrent Range Score</p></div>
+  <div class="stat"><p class="v">{D['driving']['wh_per_mi']:.0f}<small>Wh/mi</small></p><p class="k">Real consumption</p></div>
 </section>
 
 <section class="g">
@@ -1273,7 +1273,7 @@ document.addEventListener('click',function(e){
     return write("/car/", "The Car",
                  f"{v['year']} {v['model']} in {v['color']}: verified VIN decode, full spec sheet, "
                  f"Juniper differences, and six Tesla Paint Shop wrap files.",
-                 "tex-carbon.jpg", body, extra)
+                 "car/plate-0-f5d0bf.jpg", body, extra)
 
 def page_driver():
     fl = D["fleet"]
@@ -1330,7 +1330,7 @@ itself, so the car has to prove it belongs.</p>
     return write("/driver/", "The Driver",
                  "Why a measured cost per mile matters more when it is your own money: the context "
                  "behind the site, the gas fleet before it, and where the privacy line sits.",
-                 "hero-ev-road.jpg", body)
+                 "car/plate-6-95a847.jpg", body)
 
 # ── run ─────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":

@@ -108,6 +108,17 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
       0 0 0 1px rgba(244,81,30,.5),
       0 28px 70px -20px rgba(244,81,30,.32) }
 
+/* A block that is a heading and prose is not an object, so it does not get a
+   box. It gets a rule and the backdrop. Glass is kept for data, for the doors
+   and for the one commanding number on a page: when every element is a card,
+   none of them is emphasis. Padding matches .g so the type keeps the same left
+   edge as the blocks above and below it. */
+.bare{
+  border-top:1px solid var(--hairline,rgba(229,231,235,.10));
+  padding:22px var(--pad) 0;
+}
+.bare > :last-child{ margin-bottom:0 }
+
 /* ---------- grids --------------------------------------------------------- */
 .row{ display:grid; gap:var(--gap); grid-template-columns:1fr }
 @media(min-width:600px){ .row-2{ grid-template-columns:repeat(2,minmax(0,1fr)) } }

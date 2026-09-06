@@ -321,7 +321,7 @@ counts every mile: a cost per mile is only interesting if something is riding on
     charged against, and the reason the gig track is worth taking at all.
     Working: <a href="/ledger/">the Ledger</a>.</p>
   </div>
-  <div class="g">
+  <div class="bare">
     <h2>Read the order</h2>
     <p>The tracks are ranked, not listed. Software is the lead and the destination. Sourcing and
     the audience carry the miles today. The gig work is the bridge, and it is labeled that way on
@@ -335,7 +335,7 @@ counts every mile: a cost per mile is only interesting if something is riding on
 {''.join(out)}
 </ol>
 
-<section class="g">
+<section class="bare">
   <h2>The car is the advertisement <span class="chip chip-mo">planned</span></h2>
   <p class="prose">{html.escape(W['decals']['what'])}</p>
   <p class="prose">{html.escape(W['decals']['note'])}</p>
@@ -344,7 +344,7 @@ counts every mile: a cost per mile is only interesting if something is riding on
   for track one, at no extra cost per mile.</p>
 </section>
 
-<section class="g g-0">
+<section class="bare">
   <h2>What this page is not</h2>
   <p style="margin:0">Not an income report. Per track earnings, rates and hours stay private, as
   do the vehicle's financing terms. What is published here is what a vehicle costs to operate and
@@ -364,7 +364,7 @@ counts every mile: a cost per mile is only interesting if something is riding on
   </dl>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>What is original here</h2>
   <p class="prose">Four pieces were designed for this build rather than adopted from a template.
   They are the parts that transfer to client work.</p>
@@ -452,7 +452,7 @@ raw drives.</p>
   <div class="stat"><p class="v">{cents(t['cents_per_mile'])}</p><p class="k">Per mile, measured</p></div>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>Charge, drained, charged again</h2>
   <p class="prose">The whole trip as one line. Falling stretches are driving, shaded columns are
   charging stops.</p>
@@ -496,7 +496,7 @@ raw drives.</p>
   <p class="chart-note">{html.escape(G['fsd']['note'])}</p>
 </section>
 
-<section class="g g-0">
+<section class="bare">
   <h2>One number held back</h2>
   <p style="margin:0">Peak speed on one leg is in the telemetry and is not published here.
   Everything else on this page is exactly what the car recorded.</p>
@@ -525,7 +525,7 @@ measured and published. Nothing on this page is an estimate.</p>
     measured miles. The van it replaced cost {cents(D['fleet'][0]['cents_per_mi'])} a mile at the
     same pump.</p>
   </div>
-  <div class="g">
+  <div class="bare">
     <h2>Why a car has a website</h2>
     <p>Because the same person who built this measurement system builds software for other
     businesses, and a working system is a better argument than a brochure.</p>
@@ -635,7 +635,7 @@ def page_home():
   </ul>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>The rule this runs on</h2>
   <p class="prose" style="margin:0">A number here is either {M} from an invoice or a sensor, or
   it is {MO} and says so. There is no third category, and the build fails rather than publish a
@@ -756,7 +756,7 @@ what happens, roughly in the order it happens to you.</p>
   <div class="g legacy">{frag("appliance")}</div>
 </section>
 
-<section class="g g-0">
+<section class="bare">
   <h2>It does not finish</h2>
   <p class="prose" style="margin:0">Every Monday the data gets pulled again, compared against what
   is published here, and any figure that has earned a change gets one. The timeline never closes.
@@ -826,7 +826,7 @@ def page_drive():
     <p class="sub">{f['miles']:.1f} of {f['of_miles']:.1f} miles, across {f['drives']} of
     {f['of_drives']} trips. On the most recent charge cycle it was {lc['fsd_pct']}%.</p>
   </div>
-  <div class="g">
+  <div class="bare">
     <h2>Against the neighbors</h2>
     <p>TezLab compares this car to {e['sample']} other Model Ys within
     {e['radius_km']} km. This one returns {pct(e['mine_pct'])} of its rated efficiency.
@@ -853,7 +853,7 @@ def page_drive():
   {D['within_city'][1]['trips']} in {D['within_city'][1]['city']}.</p>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>The most recent charge cycle</h2>
   <p class="prose">One full cycle, {lc['start_pct']}% down to {lc['end_pct']}%, on a
   {lc['temp_f']}&deg;F day. {lc['miles']:.1f} miles on {lc['kwh_used']} kWh at
@@ -873,7 +873,7 @@ def page_drive():
   <div class="g legacy">{frag('uc-winter')}</div>
 </section>
 
-<section class="g g-0">
+<section class="bare">
   <h2>Not here yet</h2>
   <p style="margin:0">Two modules are built and empty on purpose. Road trips: {D['empty_modules']['road_trips']}
   Efficiency against temperature: {D['empty_modules']['monthly_efficiency']}</p>
@@ -936,7 +936,7 @@ the real sessions.</p>
     {cents(ch['paid_per_kwh']*100,1)}, because {ch['free_kwh']:.0f} kWh came from a private plug
     that costs nothing to use.</p>
   </div>
-  <div class="g">
+  <div class="bare">
     <h2>Two honest numbers</h2>
     <p>The blended rate is what actually left the bank account. The Supercharger rate is what this
     would cost with no free plug in the mix, which is the number worth planning against.</p>
@@ -991,7 +991,7 @@ the real sessions.</p>
   published, here or anywhere on this site.</p>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>What the plug charges you for, and what the battery keeps</h2>
   <p class="prose">Tesla's invoice bills the energy drawn from the charger. The car reports the
   energy that actually reached the pack. Those are not the same number, and neither source
@@ -1037,7 +1037,7 @@ denominator and the numerator on the same page, because separating them is how p
 themselves into vehicles they cannot afford.</p>
 {livestrip()}
 
-<section class="g">
+<section class="bare">
   <h2>What the miles are for</h2>
   <p class="prose">The vehicle economics on this site are not an academic exercise. This car is
   the denominator under a software studio in Nashville, a vehicle sourcing practice with an
@@ -1054,7 +1054,7 @@ themselves into vehicles they cannot afford.</p>
     Energy only. Insurance, payment and tires are separate lines below and are not buried in
     this figure.</p>
   </div>
-  <div class="g">
+  <div class="bare">
     <h2>What that saves</h2>
     <p>Against the Express van at {fl[0]['mpg']} mpg, this car saves
     {cents(save_van)} on every mile driven.</p>
@@ -1087,7 +1087,7 @@ themselves into vehicles they cannot afford.</p>
 </section>
 
 <section class="row row-2">
-  <div class="g">
+  <div class="bare">
     <h2>What it is worth</h2>
     <p>Recurrent puts the market value between {usd(b['recurrent_value_low'],0)} and
     {usd(b['recurrent_value_high'],0)}, moving about {b['recurrent_trend_pct_mo']}% a month.
@@ -1095,7 +1095,7 @@ themselves into vehicles they cannot afford.</p>
     saving. Saying otherwise would be selling something.</p>
     <p style="margin:0">Range Score {b['recurrent_range_score']} of 100.</p>
   </div>
-  <div class="g">
+  <div class="bare">
     <h2>What the car earns</h2>
     <p>One car, three income tracks: gig work, software, and events. The vehicle cost is the
     denominator under all three, which is the entire reason this site computes a cost per mile
@@ -1138,7 +1138,7 @@ It deserves a real answer with real numbers, including the parts that are still 
     {b['health']} and puts both degradation and cycle count in the low band for comparable
     cars in the region.</p>
   </div>
-  <div class="g">
+  <div class="bare">
     <h2>One reading is not a trend</h2>
     <p>Zero percent at {mi(D['vehicle']['odometer'],0)} miles is a real measurement, and it is also
     a single point. TezLab returns no capacity history for this car yet.</p>
@@ -1154,7 +1154,7 @@ It deserves a real answer with real numbers, including the parts that are still 
   <div class="stat"><p class="v">{D['driving']['wh_per_mi']:.0f}<small>Wh/mi</small></p><p class="k">Real consumption</p></div>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>Range lost while parked</h2>
   <p class="prose">Phantom drain is the cost of owning the car on days you do not drive it. Over
   {D['idle_loss']['days']} days this pack gave up {D['idle_loss']['range_lost_mi']:.0f} miles of
@@ -1169,7 +1169,7 @@ It deserves a real answer with real numbers, including the parts that are still 
   of electricity. {MO}, because the drain is measured in range and converted to dollars here.</p>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>Warranty, the good news</h2>
   <p class="prose" style="margin:0">The battery and drive unit are covered to 2032 or 120,000 miles,
   whichever comes first, with a floor of 70% capacity retention. At {b['cycles']} cycles and
@@ -1177,7 +1177,7 @@ It deserves a real answer with real numbers, including the parts that are still 
   warranty runs to 2028 or 50,000 miles.</p>
 </section>
 
-<section class="g g-0">
+<section class="bare">
   <h2>Not here yet</h2>
   <p style="margin:0">{D['empty_modules']['capacity_history']} Once there are enough Monday
   readings to plot, the chart replaces this note.</p>
@@ -1245,7 +1245,7 @@ images. Everything below was verified against the car, not copied from a brochur
   </div>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>Wraps</h2>
   <p class="prose">Six liveries built on Tesla's official Model Y wrap template from the
   teslamotors/custom-wraps repository. Each one is a real Paint Shop file: under 1 MB, correctly
@@ -1256,7 +1256,7 @@ images. Everything below was verified against the car, not copied from a brochur
   answer and was removed.</p>
 </section>
 
-<section class="g g-0">
+<section class="bare">
   <h2>Footnote: the best selling car claim</h2>
   <div class="legacy">{frag('history')}</div>
 </section>
@@ -1284,7 +1284,7 @@ def page_driver():
 <p class="lede prose">Forty-five. Single. Rebuilding after a divorce. Every dollar has to justify
 itself, so the car has to prove it belongs.</p>
 
-<section class="g">
+<section class="bare">
   <h2>The reason, not the punchline</h2>
   <p class="prose">Most writing about the cost of driving is done by people who are not paying for
   the car. A press fleet vehicle does not have a payment. A cost per mile calculator does not have
@@ -1294,7 +1294,7 @@ itself, so the car has to prove it belongs.</p>
   follows is about the vehicles.</p>
 </section>
 
-<section class="g">
+<section class="bare">
   <h2>The fleet before this one</h2>
   <p class="prose">Three gas vehicles in about a year, each one bought for a job and sold when the
   job or the math changed.</p>
@@ -1312,7 +1312,7 @@ itself, so the car has to prove it belongs.</p>
 
 <section class="g legacy">{frag('fleet')}</section>
 
-<section class="g">
+<section class="bare">
   <h2>Why used, and why the credit never applied</h2>
   <p class="prose" style="margin:0">The car was bought used and financed from a Ford Lincoln store
   in Franklin. The federal clean vehicle credit did not apply to this purchase, so none of the
@@ -1321,7 +1321,7 @@ itself, so the car has to prove it belongs.</p>
   covered honestly on the <a href="/ledger/">Ledger</a>.</p>
 </section>
 
-<section class="g g-0">
+<section class="bare">
   <h2>Where the line is</h2>
   <p style="margin:0">Context is public. Figures are not. Income, debt, per track earnings and
   financing terms stay in a private tool and never appear in these pages. What is published here is

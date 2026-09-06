@@ -14,3 +14,6 @@ skills-lock.json
 *.key
 .garage/
 data/inbox/
+
+# generated from live gig-income data; this repo is PUBLIC, so it never gets committed
+private-src/income.html

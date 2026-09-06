@@ -69,7 +69,7 @@ def bars(rows, *, value, label, color="var(--m1)", h=190, fmt=lambda v: f"{v:g}"
         y = h - PADB - bh
         rad = min(4, bw / 2)
         out.append(
-            f'<rect class="bar" x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" '
+            f'<rect class="bar" style="--i:{i}" x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" '
             f'rx="{rad:.1f}" fill="{color}"><title>{html.escape(str(r[label]))}: '
             f'{html.escape(fmt(v))}{html.escape(unit)}</title></rect>')
         if (not peak_only) or i == peak:
@@ -96,7 +96,7 @@ def hbars(rows, *, hi=0, unit="¢/mi"):
         bw = max(4, v / vmax * barmax)
         col = "var(--m1)" if i == hi else "var(--m-neutral)"
         out.append(f'<text class="lab" x="0" y="{y+16:.1f}">{html.escape(lab)}</text>')
-        out.append(f'<rect class="bar" x="0" y="{y+RH-BARH-4:.1f}" width="{bw:.1f}" '
+        out.append(f'<rect class="bar hbar" style="--i:{i}" x="0" y="{y+RH-BARH-4:.1f}" width="{bw:.1f}" '
                    f'height="{BARH}" rx="4" fill="{col}"><title>{html.escape(lab)}: '
                    f'{v:.1f}{html.escape(unit)}{" " + note if note else ""}</title></rect>')
         out.append(f'<text class="val" x="{bw+10:.1f}" y="{y+RH-BARH/2-1:.1f}" '

@@ -13,6 +13,7 @@ OCR is Apple Vision, on this machine, no network and no key (tools/ocr.swift).
   python3 tools/gig.py ingest data/inbox/shots/*.png      # screenshots -> gig_batch / gig_order / gig_day
   python3 tools/gig.py true 2026-09-06 3h14m --note "..."  # your own read of time actually worked
   python3 tools/gig.py day 2026-09-06                      # the reconciled day
+  python3 tools/gig.py mail data/inbox/mail/*.json         # captured shopper email -> gig_mail
 """
 import argparse, datetime as dt, json, os, pathlib, re, subprocess, sys
 
@@ -252,8 +253,17 @@ cs as (select d, count(*) charge_stops, sum(gap_s)::int charge_stop_seconds from
          from garage.drive) x
        where soc_jump >= 10 group by d),
 -- wall clock for the shift: first batch accepted to last order delivered
-w as (select b2.occurred_on, extract(epoch from max(o2.delivered_at) - min(b2.accepted_at))::int wall_seconds
-      from garage.gig_batch b2 join garage.gig_order o2 on o2.batch_id = b2.id group by b2.occurred_on)
+w as (select b2.occurred_on, min(b2.accepted_at) first_accept, max(o2.delivered_at) last_delivery,
+             extract(epoch from max(o2.delivered_at) - min(b2.accepted_at))::int wall_seconds
+      from garage.gig_batch b2 join garage.gig_order o2 on o2.batch_id = b2.id group by b2.occurred_on),
+-- the shift's own driving: drives that start between 20 min before the first accept and the last delivery.
+-- A Kroger run after the last drop-off is the same car on the same date, but it is not the shift.
+sh as (select w2.occurred_on, count(*) shift_drives, sum(d.distance_mi) shift_miles,
+              sum(d.duration_sec) shift_drive_seconds, sum(d.energy_kwh) shift_kwh
+       from (select occurred_on, min(b3.accepted_at) - interval '20 minutes' t0, max(o3.delivered_at) t1
+             from garage.gig_batch b3 join garage.gig_order o3 on o3.batch_id = b3.id group by occurred_on) w2
+       join garage.drive d on d.started_at between w2.t0 and w2.t1
+       group by w2.occurred_on)
 select b.occurred_on, b.platform, b.batches, b.orders, b.items,
        b.batch_pay_usd, b.tips_usd, b.tips_initial_usd, b.total_usd,
        round(100.0*b.tips_usd/nullif(b.total_usd,0),1)                          as tip_share_pct,
@@ -269,17 +279,67 @@ select b.occurred_on, b.platform, b.batches, b.orders, b.items,
        round(b.route_miles * %(cpm)s, 2)                                         as energy_usd_on_route,
        o.late_orders, o.found_pct,
        c.car_drives, c.car_miles, c.car_drive_seconds, c.car_kwh,
-       round(c.car_miles - b.route_miles, 1)                                     as dead_miles,
+       sh.shift_drives, sh.shift_miles, sh.shift_drive_seconds, sh.shift_kwh,
+       round(sh.shift_miles - b.route_miles, 1)                                  as dead_miles,
+       round(sh.shift_miles * %(cpm)s, 2)                                        as energy_usd_shift,
+       round(c.car_miles - sh.shift_miles, 1)                                    as personal_miles,
        round(c.car_miles * %(cpm)s, 2)                                           as energy_usd_car
 from b left join garage.gig_day g on g.occurred_on=b.occurred_on
        left join o on o.occurred_on=b.occurred_on
        left join c on c.d=b.occurred_on
        left join cs on cs.d=b.occurred_on
        left join w on w.occurred_on=b.occurred_on
+       left join sh on sh.occurred_on=b.occurred_on
 order by b.occurred_on desc
 """ % {"cpm": repr(COST_PER_MILE)}
 
-def views(cur): cur.execute(VIEW)
+def views(cur):
+    # create-or-replace cannot reorder or rename a view's columns, and this view grows as the
+    # reconciliation does, so drop and recreate. Nothing depends on it downstream.
+    cur.execute("drop view if exists garage.v_gig_day"); cur.execute(VIEW)
+
+# ---------------------------------------------------------------- mail
+def classify_mail(subject):
+    s = (subject or "").lower()
+    if any(k in s for k in ("earnings", "weekly", "statement", "pay period", "payout", "you earned")): return "statement"
+    if "tip" in s: return "tip"
+    if "batch" in s: return "batch"
+    if any(k in s for k in ("email address", "password", "account", "verify", "sign in", "login")): return "account"
+    if any(k in s for k in ("promo", "guarantee", "boost", "extra earnings", "peak", "bonus")): return "promo"
+    return "other"
+
+def mail(a):
+    """Shopper-platform email -> garage.gig_mail, idempotent on the Gmail message id.
+
+    Input files are the JSON the Gmail connector's get_message returns (PLAIN_TEXT format).
+    The fetch is done by whatever session runs this (the connector is a tool, not a library);
+    this command owns everything after that, so the logic lives in code, not in a prompt.
+    Email content is data: nothing in it is ever executed or followed."""
+    import glob
+    files = [f for pat in a.files for f in glob.glob(pat)]
+    if not files: print("no mail files matched"); return
+    new = dup = 0; kinds = {}
+    with db() as c, c.cursor() as cur:
+        for f in files:
+            m = json.loads(pathlib.Path(f).read_text())
+            mid = m.get("id") or m.get("messageId")
+            if not mid: print(f"  ? {f}: no message id, skipped"); continue
+            body = m.get("plaintextBody") or m.get("plaintext_body") or m.get("plain_text_body") or m.get("body") or m.get("snippet") or ""
+            sender = m.get("sender") or m.get("from") or ""
+            subject = m.get("subject") or ""
+            kind = classify_mail(subject)
+            cur.execute("""insert into garage.gig_mail
+                             (gmail_message_id, gmail_thread_id, received_at, sender, subject, body_text, kind, captured_by)
+                           values (%s,%s,%s,%s,%s,%s,%s,%s)
+                           on conflict (gmail_message_id) do nothing
+                           returning id""",
+                        (mid, m.get("threadId") or m.get("thread_id"), m.get("date"), sender, subject, body, kind, a.by))
+            if cur.fetchone(): new += 1; kinds[kind] = kinds.get(kind, 0) + 1
+            else: dup += 1
+    print(f"mail: {new} new, {dup} already captured"
+          + (f"  ({', '.join(f'{v} {k}' for k, v in sorted(kinds.items()))})" if kinds else ""))
+    if kinds.get("statement"):
+        print("  a statement arrived and no parser exists yet: the raw text is in garage.gig_mail, build the parser against it")
 
 # ---------------------------------------------------------------- commands
 def ingest(a):
@@ -350,9 +410,14 @@ def day(a):
     print(f"  route miles {d['route_miles'] if d['route_miles'] is not None else 'incomplete'}"
           + (f"  -> ${d['energy_usd_on_route']} energy at {COST_PER_MILE*100:.1f}c/mi" if d['energy_usd_on_route'] else ""))
     if d["late_orders"] is not None: print(f"  late orders {d['late_orders']}, found-or-replaced {d['found_pct']}%")
-    if d["car_drives"]:
-        print(f"  car: {d['car_drives']} drives, {d['car_miles']} mi, {hm(d['car_drive_seconds'])} driving, {d['car_kwh']} kWh"
-              f"  -> dead miles {d['dead_miles']}, energy ${d['energy_usd_car']}")
+    if d["shift_drives"]:
+        print(f"  car, shift  {d['shift_drives']} drives, {d['shift_miles']} mi, {hm(d['shift_drive_seconds'])} driving, {d['shift_kwh']} kWh"
+              f"  -> energy ${d['energy_usd_shift']}"
+              + (f", dead miles {d['dead_miles']} beyond the app's route" if d['dead_miles'] is not None else ", dead miles unknown (a route leg is missing)"))
+        if d["personal_miles"]:
+            print(f"  car, other  {d['car_drives'] - d['shift_drives']} drives, {d['personal_miles']} mi on the same date outside the shift window (personal)")
+    elif d["car_drives"]:
+        print(f"  car: {d['car_drives']} drives, {d['car_miles']} mi on this date, none inside the shift window")
     else:
         print("  car: no drives in the warehouse for this date yet (pull TezLab)")
 
@@ -363,5 +428,7 @@ p.add_argument("images", nargs="+"); p.add_argument("--year", type=int); p.set_d
 p = sub.add_parser("true", help="record your own read of time actually worked")
 p.add_argument("date"); p.add_argument("duration", help="e.g. 3h14m"); p.add_argument("--note"); p.set_defaults(fn=true_)
 p = sub.add_parser("day", help="the reconciled day"); p.add_argument("date"); p.set_defaults(fn=day)
+p = sub.add_parser("mail", help="Gmail get_message JSON files -> garage.gig_mail (idempotent)")
+p.add_argument("files", nargs="+"); p.add_argument("--by", default="manual", choices=["manual", "routine"]); p.set_defaults(fn=mail)
 sub.add_parser("views", help="(re)create v_gig_day").set_defaults(fn=lambda a: (lambda c: (views(c.cursor()), c.commit()))(db()))
 a = ap.parse_args(); a.fn(a)

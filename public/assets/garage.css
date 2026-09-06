@@ -466,6 +466,32 @@ body.lp::before{
 @media(prefers-reduced-motion:no-preference){
   .g,.door{ transition:border-color .2s cubic-bezier(.2,.7,.25,1),
                        box-shadow .2s cubic-bezier(.2,.7,.25,1) }
+
+  /* The charts draw their own values. This is the only motion the subject
+     justifies: the bars arrive the way the measurement did, left to right,
+     rather than sliding in because a page loaded.
+
+     The resting state is the full bar. A browser that never runs the
+     animation, and anyone who asks for reduced motion below, gets the chart
+     complete rather than empty, which is why the keyframe animates towards
+     the default instead of away from it. transform-box is what makes
+     transform-origin mean the rect rather than the whole SVG canvas. */
+  .chart .bar{
+    transform-box:fill-box; transform-origin:bottom;
+    animation:bar-rise .62s cubic-bezier(.2,.75,.3,1) both;
+    animation-delay:calc(var(--i,0) * .035s);
+  }
+  .chart .bar.hbar{ transform-origin:left; animation-name:bar-grow }
+  @keyframes bar-rise{ from{ transform:scaleY(0) } to{ transform:none } }
+  @keyframes bar-grow{ from{ transform:scaleX(0) } to{ transform:none } }
+
+  /* The peak label belongs to its bar, so it follows rather than leads. */
+  .chart .val{ animation:val-in .5s ease-out both; animation-delay:.42s }
+  @keyframes val-in{ from{ opacity:0 } to{ opacity:1 } }
+
+  /* The one commanding number on a page settles instead of appearing. */
+  .cmd .v{ animation:cmd-settle .7s cubic-bezier(.2,.75,.3,1) both }
+  @keyframes cmd-settle{ from{ opacity:0; transform:translateY(6px) } to{ opacity:1; transform:none } }
 }
 @media(prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important } }
 

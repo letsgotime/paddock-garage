@@ -290,7 +290,8 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
 
 /* ---------- operating-area diagram --------------------------------------- */
 .map{ display:block; width:100%; height:auto }
-.map .corr{ stroke:var(--m2); stroke-linecap:round; fill:none }
+.map .corr{ stroke:var(--m2); stroke-linecap:round; fill:none;
+            filter:drop-shadow(0 0 1.5px rgba(5,7,13,.85)) drop-shadow(0 0 3px rgba(5,7,13,.55)) }
 .map .city{ fill:var(--ink) }
 .map .cl{ font-family:Arial,Helvetica,sans-serif; font-size:22px; font-weight:700;
           fill:var(--ink-2); letter-spacing:.02em }

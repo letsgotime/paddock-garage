@@ -285,6 +285,7 @@ c as (select (started_at at time zone 'America/Chicago')::date d, sum(distance_m
              min(started_at) car_first_depart, max(ended_at) car_last_arrive
       from garage.drive group by 1),
 -- a charge stop is a jump in state of charge between one drive's end and the next drive's start
+-- shift miles count whole shift drives plus, for a mixed drive, the app-measured shift portion (drive.shift_mi)
 cs as (select d, count(*) charge_stops, sum(gap_s)::int charge_stop_seconds from (
          select (started_at at time zone 'America/Chicago')::date d,
                 soc_start - lag(soc_end)  over (partition by vin order by started_at)                    as soc_jump,
@@ -299,7 +300,7 @@ w as (select b2.occurred_on, min(b2.accepted_at) first_accept, max(o2.delivered_
 -- Nothing is inferred here. Unlabelled and unknown drives are counted so the day can say what is unsettled.
 sh as (select (started_at at time zone 'America/Chicago')::date occurred_on,
               count(*) filter (where purpose='shift') shift_drives,
-              sum(distance_mi) filter (where purpose='shift') shift_miles,
+              sum(case when purpose='shift' then distance_mi when purpose='mixed' then shift_mi end) shift_miles,
               sum(duration_sec) filter (where purpose='shift') shift_drive_seconds,
               sum(energy_kwh) filter (where purpose='shift') shift_kwh,
               count(*) filter (where purpose='charge') charge_drives,
@@ -307,6 +308,7 @@ sh as (select (started_at at time zone 'America/Chicago')::date occurred_on,
               sum(distance_mi) filter (where purpose='personal') personal_miles_labelled,
               count(*) filter (where purpose='mixed') mixed_drives,
               sum(distance_mi) filter (where purpose='mixed') mixed_miles,
+              sum(shift_mi) filter (where purpose='mixed') mixed_shift_miles,
               count(*) filter (where purpose is null or purpose='unknown') unsettled_drives
        from garage.drive group by 1)
 select b.occurred_on, b.platform, b.batches, b.orders, b.items,
@@ -327,7 +329,7 @@ select b.occurred_on, b.platform, b.batches, b.orders, b.items,
        sh.shift_drives, sh.shift_miles, sh.shift_drive_seconds, sh.shift_kwh,
        round(sh.shift_miles - b.route_miles, 1)                                  as dead_miles,
        round(sh.shift_miles * %(cpm)s, 2)                                        as energy_usd_shift,
-       sh.charge_drives, sh.personal_drives, sh.personal_miles_labelled, sh.mixed_drives, sh.mixed_miles, sh.unsettled_drives,
+       sh.charge_drives, sh.personal_drives, sh.personal_miles_labelled, sh.mixed_drives, sh.mixed_miles, sh.mixed_shift_miles, sh.unsettled_drives,
        round(c.car_miles * %(cpm)s, 2)                                           as energy_usd_car
 from b left join garage.gig_day g on g.occurred_on=b.occurred_on
        left join o on o.occurred_on=b.occurred_on
@@ -544,13 +546,17 @@ def day(a):
           + (f"  -> ${d['energy_usd_on_route']} energy at {COST_PER_MILE*100:.1f}c/mi" if d['energy_usd_on_route'] else ""))
     if d["late_orders"] is not None: print(f"  late orders {d['late_orders']}, found-or-replaced {d['found_pct']}%")
     if d["shift_drives"]:
-        print(f"  car, shift  {d['shift_drives']} drives, {d['shift_miles']} mi, {hm(d['shift_drive_seconds'])} driving, {d['shift_kwh']} kWh"
+        plus = f" plus {d['mixed_shift_miles']} mi of a mixed drive" if d.get("mixed_shift_miles") else ""
+        print(f"  car, shift  {d['shift_drives']} drives{plus}, {d['shift_miles']} mi; whole drives {hm(d['shift_drive_seconds'])} driving, {d['shift_kwh']} kWh"
               f"  -> energy ${d['energy_usd_shift']}"
               + (f", dead miles {d['dead_miles']} beyond the app's route" if d['dead_miles'] is not None else ", dead miles unknown (a route leg is missing)"))
     if d["charge_drives"]: print(f"  car, charge {d['charge_drives']} drive(s) to a charger")
     if d["personal_drives"]: print(f"  car, personal {d['personal_drives']} drives, {d['personal_miles_labelled']} mi, per the operator")
     if d["mixed_drives"]:
-        print(f"  car, mixed  {d['mixed_drives']} drive(s), {d['mixed_miles']} mi, part personal and part shift per the operator; counted in neither")
+        if d.get("mixed_shift_miles"):
+            print(f"  car, mixed  {d['mixed_drives']} drive(s), {d['mixed_miles']} mi: {d['mixed_shift_miles']} mi counted toward the shift, the app's accept-to-store distance; the rest personal")
+        else:
+            print(f"  car, mixed  {d['mixed_drives']} drive(s), {d['mixed_miles']} mi, part personal and part shift per the operator; counted in neither")
     if d["unsettled_drives"]:
         print(f"  {d['unsettled_drives']} drive(s) on this date are not settled: run  gig.py drives {d['occurred_on']}  and mark them")
     if not d["shift_drives"] and d["car_drives"]:

@@ -276,6 +276,11 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
           color:var(--ignition) }
 .door h3{ margin:.45em 0 .3em }
 .door p{ margin:0; font-size:.87rem }
+@media(min-width:640px){ .doors-4{ grid-template-columns:repeat(2,minmax(0,1fr)) } }
+@media(min-width:1040px){ .doors-4{ grid-template-columns:repeat(4,minmax(0,1fr)) } }
+/* the shift timeline: door to door underneath, one bar per batch on the app clock */
+.chart .tl-wall{ fill:var(--m-neutral); opacity:.55 }
+.chart.tl .val{ fill:#F0F2F5 }
 
 /* ---------- module cards -------------------------------------------------- */
 .mod{ padding:16px var(--pad) }

@@ -1,5 +1,5 @@
 /* ============================================================
-   PADDOCK GARAGE — FLOATING GLASS SYSTEM
+   PADDOCK GARAGE: FLOATING GLASS SYSTEM
    Ported from the ACC glass spec: three depth-graded elevations
    (e0 recedes, e1 rests, e2 commands), dual inner bevels, film
    grain, one command surface per view. Adapted to the Paddock
@@ -66,7 +66,7 @@ body > *{ position:relative; z-index:3; }
    ELEVATIONS
    ============================================================ */
 
-/* e1 — resting glass: the workhorse container */
+/* e1: resting glass, the workhorse container */
 .card, .tile, .kpi, .stat-tile,
 details.topic,
 .tbl-wrap, .signal, .budget, .rec,
@@ -92,7 +92,7 @@ a.card, .rec{ border-left: 4px solid var(--c, var(--ignition, #F4511E)); }
 th, td{ border-bottom: 1px solid var(--hairline-soft); }
 thead th{ border-bottom: 1px solid var(--hairline); }
 
-/* e0 — receding glass: nested context, callouts, code, chips */
+/* e0: receding glass, nested context, callouts, code, chips */
 .nugget, .flag, .good, .note, .val, .drill td,
 .meta-line, .legend, .tools{
   background: var(--g-fill-0);
@@ -108,7 +108,7 @@ thead th{ border-bottom: 1px solid var(--hairline); }
   border: 1px solid var(--hairline-soft);
 }
 
-/* e2 — command surface: ONE per view, ignition ring */
+/* e2: command surface, ONE per view, ignition ring */
 a.card[href="/case-study/"],
 .glass-e2{
   background:
@@ -163,7 +163,7 @@ footer{ border-top: 1px solid var(--hairline-soft) !important; }
 }
 
 /* ============================================================
-   NAVBAR — ported from the paddock20.com header spec
+   NAVBAR: ported from the paddock20.com header spec
    (60px, blur 24/160, #1A2740 hairline), hamburger top right
    ============================================================ */
 body{ padding-top:60px; }
@@ -199,7 +199,7 @@ body{ padding-top:60px; }
 .pg-menu a.ext{ color:var(--ink-faint, #8A93A0); border-top:1px solid var(--hairline-soft); margin-top:6px; }
 
 /* ============================================================
-   FOOTER — ported from the paddock20.com footer design
+   FOOTER: ported from the paddock20.com footer design
    ============================================================ */
 .pg-footer{ margin-top:76px; background:rgba(7,11,20,.86);
   -webkit-backdrop-filter:blur(24px) saturate(160%); backdrop-filter:blur(24px) saturate(160%);

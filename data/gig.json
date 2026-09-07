@@ -1,0 +1,80 @@
+{
+ "exported_on": "2026-09-06",
+ "figures": "measured",
+ "energy_per_mile_usd": 0.1088,
+ "source": "the shopper app's own screens and the car",
+ "days": [
+  {
+   "date": "2026-09-06",
+   "platform": "Instacart",
+   "batches": 3,
+   "orders": 4,
+   "items": 89,
+   "tip_share_pct": 63.0,
+   "app_active_s": 14644,
+   "wall_s": 19140,
+   "gap_s": 4496,
+   "charge_stops": 1,
+   "charge_stop_s": 1820,
+   "route_mi": 28.9,
+   "late_orders": 1,
+   "found_or_replaced_pct": 96.3,
+   "shift_drives": 6,
+   "shift_mi": 29.3,
+   "shift_drive_s": 3578,
+   "shift_kwh": 11.1,
+   "dead_mi": 0.4,
+   "energy_usd": 3.19,
+   "batch_rows": [
+    {
+     "store": "Costco",
+     "city": "Brentwood",
+     "orders": 2,
+     "items": 45,
+     "accept_offset_s": 0,
+     "app_active_s": 6962,
+     "route_mi": 10.7,
+     "in_store_s": 4920,
+     "sec_per_item": 109,
+     "on_time": true,
+     "late_orders": 0
+    },
+    {
+     "store": "The Fresh Market",
+     "city": "Brentwood",
+     "orders": 1,
+     "items": 14,
+     "accept_offset_s": 10800,
+     "app_active_s": 2576,
+     "route_mi": 8.1,
+     "in_store_s": 1140,
+     "sec_per_item": 81,
+     "on_time": true,
+     "late_orders": 0
+    },
+    {
+     "store": "Target",
+     "city": "Franklin",
+     "orders": 1,
+     "items": 30,
+     "accept_offset_s": 14040,
+     "app_active_s": 5106,
+     "route_mi": 10.1,
+     "in_store_s": 3300,
+     "sec_per_item": 110,
+     "on_time": false,
+     "late_orders": 1
+    }
+   ],
+   "charge_stop_list": [
+    {
+     "offset_s": 9047,
+     "seconds": 1820,
+     "soc_from": 17,
+     "soc_to": 80
+    }
+   ],
+   "chip": "measured"
+  }
+ ]
+}

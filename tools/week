@@ -1,0 +1,68 @@
+#!/bin/bash
+# The week in one command: screenshots in, drives settled, exported, built, gated, and, only
+# with --deploy, both Workers out. Stops at the first thing that needs the operator.
+#
+#   tools/week             everything up to the gate; prints what --deploy would do
+#   tools/week --deploy    the same, then deploys garage, then runway
+#
+# Drives come from a TezLab MCP session, never from here: step 2 says when they lag the batches.
+# Step 3 stops while a drive still needs your word (gig.py mark <id> shift|personal|charge).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+set -a; . ~/.garage/db.env; set +a
+DEPLOY=0
+case "${1:-}" in
+  --deploy) DEPLOY=1 ;;
+  "") ;;
+  *) echo "usage: tools/week [--deploy]"; exit 2 ;;
+esac
+step() { printf '\n\033[1m== %s\033[0m\n' "$*"; }
+
+step "1. ingest: shopper-app screenshots waiting in data/inbox/shots/"
+shopt -s nullglob
+shots=(data/inbox/shots/*.png data/inbox/shots/*.PNG data/inbox/shots/*.jpg data/inbox/shots/*.jpeg)
+if ((${#shots[@]})); then
+  python3 tools/gig.py ingest "${shots[@]}"
+  mkdir -p data/inbox/shots/done && mv "${shots[@]}" data/inbox/shots/done/
+  echo "   ${#shots[@]} screenshot(s) moved to data/inbox/shots/done/"
+else
+  echo "   none waiting"
+fi
+
+step "2. TezLab: are the car's drives current with the batches?"
+python3 tools/gig.py freshness
+
+step "3. drives: label every batch date; anything unsettled stops here"
+python3 tools/gig.py drives --all
+
+step "4. export: data/gig.json (public) and private-src/runway/gig-full.json (gated)"
+python3 tools/gig.py export --full
+
+step "5. build: public/ and private-src/runway/"
+python3 tools/build.py
+python3 tools/runway.py
+
+step "6. gate"
+python3 tools/check.py
+
+step "7. deploy"
+access_ok() { python3 -c 'import json,os,sys; sys.exit(0 if json.load(open(os.path.expanduser("~/.garage/runway.json"))).get("access_configured") else 1)'; }
+if ((DEPLOY)); then
+  echo "   garage.paddock20.com"
+  npx wrangler deploy
+  if access_ok; then
+    echo "   runway.paddock20.com"
+    npx wrangler deploy -c wrangler.runway.jsonc
+  else
+    echo "   runway NOT deployed: ~/.garage/runway.json has access_configured false."
+    echo "   Set up Cloudflare Access first (docs/runway-access.md), then set it true."
+  fi
+else
+  echo "   dry run. With --deploy this would run:"
+  echo "     npx wrangler deploy                            (garage.paddock20.com)"
+  if access_ok; then
+    echo "     npx wrangler deploy -c wrangler.runway.jsonc   (runway.paddock20.com)"
+  else
+    echo "     (runway skipped until ~/.garage/runway.json says access_configured true: docs/runway-access.md)"
+  fi
+fi

@@ -1,0 +1,18 @@
+{
+  // Runway, the gated tier: one Worker serving private-src/runway/ (gitignored, rendered by
+  // tools/runway.py from `gig.py export --full` and ~/.garage/runway.json) on runway.paddock20.com.
+  //
+  // Do NOT deploy this before the Cloudflare Access application for runway.paddock20.com exists
+  // (docs/runway-access.md). tools/week refuses to until ~/.garage/runway.json says
+  // "access_configured": true. Deploy by hand with:
+  //     npx wrangler deploy -c wrangler.runway.jsonc
+  "name": "paddock-runway",
+  "compatibility_date": "2025-03-01",
+  "assets": {
+    "directory": "./private-src/runway",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "runway.paddock20.com", "custom_domain": true }
+  ]
+}

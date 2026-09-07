@@ -1,0 +1,1608 @@
+<title>Runway</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #10131f;
+    --surface-2: #161a2a;
+    --border: #232a3d;
+    --text: #edeef2;
+    --text-muted: #8b93a6;
+    --accent: #c85a1e;
+    --accent-dim: #a34917;
+    --accent-soft: rgba(200, 90, 30, 0.14);
+    --warn: #f0c93a;
+    --warn-soft: rgba(240, 201, 58, 0.14);
+    --critical: #d8544a;
+    --critical-soft: rgba(216, 84, 74, 0.12);
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; }
+  html { color-scheme: dark; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Backdrop: the road through the windshield, under a dark veil ---------- */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -2;
+    background: url("data:image/jpeg;base64,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") center 42% / cover no-repeat;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(10,14,26,.66) 0%, rgba(10,14,26,.84) 55%, rgba(10,14,26,.94) 100%);
+  }
+  @media (max-width: 720px) { body::before { background-position: 62% center; } }
+
+  /* ---------- Glass: the panels float over the backdrop instead of sitting on a slide ---------- */
+  .masthead, section {
+    background: rgba(16, 19, 31, 0.58);
+    border-color: rgba(255, 255, 255, 0.09);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  }
+  .kpi, .check-item, .week-card, .callout, .control input[type="number"], .log-form input, .log-form select, .table-input {
+    background: rgba(22, 26, 42, 0.55);
+  }
+  .kpi-highlight { background: rgba(200, 90, 30, 0.16); }
+
+  a { color: var(--accent); }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+  }
+
+  h1, h2, h3, .num {
+    font-family: "Saira", system-ui, sans-serif;
+    text-wrap: balance;
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px 26px 26px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 18px;
+  }
+
+  .mark {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .mark .flag { font-size: 20px; }
+
+  .wordmark {
+    font-family: "Saira", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 4px;
+  }
+
+  .accent-word { color: var(--accent); font-weight: 700; }
+
+  .mark .sub {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .headline {
+    font-size: clamp(22px, 3.4vw, 30px);
+    font-weight: 600;
+    line-height: 1.25;
+    max-width: 46ch;
+  }
+
+  .support {
+    max-width: 62ch;
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .cta-row .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ---------- Section shell ---------- */
+  section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  section > h2 {
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  section > .section-note {
+    color: var(--text-muted);
+    font-size: 13.5px;
+    margin: 0 0 18px;
+    max-width: 68ch;
+  }
+
+  /* ---------- Controls ---------- */
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 18px 22px;
+  }
+
+  .control label {
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .control .value {
+    font-family: "JetBrains Mono", monospace;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .control input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+    height: 4px;
+    margin-top: 6px;
+  }
+
+  .control input[type="number"] {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 6px;
+  }
+
+  .control input[type="number"]:focus,
+  input[type="range"]:focus-visible,
+  button:focus-visible,
+  input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ---------- KPI grid ---------- */
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+  }
+
+  .kpi {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 16px 14px;
+  }
+
+  .kpi .k-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .kpi .k-value {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 26px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+
+  .kpi.accent .k-value { color: var(--accent); }
+
+  .kpi .k-context {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  .kpi-highlight {
+    grid-column: 1 / -1;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-dim);
+    border-radius: 8px;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .kpi-highlight .k-label { color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .kpi-highlight .k-value { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums; }
+
+  /* ---------- Two column ---------- */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  @media (max-width: 720px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  .checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .check-item.critical { border-color: rgba(216, 84, 74, 0.4); }
+
+  .check-item input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .check-item .ct-label { font-size: 14px; }
+  .check-item .ct-detail { font-size: 12.5px; color: var(--text-muted); margin-top: 3px; }
+
+  .pill {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+
+  .pill.critical { background: var(--critical-soft); color: var(--critical); }
+  .pill.good { background: var(--accent-soft); color: var(--accent); }
+  .pill.watch { background: var(--warn-soft); color: var(--warn); }
+  .pill.muted { background: rgba(139, 147, 166, 0.14); color: var(--text-muted); }
+
+  .callout {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    margin-top: 14px;
+  }
+  .callout.weather { border-left-color: var(--warn); }
+  .callout strong { color: var(--text); }
+
+  h3 { font-size: 15px; font-weight: 600; margin: 0 0 10px; color: var(--text); }
+
+  .ops-list { list-style: none; margin: 0 0 18px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .ops-list li { font-size: 13.5px; padding-left: 16px; position: relative; color: var(--text); }
+  .ops-list.now li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); }
+  .ops-list.later li { color: var(--text-muted); }
+  .ops-list.later li::before { content: "–"; position: absolute; left: 0; color: var(--text-muted); }
+
+  /* ---------- Identity strip ---------- */
+  .identity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 720px) { .identity-grid { grid-template-columns: 1fr; } }
+
+  .swatch-row { display: flex; gap: 10px; margin-top: 10px; }
+  .swatch {
+    flex: 1;
+    border-radius: 6px;
+    height: 46px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    padding: 5px 7px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+  }
+
+  .type-sample { margin-top: 6px; }
+  .type-sample .r { font-family: "Saira", sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 0.02em; }
+  .type-sample .i { font-family: "Inter", sans-serif; font-size: 13.5px; color: var(--text-muted); margin-top: 4px; }
+  .type-sample .m { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--accent); margin-top: 4px; }
+
+  .mini-mark {
+    margin-top: 10px;
+    display: inline-block;
+    font-family: "Saira", sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 3px;
+  }
+
+  /* ---------- Table ---------- */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 560px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); font-weight: 500; }
+  td.watch { color: var(--warn); }
+  td.mono-num, th.mono-num {
+    font-family: "JetBrains Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+  .table-input {
+    width: 76px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    padding: 5px 7px;
+    border-radius: 5px;
+  }
+  tfoot .pf-totals td {
+    border-bottom: none;
+    border-top: 2px solid var(--border);
+    padding-top: 12px;
+    font-family: "Saira", sans-serif;
+    font-weight: 700;
+  }
+
+  .plan-weeks { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  @media (max-width: 720px) { .plan-weeks { grid-template-columns: 1fr; } }
+  .week-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .week-card .wk-label { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
+  .week-card p { margin: 0; font-size: 13.5px; color: var(--text); }
+
+  /* ---------- Shift log ---------- */
+  .log-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 16px;
+  }
+  .log-form label {
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+  }
+  .log-form input, .log-form select {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    padding: 7px 8px;
+    border-radius: 6px;
+  }
+  .log-form button {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    padding: 9px 10px;
+    font-family: "Saira", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 12.5px;
+    cursor: pointer;
+  }
+  .log-form button:hover { background: var(--accent-dim); }
+  .log-empty { color: var(--text-muted); font-size: 13px; font-style: italic; padding: 6px 0 4px; }
+  .log-row-del {
+    background: none;
+    border: none;
+    color: var(--critical);
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 15px;
+    padding: 0 4px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 14px;
+  }
+  .progress-track {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    height: 14px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .progress-fill {
+    background: var(--accent);
+    height: 100%;
+    width: 0%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .progress-fill { transition: width 0.3s ease; }
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 4px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  footer .disclaimer { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .kpi, .check-item { transition: border-color 0.15s ease; }
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="mark">
+      <span class="flag">🏁</span>
+      <span class="wordmark">Runway</span>
+      <span class="sub">Paddock20 · Gig Ops · Nashville</span>
+    </div>
+    <div class="headline">Every off-hours mile is <span class="accent-word">runway</span>. This is where it gets counted.</div>
+    <div class="support">Every Instacart shift gets logged mile for mile and dollar for dollar. Energy runs 10.9 cents a mile, measured across 14 real charge sessions, not estimated; the IRS lets you deduct 72.5 cents. That spread, not hustle alone, is what shortens the runway to a funded Paddock20 build.</div>
+    <div class="cta-row"><span class="dot"></span> First full day in the book: $85.04 across three batches, $20.91/hr on the clock, $15.99/hr door to door. Everything below runs on that.</div>
+  </div>
+
+  <section>
+    <h2>Shift economics</h2>
+    <p class="section-note">Gross pay is the first full day's $85.04 over the 4h04m on the app's clock. Delivery miles are the car's own batch driving that day. Energy cost is the measured rate off garage.paddock20.com. Everything recalculates as you type and is remembered on this device.</p>
+    <div class="controls">
+      <div class="control">
+        <label>Gross pay <span class="value" id="lbl-rate">$20.91/hr</span></label>
+        <input type="range" id="in-rate" min="12" max="45" step="0.01" value="20.91">
+      </div>
+      <div class="control">
+        <label>Shift hours <span class="value" id="lbl-hours">9/wk</span></label>
+        <input type="range" id="in-hours" min="1" max="40" step="1" value="9">
+      </div>
+      <div class="control">
+        <label>Delivery miles <span class="value" id="lbl-mph">7/hr</span></label>
+        <input type="range" id="in-mph" min="4" max="32" step="1" value="7">
+      </div>
+      <div class="control">
+        <label>Energy cost <span class="value" id="lbl-energy">10.9¢/mi</span></label>
+        <input type="range" id="in-energy" min="7" max="20" step="0.1" value="10.9">
+      </div>
+      <div class="control">
+        <label>Paddock20 funding goal</label>
+        <input type="number" id="in-goal" value="10000" min="500" step="500">
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The numbers</h2>
+    <p class="section-note">Proof, not projection. Based on the sliders above and the 2026 IRS standard mileage rate of 72.5¢/mile.</p>
+    <div class="kpis">
+      <div class="kpi accent">
+        <div class="k-label">Net per week</div>
+        <div class="k-value" id="out-weekly-net">$0</div>
+        <div class="k-context" id="out-weekly-context">gross minus energy</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Net $/hour</div>
+        <div class="k-value" id="out-net-hour">$0</div>
+        <div class="k-context">after energy cost, before tax</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Business miles/yr</div>
+        <div class="k-value" id="out-annual-miles">0</div>
+        <div class="k-context">at this pace, 52 weeks</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Annual net</div>
+        <div class="k-value" id="out-annual-net">$0</div>
+        <div class="k-context" id="out-annual-context">before tax and mileage deduction</div>
+      </div>
+      <div class="kpi-highlight">
+        <div>
+          <div class="k-label">Weeks to funded</div>
+          <div class="k-value" id="out-weeks-funded">0 weeks</div>
+        </div>
+        <div class="k-context" id="out-months-funded" style="max-width:26ch;text-align:right;">≈ 0 months to the funding goal above, at this pace</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Mileage deduction, 72.5¢/mi</div>
+        <div class="k-value" id="out-deduction">$0</div>
+        <div class="k-context">paper deduction, not cash. Confirm timing and vehicle election with your CPA before filing.</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Deduction spread</div>
+        <div class="k-value" id="out-spread">0¢/mi</div>
+        <div class="k-context">IRS rate minus actual energy cost. The gap between what it costs to drive and what you can deduct.</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Illustrative tax shield</div>
+        <div class="k-value" id="out-shield">$0</div>
+        <div class="k-context">rough estimate at a 25–35% combined marginal rate. Not a tax projection.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Income replacement</h2>
+    <p class="section-note">The number that matters is take-home, not salary. The target is what the last job paid after tax. Gig income is taxed as self-employment income and the mileage deduction shelters part of it; Tennessee has no state income tax. The tax rate is yours to set. Confirm the real one with your CPA.</p>
+    <div class="controls" style="margin-bottom:18px;">
+      <div class="control">
+        <label>Take-home to replace <span class="value" id="lbl-target">$3,422/mo</span></label>
+        <input type="range" id="in-target" min="1000" max="8000" step="1" value="3422">
+      </div>
+      <div class="control">
+        <label>Tax on gig profit <span class="value" id="lbl-tax">25%</span></label>
+        <input type="range" id="in-tax" min="0" max="45" step="1" value="25">
+      </div>
+    </div>
+    <div class="kpis">
+      <div class="kpi">
+        <div class="k-label">Current plan, monthly take-home</div>
+        <div class="k-value" id="out-current-monthly">$0</div>
+        <div class="k-context">at the hours set in Shift economics, after energy and tax</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Gap to close</div>
+        <div class="k-value" id="out-gap">$0</div>
+        <div class="k-context" id="out-gap-pct">0% of target covered at this pace</div>
+      </div>
+      <div class="kpi-highlight">
+        <div>
+          <div class="k-label">Hours/week to fully close it</div>
+          <div class="k-value" id="out-hours-needed">0 hrs/wk</div>
+        </div>
+        <div class="k-context" id="out-hours-context" style="max-width:30ch;text-align:right;">Instacart alone, after energy and tax</div>
+      </div>
+    </div>
+    <p class="section-note" style="margin:18px 0 8px;">Every row below runs at the rate, miles and tax set above.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Hours/week</th><th>Weekly gross</th><th>Monthly take-home</th><th id="ir-target-head">% of target</th></tr></thead>
+        <tbody id="ir-table"></tbody>
+      </table>
+    </div>
+    <div class="callout weather" id="ir-callout"></div>
+  </section>
+
+  <section>
+    <h2>Shift log <span class="pill watch" id="log-count-pill">0 logged</span></h2>
+    <p class="section-note">Telemetry, not projection. Log each shift after it's shopped and this replaces the plan above with what's happening in the field. Record the tip separately: it is the single largest source of variance in Instacart pay, and it is the only line here you cannot forecast. Saved on this device.</p>
+    <div class="log-form">
+      <div><label>Date</label><input type="date" id="log-date"></div>
+      <div><label>Store</label>
+        <select id="log-store">
+          <option>Kroger</option><option>Publix</option><option>Sprouts</option><option>Aldi</option><option>Costco</option><option>Other</option>
+        </select>
+      </div>
+      <div><label>Items</label><input type="number" id="log-items" min="0" step="1" placeholder="30"></div>
+        <div><label>Total ($)</label><input type="number" id="log-pay" min="0" step="0.01" placeholder="18.50"></div>
+      <div><label>of which tip</label><input type="number" id="log-tip" min="0" step="0.01" placeholder="6.00"></div>
+      <div><label>Miles</label><input type="number" id="log-miles" min="0" step="0.1" placeholder="6"></div>
+      <div><label>Minutes</label><input type="number" id="log-minutes" min="1" step="1" placeholder="35"></div>
+      <button id="log-add" type="button">Log shift</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Store</th><th>Items</th><th>Total</th><th>Tip</th><th>$/hr net</th><th>$/mi</th><th></th></tr></thead>
+        <tbody id="log-body"></tbody>
+      </table>
+    </div>
+    <div id="log-empty" class="log-empty">No shifts logged yet. Once you've run one, log it here and the numbers below start tracking the field, not the plan.</div>
+    <div class="kpis" style="margin-top:16px;">
+      <div class="kpi">
+        <div class="k-label">Shifts logged</div>
+        <div class="k-value" id="log-shifts">0</div>
+        <div class="k-context">actual entries on this device</div>
+      </div>
+      <div class="kpi accent">
+        <div class="k-label">Actual avg $/hr</div>
+        <div class="k-value" id="log-avg-hr">$0</div>
+        <div class="k-context" id="log-vs-plan">log a shift to compare against the plan above</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Actual avg $/mi</div>
+        <div class="k-value" id="log-avg-mi">$0</div>
+        <div class="k-context">gross per business mile, across shifts where miles were captured</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Cumulative net logged</div>
+        <div class="k-value" id="log-cumulative">$0</div>
+        <div class="k-context">total pay and tips across every logged shift</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Tip share of gross</div>
+        <div class="k-value" id="log-tip-share">n/a</div>
+        <div class="k-context" id="log-tip-context">across shifts where the tip was recorded separately</div>
+      </div>
+    </div>
+    <div class="progress-label"><span>Progress to funding goal</span><span id="log-progress-text">$0 / $10,000</span></div>
+    <div class="progress-track"><div class="progress-fill" id="log-progress-fill"></div></div>
+  </section>
+
+  <section>
+    <h2>6 September, measured</h2>
+    <p class="section-note">First full day. The app's numbers and the car's, side by side.</p>
+    <div class="kpis">
+      <div class="kpi accent"><div class="k-label">Gross</div><div class="k-value">$85.04</div><div class="k-context">3 batches, 4 orders, 89 items. Tips were 63% of it</div></div>
+      <div class="kpi"><div class="k-label">On the clock</div><div class="k-value">4h04m</div><div class="k-context">$20.91/hr</div></div>
+      <div class="kpi"><div class="k-label">Door to door</div><div class="k-value">5h19m</div><div class="k-context">$15.99/hr</div></div>
+      <div class="kpi"><div class="k-label">In-store</div><div class="k-value">2h36m</div><div class="k-context">Costco 82 min for 45 items. Target 55 for 30. Fresh Market 19 for 14</div></div>
+      <div class="kpi"><div class="k-label">Driving for batches</div><div class="k-value">29.3 mi</div><div class="k-context">$3.19 in energy at the measured rate</div></div>
+      <div class="kpi accent"><div class="k-label">Dead miles</div><div class="k-value">0.4 mi</div><div class="k-context">29.3 driven for batches against 28.9 of app route. Staged inside the corridor</div></div>
+      <div class="kpi"><div class="k-label">Charging</div><div class="k-value">30 min</div><div class="k-context">17% to 80%, between batches, 10.7 mi to reach the charger</div></div>
+      <div class="kpi"><div class="k-label">Found or replaced</div><div class="k-value">96%</div><div class="k-context">1 of 4 orders delivered late</div></div>
+      <div class="kpi"><div class="k-label">Best hourly</div><div class="k-value">$25.45</div><div class="k-context">The Fresh Market, 14 items, after energy. Costco paid the most, $40.05, at the slowest rate, $20.71</div></div>
+    </div>
+    <div class="callout"><strong>1h14m of the day sat between batches, unpaid:</strong> the charge stop and the drive from one corridor to the other. Charge before the first accept and stay in one corridor, and door-to-door moves toward the on-the-clock rate. On this day's numbers that gap is worth about $5 an hour.</div>
+  </section>
+
+  <section>
+    <h2>Fixed overhead, for context</h2>
+    <p class="section-note">Costs the Model Y already carries for personal use, whether or not you shop this week. Not part of the shift math above.</p>
+    <div class="kpis">
+      <div class="kpi">
+        <div class="k-label">Insurance, full coverage</div>
+        <div class="k-value">$3,650/yr</div>
+        <div class="k-context">est. $3,300–4,000, roughly 20% above a comparable gas vehicle</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">FSD + Premium Connectivity</div>
+        <div class="k-value">$108.99/mo</div>
+        <div class="k-context">$1,308/yr subscription</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Measured energy cost</div>
+        <div class="k-value">10.9¢/mi</div>
+        <div class="k-context">reconciled across 14 charge sessions, 422.56 kWh drawn against 385.30 into the pack. garage.paddock20.com</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Store &amp; zone intelligence</h2>
+    <p class="section-note">Instacart doesn't publish store-level pay data, so treat the batch-profile column as shopper-community consensus, not a guarantee. The active column is fact where a batch has proved it; the two rows marked unavailable are research, unproven either way.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Store</th><th>Where</th><th>Instacart</th><th>Batch profile</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Kroger</td><td>Cool Springs (Franklin) &amp; Brentwood</td><td><span class="pill good">Active</span></td><td>Large-format anchor store, steady volume all day, best selection early after restock</td></tr>
+          <tr><td>Publix</td><td>Brentwood &amp; Franklin</td><td><span class="pill good">Active</span></td><td>Smaller, cleaner baskets; affluent zip code tip base; less item chaos than Kroger</td></tr>
+          <tr><td>Sprouts Farmers Market</td><td>Franklin &amp; Brentwood</td><td><span class="pill good">Active</span></td><td>Small-format, produce-heavy so more handling time per item, well-tipped customer base</td></tr>
+          <tr><td>Aldi</td><td>Middle TN, nearest via the app</td><td><span class="pill good">Active</span></td><td>Small basket counts, fast in-and-out, lower pay per batch but more batches per hour</td></tr>
+          <tr><td>Costco</td><td>Franklin</td><td><span class="pill good">Active</span></td><td>40-55+ item baskets, heavy and bulky, membership card needed, big payout but slow and often multi-cart. Measured 6 Sep: a 45-item double batch with 78 lb of heavy goods took 82 minutes in-store and paid $40.05, the day's biggest payout and its slowest rate</td></tr>
+          <tr><td>The Fresh Market</td><td>Brentwood</td><td><span class="pill good">Active</span></td><td>Shopped 6 Sep. Small-format: 14 items in 19 minutes in-store, 78 sec/item, no substitutions, the day's best hourly</td></tr>
+          <tr><td>Target</td><td>Cool Springs</td><td><span class="pill good">Active</span></td><td>Shopped 6 Sep. A 30-item order ran 121 sec/item, the day's slowest, with 4 substitutions and 2 refunds, and the day's one late delivery</td></tr>
+          <tr><td>Whole Foods</td><td>Brentwood</td><td><span class="pill muted">Not available</span></td><td>Left Instacart's marketplace in 2018-19; fulfilled through Amazon now. No batches here</td></tr>
+          <tr><td>Trader Joe's</td><td>Cool Springs</td><td><span class="pill muted">Not available</span></td><td>Has never partnered with Instacart or any third-party delivery service, in this market or any other</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><strong>Working set for the zone:</strong> Kroger, Publix, Sprouts, Aldi, Costco, Target and The Fresh Market have all shown batches or been shopped. Whole Foods and Trader Joe's are unproven: don't drive toward them expecting a batch, and don't rule them out on research alone.</div>
+  </section>
+
+  <section>
+    <h2>Zone staging</h2>
+    <p class="section-note">Where to sit between batches. General geography from public store locators, not GPS-verified coordinates.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Corridor</th><th>Stores covered</th><th>Anchor points</th></tr></thead>
+        <tbody>
+          <tr><td>Brentwood</td><td>Kroger, Costco</td><td>Kroger and Costco, both in Brentwood</td></tr>
+          <tr><td>Cool Springs / McEwen</td><td>Kroger Cool Springs, Sprouts, Aldi, Publix</td><td>Kroger, Aldi, Sprouts and Publix, all within a few minutes of each other</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><strong>Pick a corridor per block, not a store.</strong> The two clusters sit roughly 10 minutes apart. Staying inside one corridor for a shift block keeps you inside its highlighted batch zone the whole time; crossing between them mid-shift burns drive time neither app pays for and can drop you out of both zones at once.</div>
+    <div class="callout"><strong>One zone:</strong> the Cool Springs / McEwen corridor holds two of the working stores. Staging there between batches means every dead mile is a mile you'd likely drive anyway. On 6 Sep the car put 29.3 miles into three batches, 0.4 of them off the app's own routes.</div>
+  </section>
+
+  <section>
+    <h2>Batch evaluator</h2>
+    <p class="section-note">The accept/decline math, worked live. Not what the app shows you, what the batch is worth per hour.</p>
+    <div class="controls">
+      <div class="control"><label>Instacart pay ($)</label><input type="number" id="be-pay" value="9" min="0" step="0.5"></div>
+      <div class="control"><label>Tip ($)</label><input type="number" id="be-tip" value="6" min="0" step="0.5"></div>
+      <div class="control"><label>Items</label><input type="number" id="be-items" value="30" min="1" step="1"></div>
+      <div class="control"><label>Miles, total</label><input type="number" id="be-miles" value="6" min="0.1" step="0.5"></div>
+      <div class="control"><label>Minutes, total</label><input type="number" id="be-minutes" value="35" min="1" step="1"></div>
+      <div class="control">
+        <label>Target <span class="value" id="be-target-lbl">$22/hr</span></label>
+        <input type="range" id="be-target" min="14" max="32" step="1" value="22">
+      </div>
+    </div>
+    <div class="kpi-highlight" style="margin-top:16px;">
+      <div>
+        <div class="k-label">Verdict</div>
+        <div class="k-value" id="be-verdict">-</div>
+      </div>
+      <div class="k-context" id="be-verdict-detail" style="max-width:32ch;text-align:right;"></div>
+    </div>
+    <div class="kpis" style="margin-top:14px;">
+      <div class="kpi"><div class="k-label">Total pay</div><div class="k-value" id="be-total">$0</div></div>
+      <div class="kpi"><div class="k-label">Effective $/hr</div><div class="k-value" id="be-hr">$0</div></div>
+      <div class="kpi"><div class="k-label">$/item</div><div class="k-value" id="be-item">$0</div><div class="k-context">rule of thumb: pay should run near items ÷ 2</div></div>
+      <div class="kpi"><div class="k-label">$/mile</div><div class="k-value" id="be-mile">$0</div><div class="k-context">energy runs 10.9¢/mi, everything above that is margin</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Multi-batch math</h2>
+    <p class="section-note">Stacking two orders from the same store rarely doubles the time. Five worked scenarios, run through the same math as the evaluator above.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Scenario</th><th>Items</th><th>Pay + tip</th><th>Minutes</th><th>$/hr</th></tr></thead>
+        <tbody>
+          <tr><td>Aldi, single quick batch</td><td>18</td><td>$11</td><td>20</td><td>$33.00</td></tr>
+          <tr><td>Kroger, single batch</td><td>30</td><td>$15</td><td>35</td><td>$25.71</td></tr>
+          <tr><td>Kroger, double-stacked</td><td>45 combined</td><td>$24</td><td>50</td><td>$28.80</td></tr>
+          <tr><td>Costco, typical batch</td><td>35</td><td>$22</td><td>45</td><td>$29.33</td></tr>
+          <tr><td>Costco, large outlier (reported)</td><td>48</td><td>$125</td><td>~65 (estimated)</td><td>~$115</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><strong>The stacking math:</strong> two Kroger batches run independently cost about 70 minutes combined; stacked, the shared checkout and drive time bring that closer to 50, and the $/hr climbs from about $26 to about $29. The Costco outlier is a specific reported $125-for-48-items batch (Ridesharing Driver); most Costco batches run far smaller. Treat it as a ceiling, not a plan.</div>
+  </section>
+
+  <section>
+    <h2>Tactics: tips and time on the clock</h2>
+    <p class="section-note">Field-tested tactics from shopper guides, grouped by where they save time or move the tip.</p>
+    <div class="two-col">
+      <div>
+        <h3>Shop faster</h3>
+        <ul class="ops-list now">
+          <li>Work Kroger, Publix, Sprouts, and Aldi only, four stores you know cold beats six you're still learning</li>
+          <li>Scan the full list before you grab a cart, plan the route by aisle instead of chasing items in order</li>
+          <li>Cold items last: produce and pantry first, frozen and dairy right before checkout</li>
+          <li>Place any deli order first, then keep shopping, come back when it's ready instead of standing in line</li>
+          <li>On a "can't find," tap it and move on. Most customers have already picked their replacement preference in the app, don't spend the minute deciding for them</li>
+          <li>Bag produce while you're standing in the checkout line, not after</li>
+          <li>Park next to the cart corral, not the entrance, it costs nothing and saves a minute every single batch</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Win the tip</h3>
+        <ul class="ops-list now">
+          <li>Send one message at the start: who you are and that you're shopping now. Customers tip the shopper they can picture, not a faceless order number</li>
+          <li>Text before substituting, not after. A quick heads-up beats a surprise at the door every time</li>
+          <li>Arrive dressed like you're going to work, not like you just rolled out of bed. It reads in the first three seconds at the door</li>
+          <li>Offer to carry heavy items past the threshold instead of leaving them on the porch</li>
+          <li>Keep a couple of pre-written message templates in your phone's notes app for arrival, substitutions, and delays, so a fast reply never costs you shopping time</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout"><strong>Once the first 10 batches and your rating are solid:</strong> pick up double batches from the same store to cut combined shop time, keep a photo timestamp of every delivered order as theft-claim protection, and run grocery cashback apps (Fetch, Ibotta) on your own receipts as a small side channel that costs nothing extra.</div>
+  </section>
+
+  <section>
+    <h2>Batch timing</h2>
+    <p class="section-note">Pulled from shopper-guide consensus across multiple independent sources, not Instacart's own numbers. Test against your own zone before committing a schedule to it.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Window</th><th>Weekday</th><th>Weekend</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>7-9am</td><td><span class="pill muted">Light</span> early restock, low competition</td><td><span class="pill good">High</span> peak batch quality begins</td></tr>
+          <tr><td>9-11am</td><td><span class="pill watch">Building</span></td><td><span class="pill good">Peak</span> 35-55 item baskets, 15-20% tips</td></tr>
+          <tr><td>11am-2pm</td><td><span class="pill watch">Steady</span></td><td><span class="pill good">Strong</span> steady flow</td></tr>
+          <tr><td>2-5pm</td><td><span class="pill muted">Slow</span> lull before dinner orders</td><td><span class="pill watch">Moderate</span></td></tr>
+          <tr><td>5-8pm</td><td><span class="pill good">Peak</span> dinner-prep, 4-9pm "too tired to shop" window</td><td><span class="pill watch">Good</span> week-prep orders, tips run slightly lower Sunday evening</td></tr>
+          <tr><td>8pm-close</td><td><span class="pill muted">Tapering</span></td><td><span class="pill muted">Tapering</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><strong>Best days, in order:</strong> Saturday and Sunday carry the highest volume of the week; Sunday and Monday are the traditional grocery-shopping days behind that volume. Wednesday tends to run slowest, worth avoiding if the schedule is flexible.</div>
+    <div class="callout"><strong>Your blocks against this data:</strong> compare each fixed block with the table above before keeping it.</div>
+  </section>
+
+  <section>
+    <h2>Seasonal calendar</h2>
+    <p class="section-note">Month by month demand signal. Not a Middle Tennessee-specific dataset, general Instacart seasonality plus one local factor worth flagging on its own.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Month</th><th>Signal</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>January</td><td><span class="pill watch">Watch</span></td><td>Post-holiday lull overall, but any Middle TN ice or snow event spikes order volume 30-50% within 30-60 minutes, with no matching rise in shopper supply</td></tr>
+          <tr><td>February</td><td><span class="pill good">High</span></td><td>Super Bowl Sunday is the single biggest order day of the year</td></tr>
+          <tr><td>March-April</td><td><span class="pill watch">Baseline</span></td><td>Easter week runs above baseline</td></tr>
+          <tr><td>May</td><td><span class="pill good">High</span></td><td>Mother's Day and Memorial Day weekend bring large baskets and strong tips</td></tr>
+          <tr><td>June-July</td><td><span class="pill watch">Baseline</span></td><td>Summer baseline, July 4th weekend bumps it</td></tr>
+          <tr><td>August</td><td><span class="pill watch">Above baseline</span></td><td>Back-to-school season holds demand up</td></tr>
+          <tr><td>September-October</td><td><span class="pill watch">Baseline</span></td><td>Halloween entertaining bump late in the window</td></tr>
+          <tr><td>November</td><td><span class="pill good">High</span></td><td>Thanksgiving week, Tuesday and Wednesday specifically, is the best sustained week of the year</td></tr>
+          <tr><td>December</td><td><span class="pill good">High, volatile</span></td><td>Christmas Eve and party-prep orders spike hard but swing widely day to day</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout weather"><strong>Middle TN weather note:</strong> this region doesn't handle ice well, schools and roads shut down fast. That's genuine order-volume upside on exactly the days FSD Supervised needs the most caution and a charging plan gets the least reliable. Treat a winter weather event as a pay day to plan for, not one to walk into blind.</div>
+  </section>
+
+  <section>
+    <h2>Rating &amp; acceptance math</h2>
+    <p class="section-note">The mechanics behind who sees a batch first, sourced from Instacart's own shopper documentation.</p>
+    <div class="kpis">
+      <div class="kpi accent">
+        <div class="k-label">Priority threshold</div>
+        <div class="k-value">4.7</div>
+        <div class="k-context">customer rating average, out of your last 100 ratings, to see batches before lower-rated shoppers</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Rating forgiveness</div>
+        <div class="k-value">2 of 100</div>
+        <div class="k-context">your two lowest ratings out of every 100 are automatically dropped</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Deactivation risk line</div>
+        <div class="k-value">15%</div>
+        <div class="k-context">order cancellation rate at or above this puts an account at risk</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">New-shopper window</div>
+        <div class="k-value">First 10</div>
+        <div class="k-context">your first 10 batches carry priority access in a store's highlighted zone; the 4.7 rule doesn't apply yet</div>
+      </div>
+    </div>
+    <div class="callout"><strong>Use the first 10 deliberately.</strong> Those batches carry priority access before the rating rule even applies. Take them slow, get every substitution right, and the rating that sets your access for the next year gets built on the easiest batches you'll ever see.</div>
+  </section>
+
+  <section>
+    <h2>Platform net $/hr, over hours applied</h2>
+    <p class="section-note">The optimization target: net dollars per hour, multiplied by the hours you put on each app. The Instacart row now carries your measured rate and miles per hour; the other three are still researched market figures. Every field is yours to edit. Energy rate is shared with Shift economics above, your Tesla's own cost, not a generic vehicle assumption.</p>
+    <div class="table-wrap">
+      <table id="pf-table">
+        <thead>
+          <tr><th>Platform</th><th>Gross $/hr</th><th>Miles/hr</th><th>Net $/hr</th><th>Hours/wk applied</th><th>Weekly net</th></tr>
+        </thead>
+        <tbody>
+          <tr data-platform="instacart">
+            <td>Instacart <span class="pill good">measured</span></td>
+            <td><input class="table-input" type="number" data-field="rate" value="20.91" step="0.25" min="0"></td>
+            <td><input class="table-input" type="number" data-field="mph" value="7" step="1" min="0"></td>
+            <td class="mono-num" data-field="net">-</td>
+            <td><input class="table-input" type="number" data-field="hours" value="9" step="1" min="0"></td>
+            <td class="mono-num" data-field="weekly">-</td>
+          </tr>
+          <tr data-platform="doordash">
+            <td>DoorDash</td>
+            <td><input class="table-input" type="number" data-field="rate" value="21.50" step="0.25" min="0"></td>
+            <td><input class="table-input" type="number" data-field="mph" value="18" step="1" min="0"></td>
+            <td class="mono-num" data-field="net">-</td>
+            <td><input class="table-input" type="number" data-field="hours" value="0" step="1" min="0"></td>
+            <td class="mono-num" data-field="weekly">-</td>
+          </tr>
+          <tr data-platform="spark">
+            <td>Walmart Spark</td>
+            <td><input class="table-input" type="number" data-field="rate" value="24" step="0.25" min="0"></td>
+            <td><input class="table-input" type="number" data-field="mph" value="14" step="1" min="0"></td>
+            <td class="mono-num" data-field="net">-</td>
+            <td><input class="table-input" type="number" data-field="hours" value="0" step="1" min="0"></td>
+            <td class="mono-num" data-field="weekly">-</td>
+          </tr>
+          <tr data-platform="ubereats">
+            <td>Uber Eats</td>
+            <td><input class="table-input" type="number" data-field="rate" value="20.25" step="0.25" min="0"></td>
+            <td><input class="table-input" type="number" data-field="mph" value="18" step="1" min="0"></td>
+            <td class="mono-num" data-field="net">-</td>
+            <td><input class="table-input" type="number" data-field="hours" value="0" step="1" min="0"></td>
+            <td class="mono-num" data-field="weekly">-</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="pf-totals">
+            <td><strong>Total</strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="mono-num" id="pf-total-hours">0</td>
+            <td class="mono-num" id="pf-total-weekly">$0</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="kpi-highlight" style="margin-top:14px;">
+      <div>
+        <div class="k-label">Monthly net, this allocation</div>
+        <div class="k-value" id="pf-monthly">$0</div>
+      </div>
+      <div class="k-context" id="pf-target-pct" style="max-width:28ch;text-align:right;">0% of the take-home target above, before tax</div>
+    </div>
+    <div class="callout"><strong>What the Tesla is worth here:</strong> every gross figure above uses generic gas-vehicle cost assumptions in its source guide, typically 40-58¢/mile. At your measured 10.9¢/mile, the net $/hr on every platform runs roughly $4-7/hr above what those guides report as achievable, depending on how many miles the app puts under you. That gap is yours on any app you drive for, and it is the one advantage here that does not depend on tips.</div>
+  </section>
+
+  <section>
+    <h2>Multi-app coverage</h2>
+    <p class="section-note">Whole Foods and Walmart are on different apps. Target is on Instacart as well.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>App</th><th>Recaptures</th><th>Coverage in this zone</th></tr></thead>
+        <tbody>
+          <tr><td>Shipt</td><td>Target (also on Instacart), plus other Shipt-partner stores</td><td>Shipt operates across the Nashville metro; confirm Brentwood/Franklin/Cool Springs zip coverage in the driver app before counting on it</td></tr>
+          <tr><td>Walmart Spark</td><td>Walmart, curbside grocery pickup and delivery</td><td>Per-delivery pay, no shopper account overlap with Instacart, the strongest second app on the net $/hr table above</td></tr>
+          <tr><td>Amazon Flex</td><td>Whole Foods, Amazon-fulfilled</td><td>A separate driver program from Instacart, Shipt, or Spark, a heavier lift to onboard, worth it once the others aren't filling the schedule</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><strong>DoorDash plays by different rules.</strong> Dasher Rewards gates priority on acceptance rate, not just completion: Platinum needs 70% acceptance, 95% completion, a 4.7 rating, and 100 deliveries in the last 30 days. On Instacart, declining a weak batch costs nothing but time. On DoorDash, declining too often costs the tier itself. Don't run the Batch Evaluator's decline-freely habit over onto this app without adjusting for that.</div>
+    <div class="callout"><strong>Sequencing, not stacking on day one.</strong> Clear the go/no-go checklist and run two weeks of Instacart data first. Add a second app, Spark first, only once the five active Instacart stores stop filling the shift window on their own, running two apps at once means splitting attention between two queues during the same shift.</div>
+  </section>
+
+  <section>
+    <h2>Advertising &amp; audience</h2>
+    <p class="section-note">Wearables and leave-behinds, weighed against what's documented.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Channel</th><th>What's documented</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>Hat or shirt, identity only</td><td>Instacart has no dress code and offers no official branded gear, shoppers have full attire freedom</td><td><span class="pill good">Wear it</span></td></tr>
+          <tr><td>Card or flyer left in the order</td><td>Not confirmed either way, Instacart's shopper terms and community guidelines pages block automated access. Every major gig platform's general pattern restricts off-platform solicitation of paying customers</td><td><span class="pill muted">Skip</span></td></tr>
+          <tr><td>Car exterior signage or magnets</td><td>Uber and Lyft explicitly ban this and enforce it, one driver on record was penalized at an airport for a forgotten magnet. Instacart's exact clause wasn't accessible to confirm, but the pattern holds</td><td><span class="pill muted">Skip</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><strong>Why the hat clears and the card doesn't.</strong> Clothing is yours, worn, not handed to anyone, not inserted into a paid order, nothing to solicit. A card or flyer physically joins the delivery a customer paid Instacart for, and if it's ever flagged, that complaint lands on the one number that controls your batch access. Keep the wearable to identity only, wordmark and garage.paddock20.com, no phone number, no "hire me" copy, so it reads as apparel, not a sign.</div>
+    <div class="callout"><strong>The hat does the leave-behind's job without the risk.</strong> Same silent impression, every single delivery, zero insertion into the order, zero solicitation because it's not directed at anyone, it's just what you're wearing when you knock. It also costs about $20 once and shows up in every blog and LinkedIn photo from here forward, worth doing even though most doorsteps aren't Paddock20's buyer, because the downside is nothing and it compounds with the build-in-public content from the shift log.</div>
+    <div class="callout"><strong>If a customer asks, answer. Don't lead.</strong> Someone clocks the hat or the Model Y and asks what you do, that's an opening, not a solicitation, you didn't start it. Mention garage.paddock20.com if it fits the conversation. That's the entire allowance: reactive, brief, never initiated at the door.</div>
+  </section>
+
+  <section>
+    <h2>Go / no-go <span class="pill critical">4 critical</span></h2>
+    <p class="section-note">The minimum required to launch credibly. Checked state is saved on this device.</p>
+    <ul class="checklist" id="checklist"></ul>
+  </section>
+
+  <div class="two-col">
+    <section>
+      <h2>Launch now</h2>
+      <ul class="ops-list now">
+        <li>The go/no-go items above, all six</li>
+        <li>A fixed weekly window of three blocks, so shifts don't compete with Paddock20 build hours</li>
+        <li>One number to watch daily: net $/hour after energy cost</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Postpone</h2>
+      <ul class="ops-list later">
+        <li>Shopper-specific branding, cards, or a dedicated site. Instacart is white-label; the shopper never markets themselves</li>
+        <li>A full commercial auto policy, until batch volume confirms it's warranted. A delivery endorsement covers the launch</li>
+        <li>Stacking a second gig platform before two weeks of Instacart data exist</li>
+        <li>Bookkeeping software. Shifts already post to the Paddock Mobile warehouse alongside the charge and drive data; that carries the books until volume says otherwise</li>
+      </ul>
+    </section>
+  </div>
+
+  <section>
+    <h2>Booked through Paddock20</h2>
+    <p class="section-note" style="margin-bottom:10px;">What "through the business" means in practice, since Instacart itself only contracts with individuals.</p>
+    <ul class="ops-list now" style="margin-bottom:0;">
+      <li>Instacart runs its background check and 1099-NEC on you personally, by Social Security number. There's no shopper account type for a business entity</li>
+      <li>"Through Paddock20" means the payouts land in a Paddock20 business account and get booked on Paddock20's ledger as gig revenue, with the mileage and shift costs claimed against it. The account and the tax filing sit under the legal entity behind Paddock20, the entity</li>
+      <li>If the entity is a single-member LLC taxed as a disregarded entity, this still flows to your personal Schedule C under its EIN. If it has an S-corp election, the mechanics change. Confirm which applies with your CPA before your first payout, not after</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Identity, reused</h2>
+    <p class="section-note">Nothing new. This tool runs on the Paddock20 system already locked in your brand file.</p>
+    <div class="identity-grid">
+      <div>
+        <h3>Color</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#0a0e1a;color:#edeef2;">Paddock Navy<br>#0A0E1A</div>
+          <div class="swatch" style="background:#c85a1e;color:#0a0e1a;">IQ Orange<br>#C85A1E</div>
+        </div>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#f0c93a;color:#0a0e1a;">Trackday Yellow<br>#F0C93A</div>
+          <div class="swatch" style="background:#7dc8e8;color:#0a0e1a;">Speed Blue<br>#7DC8E8</div>
+        </div>
+      </div>
+      <div>
+        <h3>Type</h3>
+        <div class="type-sample">
+          <div class="r">Saira</div>
+          <div class="i">Inter, body text</div>
+          <div class="m">JetBrains Mono, data</div>
+        </div>
+      </div>
+      <div>
+        <h3>Minimal mark</h3>
+        <div class="mini-mark">Runway</div>
+        <div class="i" style="font-family:Inter;font-size:12.5px;color:var(--text-muted);margin-top:8px;">Saira Black, uppercase, letter-spaced, one 3px IQ Orange rule underneath. Buildable in any tool in under 15 minutes.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Two-week iteration plan</h2>
+    <p class="section-note">Field signals over assumptions. Watch these, then change one thing.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Signal</th><th>Why it matters</th><th>Watch for</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Net $/hour by shift window</td><td>Tells you which of Friday evening, Saturday midday, or Sunday morning is worth keeping</td><td class="watch">A window well below the others</td></tr>
+          <tr><td>Batch decline / skip rate</td><td>A high skip rate signals a bad zone or a bad time slot, not bad luck</td><td class="watch">A rising trend across shifts</td></tr>
+          <tr><td>Tip variance</td><td>Tips swing Instacart pay more than batch pay does</td><td class="watch">Days that land far under plan</td></tr>
+          <tr><td>Charging friction</td><td>Every minute at a Supercharger is a minute off the clock</td><td class="watch">Any queue or detour</td></tr>
+          <tr><td>Actual vs. planned hours</td><td>Confirms the 9-hour window is holding against everything else on the calendar</td><td class="watch">Drift from the plan</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="plan-weeks">
+      <div class="week-card">
+        <div class="wk-label">Week 1</div>
+        <p>Run the plan exactly as built. Log every shift: gross, tips, miles, energy cost. Change nothing yet, even if a shift feels off.</p>
+      </div>
+      <div class="week-card">
+        <div class="wk-label">Week 2</div>
+        <p>Pull up the log. Change the one variable the data flagged hardest, usually the shift window or the zone, and nothing else. Re-measure before touching a second variable.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Sources: the car's own trip log (TezLab) and the app's batch summaries for 6 September 2026; garage.paddock20.com (Supercharging cost, FSD stats, insurance estimate); IRS 2026 standard mileage rate notice; Indeed and ZipRecruiter Instacart pay data for Brentwood/Franklin/Nashville, TN; Instacart's own Franklin and Nashville store pages (Costco confirmed active) and shopper access-batches documentation (rating, priority, and location mechanics); Retail Dive on the Instacart/Whole Foods split; reporting on Target's move to Shipt; Costco, Sprouts, Kroger, Aldi, and Trader Joe's store locators for Franklin/Brentwood/Cool Springs; shopper-guide tactics and batch-selection math from Ridesharing Driver, The Rideshare Guy, The Budget Diet, and ShiftTracker; RideGuru on rideshare vehicle-advertising policy.</div>
+    <div class="disclaimer">Not tax, legal, or insurance advice. Pay figures are market estimates, not a guaranteed hourly wage. Confirm insurance coverage for paid delivery use with your carrier, confirm the entity's tax election and vehicle mileage method with your CPA, and confirm shopper terms directly with Instacart before your first shift.</div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  try {
+    ["inputs", "checklist", "log", "platforms"].forEach(function (k) {
+      var oldKey = "shift" + "-ledger-" + k, newKey = "runway-" + k;
+      if (localStorage.getItem(newKey) === null) {
+        var v = localStorage.getItem(oldKey);
+        if (v !== null) localStorage.setItem(newKey, v);
+      }
+    });
+  } catch (e) { /* storage unavailable, ignore */ }
+})();
+(function () {
+  var ids = ["rate", "hours", "mph", "energy", "goal", "target", "tax"];
+  var IRS_RATE = 0.725;
+  var MONTH_FACTOR = 4.345;
+
+  var stored = {};
+  try {
+    var raw = localStorage.getItem("runway-inputs");
+    if (raw) stored = JSON.parse(raw);
+  } catch (e) { stored = {}; }
+
+  ids.forEach(function (id) {
+    var el = document.getElementById("in-" + id);
+    if (el && stored[id] !== undefined && !isNaN(stored[id])) el.value = stored[id];
+  });
+
+  function fmtMoney(n) {
+    return "$" + Math.round(n).toLocaleString("en-US");
+  }
+  function fmtMoney2(n) {
+    return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function recalc() {
+    var rate = parseFloat(document.getElementById("in-rate").value);
+    var hours = parseFloat(document.getElementById("in-hours").value);
+    var mph = parseFloat(document.getElementById("in-mph").value);
+    var energyCents = parseFloat(document.getElementById("in-energy").value);
+    var goal = parseFloat(document.getElementById("in-goal").value) || 0;
+    var energy = energyCents / 100;
+
+    document.getElementById("lbl-rate").textContent = "$" + rate.toFixed(2) + "/hr";
+    document.getElementById("lbl-hours").textContent = hours + "/wk";
+    document.getElementById("lbl-mph").textContent = mph + "/hr";
+    document.getElementById("lbl-energy").textContent = energyCents.toFixed(1) + "¢/mi";
+
+    var weeklyMiles = hours * mph;
+    var weeklyGross = rate * hours;
+    var weeklyEnergyCost = weeklyMiles * energy;
+    var weeklyNet = weeklyGross - weeklyEnergyCost;
+    var netPerHour = hours > 0 ? weeklyNet / hours : 0;
+    var annualMiles = weeklyMiles * 52;
+    var annualNet = weeklyNet * 52;
+    var annualDeduction = annualMiles * IRS_RATE;
+    var spread = IRS_RATE - energy;
+    var shieldLow = annualDeduction * 0.25;
+    var shieldHigh = annualDeduction * 0.35;
+    var weeksToFunded = weeklyNet > 0 ? Math.ceil(goal / weeklyNet) : Infinity;
+    var monthsToFunded = isFinite(weeksToFunded) ? (weeksToFunded / 4.345) : Infinity;
+
+    document.getElementById("out-weekly-net").textContent = fmtMoney(weeklyNet);
+    document.getElementById("out-weekly-context").textContent = fmtMoney(weeklyGross) + " gross − " + fmtMoney2(weeklyEnergyCost) + " energy";
+    document.getElementById("out-net-hour").textContent = fmtMoney2(netPerHour) + "/hr";
+    document.getElementById("out-annual-miles").textContent = Math.round(annualMiles).toLocaleString("en-US");
+    document.getElementById("out-annual-net").textContent = fmtMoney(annualNet);
+    document.getElementById("out-annual-context").textContent = fmtMoney(weeklyGross * 52) + " gross/yr before tax and mileage deduction";
+    document.getElementById("out-weeks-funded").textContent = isFinite(weeksToFunded) ? (weeksToFunded + " weeks") : "n/a";
+    document.getElementById("out-months-funded").textContent = isFinite(monthsToFunded)
+      ? ("≈ " + monthsToFunded.toFixed(1) + " months to " + fmtMoney(goal) + ", at this pace")
+      : "Net per week is $0 or less at these settings";
+    document.getElementById("out-deduction").textContent = fmtMoney(annualDeduction);
+    document.getElementById("out-spread").textContent = (spread * 100).toFixed(1) + "¢/mi";
+    document.getElementById("out-shield").textContent = fmtMoney(shieldLow) + "–" + fmtMoney(shieldHigh);
+
+    var target = parseFloat(document.getElementById("in-target").value) || 0;
+    var taxPct = parseFloat(document.getElementById("in-tax").value) || 0;
+    var tax = taxPct / 100;
+    document.getElementById("lbl-target").textContent = "$" + Math.round(target).toLocaleString("en-US") + "/mo";
+    document.getElementById("lbl-tax").textContent = taxPct + "%";
+    // take-home per hour: gross, less energy, less tax on the profit the mileage deduction does not shelter.
+    // Energy is inside the standard mileage rate, so it is a cash cost here but not a second deduction.
+    var taxablePerHour = Math.max(0, rate - mph * IRS_RATE);
+    var takeHomePerHour = rate - mph * energy - tax * taxablePerHour;
+    var currentMonthly = takeHomePerHour * hours * MONTH_FACTOR;
+    var gap = Math.max(0, target - currentMonthly);
+    var gapPct = target > 0 ? (currentMonthly / target * 100) : 0;
+    var hoursNeeded = takeHomePerHour > 0 ? (target / MONTH_FACTOR) / takeHomePerHour : Infinity;
+
+    document.getElementById("out-current-monthly").textContent = fmtMoney(currentMonthly);
+    document.getElementById("out-gap").textContent = fmtMoney(gap);
+    document.getElementById("out-gap-pct").textContent = gapPct.toFixed(1) + "% of target covered at this pace";
+    document.getElementById("out-hours-needed").textContent = isFinite(hoursNeeded) ? (hoursNeeded.toFixed(1) + " hrs/wk") : "n/a";
+    document.getElementById("out-hours-context").textContent = "Instacart alone: $" + rate.toFixed(2) + "/hr gross is $" + takeHomePerHour.toFixed(2) + "/hr take-home after energy and " + taxPct + "% tax";
+
+    var rowsH = [9, 15, 20, 25, 30, 40, 50, 55];
+    document.getElementById("ir-table").innerHTML = rowsH.map(function (h) {
+      var monthly = takeHomePerHour * h * MONTH_FACTOR;
+      var pct = target > 0 ? (monthly / target * 100) : 0;
+      return "<tr><td>" + h + (h === hours ? " (current plan)" : "") + "</td><td>" + fmtMoney(rate * h) + "</td><td>" + fmtMoney(monthly) + "</td><td>" + pct.toFixed(1) + "%</td></tr>";
+    }).join("");
+    document.getElementById("ir-target-head").textContent = "% of " + fmtMoney(target);
+    var twenty = takeHomePerHour * 20 * MONTH_FACTOR;
+    document.getElementById("ir-callout").innerHTML =
+      "<strong>" + (isFinite(hoursNeeded) ? (Math.round(hoursNeeded) + " hours a week") : "No number of hours") + "</strong> takes home " + fmtMoney(target)
+      + " a month through Instacart alone at these settings. A 20-hour week takes home " + fmtMoney(twenty) + ", " + (target > 0 ? (twenty / target * 100).toFixed(0) : "0") + "% of it. "
+      + "Every hour's gross carries self-employment tax on top of income tax; the mileage deduction shelters " + fmtMoney2(mph * IRS_RATE) + " of it at " + mph + " miles an hour. One day is not a sample.";
+
+    try {
+      var toSave = { rate: rate, hours: hours, mph: mph, energy: energyCents, goal: goal, target: target, tax: taxPct };
+      localStorage.setItem("runway-inputs", JSON.stringify(toSave));
+    } catch (e) { /* storage unavailable, ignore */ }
+
+    window.dispatchEvent(new CustomEvent("runway:recalc", { detail: { rate: rate, hours: hours, mph: mph, energy: energy, netPerHour: netPerHour } }));
+  }
+
+  ids.forEach(function (id) {
+    var el = document.getElementById("in-" + id);
+    if (el) el.addEventListener("input", recalc);
+  });
+
+  recalc();
+})();
+
+(function () {
+  var items = [
+    { id: "insurance", critical: true, label: "Auto insurance confirmed for paid delivery use", detail: "Call your carrier and ask about a delivery or rideshare endorsement. A standard personal policy can deny a claim mid-delivery." },
+    { id: "banking", critical: true, label: "Paddock20 account ready for payouts", detail: "Business checking (the entity, operating as Paddock20) open and able to receive Instacart transfers before the first shift." },
+    { id: "mileage", critical: true, label: "Mileage log running", detail: "An app-based log (Everlance, Stride, or similar) plus a start and end odometer photo each shift. Instacart's batch map alone won't hold up." },
+    { id: "shopper", critical: true, done: true, label: "Shopper app active and zone confirmed", detail: "Cleared. Three batches, four orders, shopped and delivered 6 September across Costco, The Fresh Market and Target." },
+    { id: "charging", critical: false, label: "Charging plan set for shift days", detail: "Plan a Supercharger stop or a workplace Level 2 window around each shift block." },
+    { id: "ledger", critical: false, done: true, label: "Shift records landing somewhere durable", detail: "Live. Shifts post to the Paddock Mobile warehouse next to the charge and drive data, so gross, tips, miles, minutes and energy cost reconcile against the car itself." }
+  ];
+
+  var stored = {};
+  try {
+    var raw = localStorage.getItem("runway-checklist");
+    if (raw) stored = JSON.parse(raw);
+  } catch (e) { stored = {}; }
+
+  var list = document.getElementById("checklist");
+  items.forEach(function (item) {
+    var li = document.createElement("li");
+    li.className = "check-item" + (item.critical ? " critical" : "");
+    var hasStored = Object.prototype.hasOwnProperty.call(stored, item.id);
+    var checked = (hasStored ? stored[item.id] : item.done) ? "checked" : "";
+    li.innerHTML =
+      '<input type="checkbox" id="chk-' + item.id + '" ' + checked + '>' +
+      '<div>' +
+        '<div class="ct-label">' + item.label + (item.critical ? '<span class="pill critical">Critical</span>' : '') + '</div>' +
+        '<div class="ct-detail">' + item.detail + '</div>' +
+      '</div>';
+    list.appendChild(li);
+  });
+
+  list.addEventListener("change", function () {
+    var state = {};
+    items.forEach(function (item) {
+      state[item.id] = document.getElementById("chk-" + item.id).checked;
+    });
+    try {
+      localStorage.setItem("runway-checklist", JSON.stringify(state));
+    } catch (e) { /* storage unavailable, ignore */ }
+  });
+})();
+
+(function () {
+  var STORAGE_KEY = "runway-log";
+  var SEED_VERSION = "2";   // bump to replace the seeded rows on every device that holds an older seed
+  // The first full day, from the app's own batch summaries. Minutes are the
+  // app's accept-to-last-drop clock per batch; miles are the app's route legs per batch.
+  var FIRST_SHIFTS = [
+    { date: "2026-09-06", store: "Costco", items: 45, pay: 40.05, tip: 29.52, miles: 10.7, minutes: 116 },
+    { date: "2026-09-06", store: "The Fresh Market", items: 14, pay: 18.22, tip: 12.11, miles: 8.1, minutes: 43 },
+    { date: "2026-09-06", store: "Target", items: 30, pay: 26.77, tip: 11.96, miles: 10.1, minutes: 85 }
+  ];
+  var entries = FIRST_SHIFTS.slice();
+  try {
+    var seeded = localStorage.getItem(STORAGE_KEY + "-seed");
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (seeded !== SEED_VERSION) {
+      entries = FIRST_SHIFTS.slice(); save(); localStorage.setItem(STORAGE_KEY + "-seed", SEED_VERSION);
+    } else if (raw) {
+      var parsed = JSON.parse(raw);
+      entries = (parsed && parsed.length) ? parsed : FIRST_SHIFTS.slice();
+    } else {
+      save();
+    }
+  } catch (e) { entries = FIRST_SHIFTS.slice(); }
+
+  function fmtMoney(n) { return "$" + Math.round(n).toLocaleString("en-US"); }
+  function fmtMoney2(n) { return "$" + n.toFixed(2); }
+
+  function energyRate() {
+    var el = document.getElementById("in-energy");
+    return el ? (parseFloat(el.value) || 0) / 100 : 0.109;
+  }
+
+  function planNetPerHour() {
+    var rate = parseFloat(document.getElementById("in-rate").value) || 0;
+    var hours = parseFloat(document.getElementById("in-hours").value) || 0;
+    var mph = parseFloat(document.getElementById("in-mph").value) || 0;
+    var energy = energyRate();
+    if (hours <= 0) return 0;
+    var weeklyMiles = hours * mph;
+    var weeklyNet = (rate * hours) - (weeklyMiles * energy);
+    return weeklyNet / hours;
+  }
+
+  function goalAmount() {
+    try {
+      var raw = localStorage.getItem("runway-inputs");
+      if (raw) {
+        var obj = JSON.parse(raw);
+        if (obj && !isNaN(obj.goal)) return obj.goal;
+      }
+    } catch (e) { /* ignore */ }
+    return 10000;
+  }
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch (e) { /* storage unavailable, ignore */ }
+  }
+
+  function render() {
+    var body = document.getElementById("log-body");
+    var empty = document.getElementById("log-empty");
+    if (!body) return;
+    body.innerHTML = "";
+    empty.style.display = entries.length === 0 ? "block" : "none";
+
+    var sumPay = 0, sumMinutes = 0, sumMiles = 0, sumNet = 0, sumPayWithMiles = 0;
+    var tipSum = 0, tipGross = 0, tipCount = 0;
+    var eRate = energyRate();
+
+    entries.forEach(function (e, idx) {
+      var total = e.pay;
+      var hasMiles = (e.miles !== null && e.miles !== undefined && !isNaN(e.miles) && e.miles > 0);
+      var netAmt = total - (hasMiles ? e.miles * eRate : 0);
+      var perHour = e.minutes > 0 ? (netAmt / (e.minutes / 60)) : 0;
+      var perMile = hasMiles ? (total / e.miles) : null;
+      sumPay += total; sumMinutes += e.minutes; sumNet += netAmt;
+      if (hasMiles) { sumMiles += e.miles; sumPayWithMiles += total; }
+
+      var hasTip = (e.tip !== null && e.tip !== undefined && !isNaN(e.tip));
+      if (hasTip) { tipSum += e.tip; tipGross += total; tipCount += 1; }
+
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" + (e.date || "-") + "</td>" +
+        "<td>" + e.store + "</td>" +
+        "<td>" + e.items + "</td>" +
+        "<td>" + fmtMoney2(total) + "</td>" +
+        "<td>" + (hasTip ? (fmtMoney2(e.tip) + ' <span class="pill muted">' + Math.round(e.tip / total * 100) + '%</span>') : '<span class="pill muted">not recorded</span>') + "</td>" +
+        "<td>$" + perHour.toFixed(2) + "</td>" +
+        "<td>" + (perMile === null ? '<span class="pill muted">miles not captured</span>' : perMile.toFixed(2)) + "</td>" +
+        '<td><button class="log-row-del" data-idx="' + idx + '" title="Remove">&times;</button></td>';
+      body.appendChild(tr);
+    });
+
+    var count = entries.length;
+    var avgHr = sumMinutes > 0 ? (sumNet / (sumMinutes / 60)) : 0;
+    var avgMi = sumMiles > 0 ? (sumPayWithMiles / sumMiles) : 0;
+    var cumulative = sumPay;
+    var g = goalAmount();
+    var pct = g > 0 ? Math.min(100, (cumulative / g) * 100) : 0;
+    var plan = planNetPerHour();
+    var delta = avgHr - plan;
+
+    document.getElementById("log-count-pill").textContent = count + " logged";
+    document.getElementById("log-shifts").textContent = count;
+    document.getElementById("log-avg-hr").textContent = count > 0 ? fmtMoney2(avgHr) : "$0";
+    document.getElementById("log-avg-mi").textContent = count > 0 ? ("$" + avgMi.toFixed(2)) : "$0";
+    document.getElementById("log-cumulative").textContent = fmtMoney2(cumulative);
+    document.getElementById("log-vs-plan").textContent = count === 0
+      ? "log a shift to compare against the plan above"
+      : (Math.abs(delta) < 0.5
+          ? "tracking the plan, because the plan is seeded from these shifts"
+          : (delta >= 0 ? ("+" + fmtMoney2(delta) + "/hr above plan") : ("-" + fmtMoney2(Math.abs(delta)) + "/hr below plan")));
+    document.getElementById("log-tip-share").textContent = tipCount > 0 ? ((tipSum / tipGross) * 100).toFixed(1) + "%" : "n/a";
+    document.getElementById("log-tip-context").textContent = tipCount > 0
+      ? (fmtMoney2(tipSum) + " of " + fmtMoney2(tipGross) + " across " + tipCount + " of " + count + " shifts")
+      : "record the tip separately and this starts tracking";
+    document.getElementById("log-progress-text").textContent = fmtMoney(cumulative) + " / " + fmtMoney(g);
+    document.getElementById("log-progress-fill").style.width = pct + "%";
+
+    Array.prototype.forEach.call(body.querySelectorAll(".log-row-del"), function (btn) {
+      btn.addEventListener("click", function () {
+        var i = parseInt(btn.getAttribute("data-idx"), 10);
+        entries.splice(i, 1);
+        save();
+        render();
+      });
+    });
+  }
+
+  var addBtn = document.getElementById("log-add");
+  if (addBtn) {
+    addBtn.addEventListener("click", function () {
+      var date = document.getElementById("log-date").value || new Date().toISOString().slice(0, 10);
+      var store = document.getElementById("log-store").value;
+      var items = parseFloat(document.getElementById("log-items").value) || 0;
+      var pay = parseFloat(document.getElementById("log-pay").value) || 0;
+      var tipRaw = document.getElementById("log-tip").value;
+      var tip = tipRaw === "" ? null : (parseFloat(tipRaw) || 0);
+      var milesRaw = document.getElementById("log-miles").value;
+      var miles = milesRaw === "" ? null : (parseFloat(milesRaw) || 0);
+      var minutes = parseFloat(document.getElementById("log-minutes").value) || 0;
+      if (pay <= 0 || minutes <= 0) return;
+      entries.push({ date: date, store: store, items: items, pay: pay, tip: tip, miles: miles, minutes: minutes });
+      save();
+      document.getElementById("log-items").value = "";
+      document.getElementById("log-pay").value = "";
+      document.getElementById("log-tip").value = "";
+      document.getElementById("log-miles").value = "";
+      document.getElementById("log-minutes").value = "";
+      render();
+    });
+  }
+
+  window.addEventListener("runway:recalc", render);
+  render();
+})();
+
+(function () {
+  function fmtMoney(n) { return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+  function recalcBE() {
+    var pay = parseFloat(document.getElementById("be-pay").value) || 0;
+    var tip = parseFloat(document.getElementById("be-tip").value) || 0;
+    var items = parseFloat(document.getElementById("be-items").value) || 1;
+    var miles = parseFloat(document.getElementById("be-miles").value) || 0.1;
+    var minutes = parseFloat(document.getElementById("be-minutes").value) || 1;
+    var target = parseFloat(document.getElementById("be-target").value) || 22;
+
+    document.getElementById("be-target-lbl").textContent = "$" + target + "/hr";
+
+    var total = pay + tip;
+    var perHour = total / (minutes / 60);
+    var perItem = total / items;
+    var perMile = total / miles;
+    var itemsHalf = items / 2;
+
+    document.getElementById("be-total").textContent = fmtMoney(total);
+    document.getElementById("be-hr").textContent = fmtMoney(perHour) + "/hr";
+    document.getElementById("be-item").textContent = fmtMoney(perItem);
+    document.getElementById("be-mile").textContent = fmtMoney(perMile);
+
+    var verdictEl = document.getElementById("be-verdict");
+    var detailEl = document.getElementById("be-verdict-detail");
+    var rateNote = perHour >= target
+      ? ("$" + perHour.toFixed(2) + "/hr clears the $" + target + "/hr target.")
+      : ("$" + perHour.toFixed(2) + "/hr misses the $" + target + "/hr target by $" + (target - perHour).toFixed(2) + ".");
+    var itemNote = total >= itemsHalf
+      ? " Pay matches the items ÷ 2 rule of thumb."
+      : " Pay runs under items ÷ 2, expect a slower shop than the payout suggests.";
+
+    if (perHour >= target * 1.1) {
+      verdictEl.textContent = "Accept";
+      verdictEl.style.color = "var(--accent)";
+    } else if (perHour >= target * 0.85) {
+      verdictEl.textContent = "Borderline";
+      verdictEl.style.color = "var(--warn)";
+    } else {
+      verdictEl.textContent = "Decline";
+      verdictEl.style.color = "var(--critical)";
+    }
+    detailEl.textContent = rateNote + itemNote;
+  }
+
+  ["be-pay", "be-tip", "be-items", "be-miles", "be-minutes", "be-target"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", recalcBE);
+  });
+  recalcBE();
+})();
+
+(function () {
+  var STORAGE_KEY = "runway-platforms";
+  var table = document.getElementById("pf-table");
+  if (!table) return;
+  var rows = Array.prototype.slice.call(table.querySelectorAll("tbody tr"));
+
+  function fmtMoney(n) { return "$" + Math.round(n).toLocaleString("en-US"); }
+  function fmtMoney2(n) { return "$" + n.toFixed(2); }
+
+  function energyRate() {
+    var el = document.getElementById("in-energy");
+    return el ? (parseFloat(el.value) || 0) / 100 : 0.109;
+  }
+
+  function targetAmount() {
+    try {
+      var raw = localStorage.getItem("runway-inputs");
+      if (raw) {
+        var obj = JSON.parse(raw);
+        if (obj && !isNaN(obj.target)) return obj.target;
+      }
+    } catch (e) { /* ignore */ }
+    return 3422;
+  }
+
+  function loadStored() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+
+  var stored = loadStored();
+  rows.forEach(function (row) {
+    var platform = row.getAttribute("data-platform");
+    var saved = stored[platform];
+    if (!saved) return;
+    ["rate", "mph", "hours"].forEach(function (field) {
+      var input = row.querySelector('[data-field="' + field + '"]');
+      if (input && saved[field] !== undefined && !isNaN(saved[field])) input.value = saved[field];
+    });
+  });
+
+  function save() {
+    var data = {};
+    rows.forEach(function (row) {
+      var platform = row.getAttribute("data-platform");
+      data[platform] = {
+        rate: parseFloat(row.querySelector('[data-field="rate"]').value) || 0,
+        mph: parseFloat(row.querySelector('[data-field="mph"]').value) || 0,
+        hours: parseFloat(row.querySelector('[data-field="hours"]').value) || 0
+      };
+    });
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* ignore */ }
+  }
+
+  function render() {
+    var energy = energyRate();
+    var totalHours = 0;
+    var totalWeekly = 0;
+
+    rows.forEach(function (row) {
+      var rate = parseFloat(row.querySelector('[data-field="rate"]').value) || 0;
+      var mph = parseFloat(row.querySelector('[data-field="mph"]').value) || 0;
+      var hours = parseFloat(row.querySelector('[data-field="hours"]').value) || 0;
+      var net = rate - (mph * energy);
+      var weekly = net * hours;
+
+      row.querySelector('[data-field="net"]').textContent = fmtMoney2(net) + "/hr";
+      row.querySelector('[data-field="weekly"]').textContent = fmtMoney(weekly);
+
+      totalHours += hours;
+      totalWeekly += weekly;
+    });
+
+    document.getElementById("pf-total-hours").textContent = totalHours;
+    document.getElementById("pf-total-weekly").textContent = fmtMoney(totalWeekly);
+
+    var monthly = totalWeekly * 4.345;
+    var target = targetAmount();
+    var pct = target > 0 ? (monthly / target * 100) : 0;
+
+    document.getElementById("pf-monthly").textContent = fmtMoney(monthly);
+    document.getElementById("pf-target-pct").textContent = pct.toFixed(1) + "% of the take-home target above, before tax";
+  }
+
+  rows.forEach(function (row) {
+    row.querySelectorAll(".table-input").forEach(function (input) {
+      input.addEventListener("input", function () { render(); save(); });
+    });
+  });
+
+  window.addEventListener("runway:recalc", render);
+  render();
+})();
+</script>

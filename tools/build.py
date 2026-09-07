@@ -176,7 +176,7 @@ def corridor_map():
         if c["a"] not in CITY or c["b"] not in CITY: continue
         x1, y1 = xy(c["a"]); x2, y2 = xy(c["b"])
         w = 1.2 + (c["trips"] / tmax) * 8.5
-        op = .22 + (c["trips"] / tmax) * .58
+        op = .58 + (c["trips"] / tmax) * .42
         out.append(f'<line class="corr" x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" '
                    f'y2="{y2:.1f}" stroke-width="{w:.1f}" opacity="{op:.2f}">'
                    f'<title>{c["a"]} to {c["b"]}: {c["trips"]} trips, '

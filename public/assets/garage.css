@@ -217,9 +217,34 @@ button,input,select,textarea{ font:inherit; font-size:max(16px,1em) }
 @media(min-width:600px){ .chart .lab{ font-size:13px } .chart .val{ font-size:14px } }
 @media(min-width:1040px){ .chart .lab{ font-size:11px } .chart .val{ font-size:12px } }
 .chart .axis{ stroke:var(--grid); stroke-width:1 }
-.chart .bar{ transition:opacity .15s ease }
+.chart .bar{ transition:opacity .15s ease, stroke .15s ease; cursor:pointer }
 .chart .bar:hover{ opacity:.75 }
+.chart .bar[tabindex]:focus-visible{ outline:2px solid var(--ignition); outline-offset:2px }
+/* The pinned bar stays visually marked through hover and hand-off between
+   bars, since opacity 1 alone is indistinguishable from a bar nobody chose. */
+.chart .bar.is-active{ opacity:1; stroke:var(--ignition); stroke-width:2;
+                        vector-effect:non-scaling-stroke }
+.chart .bar.is-active:hover{ opacity:1 }
 .chart-note{ font-size:.74rem; color:var(--ink-3); margin:9px 0 0; line-height:1.5 }
+
+/* ---------- chart detail panel --------------------------------------------
+   One panel per bars() chart, matched to its bars by data-panel/id. Server-
+   rendered to the peak day so it is never empty; chart.js swaps its content
+   on hover (desktop) or tap (any pointer), same complete-by-default rule as
+   the bars themselves. */
+.chart-detail{ margin-top:14px; padding:13px var(--pad); border-radius:12px;
+               background:rgba(255,255,255,.035);
+               border:1px solid var(--hairline,rgba(229,231,235,.10)) }
+.cd-title{ margin:0 0 10px; font-size:.72rem; font-weight:700; letter-spacing:.1em;
+           text-transform:uppercase; color:var(--ink-3) }
+.cd-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 16px }
+@media(min-width:600px){ .cd-grid{ grid-template-columns:repeat(3,minmax(0,1fr)) } }
+@media(min-width:1040px){ .cd-grid{ grid-template-columns:repeat(6,minmax(0,1fr)) } }
+.cd-stat{ display:flex; flex-direction:column; gap:3px; min-width:0 }
+.cd-k{ font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+       color:var(--ink-3) }
+.cd-v{ font-size:.92rem; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums;
+       overflow-wrap:break-word }
 .legend{ display:flex; flex-wrap:wrap; gap:8px 16px; margin:0 0 12px; padding:0; list-style:none }
 .legend li{ display:flex; align-items:center; gap:7px; font-size:.76rem; color:var(--ink-2) }
 .legend i{ width:11px; height:11px; border-radius:3px; flex:none }

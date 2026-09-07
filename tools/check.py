@@ -39,7 +39,7 @@ FIXTURE = ROOT / "tools" / "fixtures" / "runway-v6.html"
 
 # ── hard rules from CLAUDE.md: literal, anywhere, any page ──────────────────
 FORBIDDEN = {
-    "em dash":            r"—|&mdash;",
+    "em dash":            "—|&mdash;",
     "VIN serial":         r"7SAYGAEE8RF\d{6}|169869",
     "street address":     r"Alligood",
     "private coordinate": r"36\.17\d{4}|35\.9679\d*|-86\.8235|-86\.2953",

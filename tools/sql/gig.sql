@@ -86,3 +86,7 @@ create table if not exists garage.gig_mail_run (
   new_rows    int,
   already     int
 );
+
+-- For a drive labelled mixed (it changed jobs mid-way), the portion that belonged to the shift, measured by the
+-- app's own accept-to-store distance. NULL for every other drive. The view counts it toward shift miles.
+alter table garage.drive add column if not exists shift_mi numeric;

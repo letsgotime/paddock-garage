@@ -91,7 +91,7 @@ def parse_batch(rows, year):
     b = {"orders": None, "items": None, "units": None, "batch_pay_usd": None, "tips_usd": None,
          "tips_initial_usd": None, "total_usd": None, "heavy_pay": False, "boost_pay": False,
          "app_active_seconds": None, "route_miles": None, "store": None, "accepted_at": None,
-         "occurred_on": None, "legs": [], "order_tips": {}, "store_arrival": None}
+         "occurred_on": None, "legs": [], "order_tips": {}, "store_arrival": None, "_legs_seen": set(), "note": None}
     flat = [" ".join(r) for r in rows]
     for i, t in enumerate(flat):
         m = DATE.search(t)
@@ -111,10 +111,16 @@ def parse_batch(rows, year):
         m = re.search(r"(\d+)\s+orders?\s*[•·.]?\s*(\d+)\s+items?\s*\((\d+)\s+units?\)", t, re.I)
         if m: b["orders"], b["items"], b["units"] = int(m.group(1)), int(m.group(2)), int(m.group(3))
         m = re.search(r"Distance:\s*([\d.]+)\s*miles?", t, re.I)
-        if m: b["legs"].append(float(m.group(1)))
-        if re.search(r"^Arrival:", t, re.I) and i + 1 < len(flat):
-            b["store"] = flat[i+1].strip(); b["store_arrival"] = clock(t)
-        if re.search(r"^Active hours", t, re.I):
+        if m:
+            key = (flat[i-1].strip() if i else "", m.group(1))     # "Order A" + "9.0": the same leg in two screenshots is one leg
+            if key not in b["_legs_seen"]: b["_legs_seen"].add(key); b["legs"].append(float(m.group(1)))
+        if re.search(r"\bArrival:", t, re.I):
+            b["store_arrival"] = clock(t)
+            for cand in flat[i+1:i+6]:
+                c = re.sub(r"^[^A-Za-z0-9]+", "", cand.strip())
+                if not c or re.match(r"^(Your location|Distance:|Accepted:|Drop off:|Arrival:|\d+\s+orders?\b)", c, re.I) or clock(c): continue
+                b["store"] = " ".join(w.capitalize() if w.islower() else w for w in c.split()); break
+        if re.search(r"\bActive hours\b", t, re.I):
             d = duration_s(t)
             if d: b["app_active_seconds"] = d
     # label/value rows
@@ -129,11 +135,11 @@ def parse_batch(rows, year):
         elif re.match(r"order( [a-z]| tip)?$", L):
             key = label.split()[-1].upper() if len(label.split()) > 1 and len(label.split()[-1]) == 1 else None
             b["order_tips"][key] = {"tip": vals[-1], "initial": vals[0] if len(vals) > 1 else None}
-    # Only claim an initial tip total when the screen actually showed a struck-through
-    # amount on at least one order. Otherwise it is unknown, not equal to the final.
-    if b["order_tips"] and any(v["initial"] is not None for v in b["order_tips"].values()):
-        init = [v["initial"] if v["initial"] is not None else v["tip"] for v in b["order_tips"].values()]
-        b["tips_initial_usd"] = round(sum(init), 2)
+    # A struck-through amount OCRs with full confidence and a wrong digit (a crossed 1 reads as 7), so it is
+    # never written as tips_initial_usd from a screenshot. It is kept in the note as what the screen showed.
+    struck = {k: v["initial"] for k, v in b["order_tips"].items() if v["initial"] is not None}
+    b["note"] = ("tip shown as changed on screen from " + ", ".join(f"${v:.2f}" for v in struck.values())
+                 + " (struck-through, OCR-unreliable, not stored as tips_initial)") if struck else None
     if b["legs"]: b["route_miles"] = round(sum(b["legs"]), 1)
     return b
 
@@ -141,15 +147,33 @@ def parse_completed(rows, year):
     """'Completed orders' daily screen -> list of {store, delivered, found_pct, found_items, on_time}."""
     out, cur, day = [], None, None
     flat = [" ".join(r) for r in rows]
+    def store_name(txt):
+        words = txt.strip().split()
+        if len(words) > 1 and words[0].lower() == words[1].lower(): words = words[1:]   # logo text repeats the name
+        return " ".join(w.capitalize() if w.islower() or w.isupper() else w for w in words)
     for i, t in enumerate(flat):
         m = re.search(r"^(Sun|Mon|Tue|Wed|Thu|Fri|Sat),\s+([A-Z][a-z]{2})\w*\s+(\d{1,2})", t)
         if m and day is None:
             mon = [k for k in MONTHS if k.startswith(m.group(2).lower())]
             if mon: day = dt.date(year, MONTHS[mon[0]], int(m.group(3)))
-        m = re.search(r"^(.+?)\s*[•·.]\s*(\d{1,2}:\d{2}\s*[ap]m)$", t)
-        if m and not t.lower().startswith(("found", "on-time")):
-            cur = {"store": m.group(1).strip(), "delivered": clock(m.group(2)), "found_pct": None,
-                   "found_items": None, "on_time": None}; out.append(cur); continue
+        if t.lower().startswith(("found", "on-time")): pass
+        else:
+            # "Target • 4:22pm" in any cell (the logo cell comes first), or "The Fresh Market •" with the time up to 3 rows down
+            hdr = None
+            for cell in reversed(rows[i]):
+                m = re.search(r"^(.+?)\s*[•·]\s*(\d{1,2}:\d{2}\s*[ap]m)$", cell.strip())
+                if m: hdr = (m.group(1), clock(m.group(2))); break
+            if hdr is None:
+                for cell in reversed(rows[i]):
+                    m = re.search(r"^(.+?)\s*[•·]\s*$", cell.strip())
+                    if m:
+                        for later in flat[i+1:i+4]:
+                            tm = clock(later)
+                            if tm: hdr = (m.group(1), tm); break
+                        break
+            if hdr:
+                cur = {"store": store_name(hdr[0]), "delivered": hdr[1], "found_pct": None, "found_items": None, "on_time": None}
+                out.append(cur); continue
         if cur is None: continue
         r = rows[i]
         if len(r) >= 2:
@@ -173,7 +197,7 @@ def parse_day(rows):
 
 def classify(rows):
     txt = " ".join(" ".join(r) for r in rows).lower()
-    if "completed orders" in txt: return "completed"
+    if "completed orders" in txt or ("found or replaced" in txt and "on-time" in txt): return "completed"
     if "shop and deliver" in txt or "batch summary" in txt or "drop off:" in txt or "arrival:" in txt: return "batch"
     if ("daily earnings" in txt or "weekly earnings" in txt) and "active hours" in txt: return "day"
     if "active hours" in txt: return "batch"        # a scrolled tail of a batch summary
@@ -187,9 +211,9 @@ def upsert_batch(cur, b, files):
     store_miles = b["legs"][0] if b["legs"] else None
     cur.execute("""insert into garage.gig_batch (occurred_on, accepted_at, store, orders, items, units,
                      batch_pay_usd, tips_usd, tips_initial_usd, total_usd, heavy_pay, boost_pay,
-                     app_active_seconds, route_miles, source_files, store_arrival_at, store_miles)
-                   values (%s, %s::timestamp || %s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
-                           (%s::timestamp || %s)::timestamptz, %s)
+                     app_active_seconds, route_miles, source_files, store_arrival_at, store_miles, note)
+                   values (%s, (%s::timestamp || %s)::timestamptz, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
+                           (%s::timestamp || %s)::timestamptz, %s, %s)
                    on conflict (occurred_on, accepted_at, store) do update set
                      orders=coalesce(excluded.orders, gig_batch.orders), items=coalesce(excluded.items, gig_batch.items),
                      units=coalesce(excluded.units, gig_batch.units),
@@ -202,11 +226,15 @@ def upsert_batch(cur, b, files):
                      route_miles=coalesce(excluded.route_miles, gig_batch.route_miles),
                      source_files=array(select distinct unnest(gig_batch.source_files || excluded.source_files)),
                      store_arrival_at=coalesce(excluded.store_arrival_at, gig_batch.store_arrival_at),
-                     store_miles=coalesce(excluded.store_miles, gig_batch.store_miles)
+                     store_miles=coalesce(excluded.store_miles, gig_batch.store_miles),
+                     note=case when excluded.note is null then gig_batch.note
+                               when gig_batch.note is null then excluded.note
+                               when position(excluded.note in gig_batch.note) > 0 then gig_batch.note
+                               else gig_batch.note || '. ' || excluded.note end
                    returning id""",
                 (b["occurred_on"], b["accepted_at"].isoformat(), TZ, b["store"], b["orders"], b["items"], b["units"],
                  b["batch_pay_usd"], b["tips_usd"], b["tips_initial_usd"], b["total_usd"], b["heavy_pay"], b["boost_pay"],
-                 b["app_active_seconds"], b["route_miles"], files, arrival, TZ, store_miles))
+                 b["app_active_seconds"], b["route_miles"], files, arrival, TZ, store_miles, b.get("note")))
     bid = cur.fetchone()[0]
     sync_ledger(cur, bid)
     return bid
@@ -224,16 +252,20 @@ def attach_orders(cur, day, orders):
     """Completed-orders cards -> gig_order rows, matched to a batch by store on that day."""
     n = 0
     for o in orders:
-        cur.execute("""select id from garage.gig_batch where occurred_on=%s and lower(store) like %s
-                       order by accepted_at limit 1""", (day, o["store"].lower().split(" ")[0] + "%"))
+        if not o["delivered"]: continue
+        cur.execute("""select id from garage.gig_batch where occurred_on=%s and lower(store) = lower(%s)
+                       order by accepted_at limit 1""", (day, o["store"]))
         r = cur.fetchone()
         if not r: print(f"  ! no batch for {o['store']} on {day}, order card skipped"); continue
-        delivered = dt.datetime.combine(day, o["delivered"]).isoformat() if o["delivered"] else None
-        cur.execute("""delete from garage.gig_order where batch_id=%s and delivered_at = (%s::timestamp || %s)::timestamptz""",
-                    (r[0], delivered, TZ))
-        cur.execute("""insert into garage.gig_order (batch_id, items_found, found_or_replaced_pct, on_time, delivered_at)
-                       values (%s,%s,%s,%s,(%s::timestamp || %s)::timestamptz)""",
-                    (r[0], o["found_items"], o["found_pct"], o["on_time"], delivered, TZ))
+        delivered = dt.datetime.combine(day, o["delivered"]).isoformat()
+        cur.execute("""update garage.gig_order set items_found=coalesce(%s, items_found),
+                         found_or_replaced_pct=coalesce(%s, found_or_replaced_pct), on_time=coalesce(%s, on_time)
+                       where batch_id=%s and delivered_at = (%s::timestamp || %s)::timestamptz returning id""",
+                    (o["found_items"], o["found_pct"], o["on_time"], r[0], delivered, TZ))
+        if cur.fetchone() is None:
+            cur.execute("""insert into garage.gig_order (batch_id, items_found, found_or_replaced_pct, on_time, delivered_at)
+                           values (%s,%s,%s,%s,(%s::timestamp || %s)::timestamptz)""",
+                        (r[0], o["found_items"], o["found_pct"], o["on_time"], delivered, TZ))
         n += 1
     return n
 
@@ -433,17 +465,41 @@ def ingest(a):
         if has_header or current is None:
             current = {"files": [], "rows": []}; groups.append(current)
         current["files"].append(s["file"]); current["rows"].extend(rows)
+    parsed = [(g, parse_batch(g["rows"], year)) for g in groups]
+    cards = []
+    for f, rows in completed:
+        d, orders = parse_completed(rows, year)
+        if d: cards += [(o["store"], dt.datetime.combine(d, o["delivered"])) for o in orders if o["delivered"]]
+    accepts = sorted(b["accepted_at"] for _, b in parsed if b["accepted_at"])
+    for g, b in parsed:
+        if b["store"] or not b["accepted_at"]: continue
+        later = [t for t in accepts if t > b["accepted_at"]]
+        end = later[0] if later else b["accepted_at"] + dt.timedelta(hours=6)
+        stores = {st for st, t in cards if b["accepted_at"] < t <= end}
+        if len(stores) == 1:
+            b["store"] = stores.pop(); b["_store_from_cards"] = True
+
+    def describe(b, files):
+        acc = b["accepted_at"].strftime("%-I:%M%p").lower() if b["accepted_at"] else "?"
+        return (f"{b['occurred_on']} {acc}  {b['store']}{' (from the completed-orders card)' if b.get('_store_from_cards') else ''}  ${b['total_usd']}  (pay {b['batch_pay_usd']}, tips {b['tips_usd']}"
+                f"{', was '+str(b['tips_initial_usd']) if b['tips_initial_usd'] else ''})  {b['orders']} orders, {b['items']} items,"
+                f" {b['app_active_seconds'] and round(b['app_active_seconds']/60)} min, legs {b['legs']} = {b['route_miles']} mi"
+                f"  arrival {b['store_arrival']}  [{', '.join(files)}]")
+    if a.dry_run:
+        print("dry run: nothing written")
+        for g, b in parsed: print("  batch  " + describe(b, [pathlib.Path(f).name for f in g["files"]]))
+        for f, rows in completed:
+            day, orders = parse_completed(rows, year)
+            print(f"  completed {day}: " + "; ".join(f"{o['store']} {o['delivered']} found {o['found_items']} {o['found_pct']}% on-time {o['on_time']}" for o in orders))
+        for f, rows in days:
+            d = parse_day(rows); print(f"  day  active {d['app_active_seconds']}s, {d['batches']} batches, total ${d['total_usd']}, tips ${d['tips_usd']}, pay ${d['batch_pay_usd']}")
+        return
     with db() as c, c.cursor() as cur:
         views(cur)
-        for g in groups:
-            b = parse_batch(g["rows"], year)
-            bid = upsert_batch(cur, b, [pathlib.Path(f).name for f in g["files"]])
-            if bid:
-                print(f"  batch #{bid}  {b['occurred_on']} {b['accepted_at'].strftime('%-I:%M%p').lower()}  {b['store']}"
-                      f"  ${b['total_usd']}  (pay {b['batch_pay_usd']}, tips {b['tips_usd']}"
-                      f"{', was '+str(b['tips_initial_usd']) if b['tips_initial_usd'] else ''})"
-                      f"  {b['orders']} orders, {b['items']} items,"
-                      f" {b['app_active_seconds'] and round(b['app_active_seconds']/60)} min, {b['route_miles']} mi")
+        for g, b in parsed:
+            files = [pathlib.Path(f).name for f in g["files"]]
+            bid = upsert_batch(cur, b, files)
+            if bid: print(f"  batch #{bid}  " + describe(b, files))
         for f, rows in completed:
             day, orders = parse_completed(rows, year)
             if day: print(f"  completed orders {day}: attached {attach_orders(cur, day, orders)} of {len(orders)}")
@@ -505,7 +561,7 @@ def day(a):
 ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
 sub = ap.add_subparsers(dest="cmd", required=True)
 p = sub.add_parser("ingest", help="OCR shopper-app screenshots into the warehouse")
-p.add_argument("images", nargs="+"); p.add_argument("--year", type=int); p.set_defaults(fn=ingest)
+p.add_argument("images", nargs="+"); p.add_argument("--year", type=int); p.add_argument("--dry-run", action="store_true"); p.set_defaults(fn=ingest)
 p = sub.add_parser("true", help="record your own read of time actually worked")
 p.add_argument("date"); p.add_argument("duration", help="e.g. 3h14m"); p.add_argument("--note"); p.set_defaults(fn=true_)
 p = sub.add_parser("day", help="the reconciled day"); p.add_argument("date"); p.set_defaults(fn=day)

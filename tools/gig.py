@@ -349,7 +349,11 @@ def mail(a):
                         (mid, m.get("threadId") or m.get("thread_id"), m.get("date"), sender, subject, body, kind, a.by))
             if cur.fetchone(): new += 1; kinds[kind] = kinds.get(kind, 0) + 1
             else: dup += 1
-    print(f"mail: {new} new, {dup} already captured"
+        # every run leaves a row, so a run that found nothing new is still provably a run
+        cur.execute("insert into garage.gig_mail_run (captured_by, files_seen, new_rows, already) values (%s,%s,%s,%s) returning id",
+                    (a.by, len(files), new, dup))
+        run_id = cur.fetchone()[0]
+    print(f"mail run #{run_id} ({a.by}): {new} new, {dup} already captured"
           + (f"  ({', '.join(f'{v} {k}' for k, v in sorted(kinds.items()))})" if kinds else ""))
     if kinds.get("statement"):
         print("  a statement arrived and no parser exists yet: the raw text is in garage.gig_mail, build the parser against it")

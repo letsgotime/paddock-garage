@@ -10,11 +10,10 @@ card always uses the same photography as the page it represents.
 
     python3 tools/og-image.py public/og/garage.png
 """
-import base64, io, os, re, sys
+import json, os, re, sys
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 
 W, H   = 1200, 630
-PLATE  = 3                       # index of the hero photo in index.html
 INK        = (255, 255, 255)
 IGNITION   = (244, 81, 30)
 SKY        = (87, 180, 230)
@@ -43,8 +42,8 @@ def track_width(d, text, f, track=0.0):
 # ---------- background plate -------------------------------------------
 here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 html = open(os.path.join(here, "public", "index.html"), encoding="utf-8").read()
-uris = re.findall(r"data:image/[a-zA-Z]+;base64,([A-Za-z0-9+/=]+)", html)
-src  = Image.open(io.BytesIO(base64.b64decode(uris[PLATE]))).convert("RGB")
+bg   = re.search(r"--page-bg:url\('([^']+)'\)", html).group(1)
+src  = Image.open(os.path.join(here, "public", bg.lstrip("/"))).convert("RGB")
 
 # cover-fit, then bias the crop so the car sits right of centre
 scale = max(W / src.width, H / src.height) * 1.18
@@ -90,7 +89,10 @@ d.polygon([(M, sy + 21), (M + 406, sy + 21), (M + 386, sy + 34), (M, sy + 34)], 
 tracked(d, (M, sy + 60), "2024 TESLA MODEL Y LONG RANGE AWD", bold(21), INK, 2.4)
 
 # ---------- bottom stat line -------------------------------------------
-stats = "12.0¢ PER MILE  ·  0% BATTERY DEGRADATION  ·  90.8% ON FSD"
+T = json.load(open(os.path.join(here, "data", "telemetry.json"), encoding="utf-8"))
+stats = (f"{T['cost']['per_mile_cents']:.1f}¢ PER MILE  ·  "
+         f"{T['battery']['degradation_pct']:g}% BATTERY DEGRADATION  ·  "
+         f"{T['fsd']['pct']:.1f}% ON FSD")
 tracked(d, (M, H - 96), stats, bold(19), INK_FAINT, 1.6)
 tracked(d, (M, H - 58), "GARAGE.PADDOCK20.COM", black(19), IGNITION, 2.6)
 

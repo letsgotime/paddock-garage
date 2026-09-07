@@ -47,9 +47,38 @@ def fig(src, alt, cap, *, stock=False):
 # ── chart primitives ────────────────────────────────────────────────────────
 # One series = one hue, no legend (the title names it). Marks are thin with a
 # 4px rounded top anchored to the baseline and a 2px gap between bars.
+_uid_n = 0
+def _next_uid():
+    global _uid_n
+    _uid_n += 1
+    return f"cd-{_uid_n}"
+
+def _day_detail(r):
+    """Full context for one daily record, keyed for the chart-detail panel.
+    Every bars() chart below is fed the same daily rows, so one bar in any
+    of them can surface the whole day, not just the metric that chart plots.
+    On FSD is dropped for a row outside 0-100%: CLAUDE.md says report an
+    implausible figure rather than publish it, and 2026-08-31 currently pulls
+    154.1 from the source data (see the build output for the flag)."""
+    charged = (f"{r['kwh']:.1f} kWh, {usd(r['cost'])}" if r.get("kwh")
+               else "no charge that day")
+    pairs = [("Miles", f"{r['mi']:.1f} mi"), ("Drives", str(r["drives"]))]
+    if 0 <= r["fsd"] <= 100:
+        pairs.append(("On FSD", f"{r['fsd']:.1f}%"))
+    else:
+        print(f"WARNING build.py: {r['d']} has fsd={r['fsd']}, outside 0-100%, "
+              f"dropped from its chart-detail panel", file=__import__("sys").stderr)
+    pairs += [("Efficiency", f"{r['eff']}%"), ("Idle loss", f"{r['idle']:.1f} mi"),
+              ("Charged", charged)]
+    return pairs
+
 def bars(rows, *, value, label, color="var(--m1)", h=190, fmt=lambda v: f"{v:g}",
-         peak_only=True, unit=""):
-    """rows: list of dicts. value/label: key names."""
+         peak_only=True, unit="", detail=None):
+    """rows: list of dicts. value/label: key names.
+    detail: optional callable(row) -> list[(label, value)]. When given, every
+    bar carries its full context as a data attribute and the chart grows a
+    companion .chart-detail panel (wired up by chart.js on hover or tap),
+    defaulted here to the peak day so it never renders empty."""
     n = len(rows)
     if not n: return ""
     W, PADL, PADB, PADT = 720, 4, 34, 30
@@ -59,6 +88,7 @@ def bars(rows, *, value, label, color="var(--m1)", h=190, fmt=lambda v: f"{v:g}"
     bw = max(6, slot - 2)                      # 2px surface gap between bars
     plot = h - PADB - PADT
     peak = vals.index(vmax)
+    uid = _next_uid() if detail else None
     out = [f'<svg class="chart" viewBox="0 0 {W} {h}" role="img" '
            f'aria-label="{html.escape(unit or value)}">']
     out.append(f'<line class="axis" x1="0" y1="{h-PADB}" x2="{W}" y2="{h-PADB}"/>')
@@ -68,17 +98,32 @@ def bars(rows, *, value, label, color="var(--m1)", h=190, fmt=lambda v: f"{v:g}"
         x = PADL + i * slot
         y = h - PADB - bh
         rad = min(4, bw / 2)
+        lab = str(r[label])
+        cls = "bar is-active" if detail and i == peak else "bar"
+        extra_attrs = ""
+        if detail:
+            payload = html.escape(json.dumps(detail(r), separators=(",", ":")), quote=True)
+            extra_attrs = (f' tabindex="0" data-label="{html.escape(lab)}" '
+                            f'data-panel="{uid}" data-detail="{payload}"')
         out.append(
-            f'<rect class="bar" style="--i:{i}" x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" '
-            f'rx="{rad:.1f}" fill="{color}"><title>{html.escape(str(r[label]))}: '
+            f'<rect class="{cls}" style="--i:{i}" x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" '
+            f'rx="{rad:.1f}" fill="{color}"{extra_attrs}><title>{html.escape(lab)}: '
             f'{html.escape(fmt(v))}{html.escape(unit)}</title></rect>')
         if (not peak_only) or i == peak:
             out.append(f'<text class="val" x="{x+bw/2:.1f}" y="{y-5:.1f}" '
                        f'text-anchor="middle">{html.escape(fmt(v))}</text>')
         if n <= 12 or i % 2 == 0:
             out.append(f'<text class="lab" x="{x+bw/2:.1f}" y="{h-11}" '
-                       f'text-anchor="middle">{html.escape(str(r[label]))}</text>')
+                       f'text-anchor="middle">{html.escape(lab)}</text>')
     out.append("</svg>")
+    if detail:
+        stats = "".join(
+            f'<div class="cd-stat"><span class="cd-k">{html.escape(k)}</span>'
+            f'<span class="cd-v">{html.escape(v)}</span></div>'
+            for k, v in detail(rows[peak]))
+        out.append(f'<div class="chart-detail" id="{uid}">'
+                    f'<p class="cd-title">{html.escape(str(rows[peak][label]))}</p>'
+                    f'<div class="cd-grid">{stats}</div></div>')
     return "".join(out)
 
 def hbars(rows, *, hi=0, unit="¢/mi"):
@@ -181,6 +226,7 @@ def head(title, desc, path, plate, extra="", bodycls=""):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="/assets/glass.css">
 <link rel="stylesheet" href="/assets/garage.css">
+<script src="/assets/chart.js" defer></script>
 <style>:root{{--page-bg:url('/img/{plate}')}}</style>
 {extra}
 </head>
@@ -805,14 +851,14 @@ def page_drive():
 <section class="row row-2">
   <div class="g">
     <h2>Miles per day</h2>
-    {bars(days, value="mi", label="lab", unit=" mi", fmt=lambda v: f"{v:.0f}")}
+    {bars(days, value="mi", label="lab", unit=" mi", fmt=lambda v: f"{v:.0f}", detail=_day_detail)}
     <p class="chart-note">{M}. The peak is a {max(d['mi'] for d in days):.1f} mile day running
     down to Unionville and back.</p>
   </div>
   <div class="g">
     <h2>What it costs to park</h2>
     {bars(days, value="idle", label="lab", color="var(--m3)", unit=" mi",
-          fmt=lambda v: f"{v:.1f}")}
+          fmt=lambda v: f"{v:.1f}", detail=_day_detail)}
     <p class="chart-note">{M}. Range lost while parked, {D['idle_loss']['range_lost_mi']:.0f} miles
     over {D['idle_loss']['days']} days. Nobody publishes this number. It is roughly
     {D['idle_loss']['range_lost_mi']/D['idle_loss']['days']:.0f} miles a day of standing still.</p>
@@ -954,7 +1000,7 @@ the real sessions.</p>
 <section class="g">
   <h2>Spend per day</h2>
   {bars(days, value="cost", label="lab", color="var(--m3)", unit="", peak_only=False,
-        fmt=lambda v: f"${v:.0f}" if v else "")}
+        fmt=lambda v: f"${v:.0f}" if v else "", detail=_day_detail)}
   <p class="chart-note">{M}. Flat days are days it did not need charging, or days it charged on
   the free plug. Eight of {D['window']['days']} days cost nothing at all.</p>
 </section>
@@ -1160,7 +1206,7 @@ It deserves a real answer with real numbers, including the parts that are still 
   {D['idle_loss']['days']} days this pack gave up {D['idle_loss']['range_lost_mi']:.0f} miles of
   range sitting still, an average of about
   {D['idle_loss']['range_lost_mi']/D['idle_loss']['days']:.0f} miles a day.</p>
-  {bars(days, value="idle", label="lab", color="var(--m3)", unit=" mi", fmt=lambda v: f"{v:.1f}")}
+  {bars(days, value="idle", label="lab", color="var(--m3)", unit=" mi", fmt=lambda v: f"{v:.1f}", detail=_day_detail)}
   <p class="chart-note">{M}. The spikes are days the car sat outside in Tennessee summer heat with
   cabin protection running. At {cents(D['charging']['blended_per_kwh']*100,1)} a kWh and
   {D['driving']['wh_per_mi']:.0f} Wh a mile, {D['idle_loss']['range_lost_mi']:.0f} miles of lost

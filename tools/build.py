@@ -199,8 +199,8 @@ def corridor_map():
     return "".join(out)
 
 # ── shell ───────────────────────────────────────────────────────────────────
-NAV = [("/trip/", "Road Trip"), ("/work/", "The Work"), ("/shift/", "Shift"), ("/switch/", "The Switch"), ("/drive/", "Drive"),
-       ("/charge/", "Charge"), ("/ledger/", "Ledger"), ("/battery/", "Battery"),
+NAV = [("/trip/", "Road Trip"), ("/work/", "The Work"), ("/switch/", "The Switch"), ("/drive/", "Drive"),
+       ("/shift/", "Shift"), ("/charge/", "Charge"), ("/ledger/", "Ledger"), ("/battery/", "Battery"),
        ("/car/", "The Car")]
 
 FOOTER_LINKS = NAV + [("/driver/", "The Driver")]

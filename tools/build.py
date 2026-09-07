@@ -17,6 +17,7 @@ W = json.loads((ROOT / "data" / "work.json").read_text())
 C = json.loads((ROOT / "data" / "colophon.json").read_text())
 T = json.loads((ROOT / "data" / "roadtrip.json").read_text())
 G = json.loads((ROOT / "data" / "charging.json").read_text())
+GIG = json.loads((ROOT / "data" / "gig.json").read_text())   # gig.py export: workload, never pay
 sys.path.insert(0, str(ROOT / "tools"))
 import trip as TR
 LEGACY = ROOT / "content" / "legacy"
@@ -126,16 +127,18 @@ def bars(rows, *, value, label, color="var(--m1)", h=190, fmt=lambda v: f"{v:g}"
                     f'<div class="cd-grid">{stats}</div></div>')
     return "".join(out)
 
-def hbars(rows, *, hi=0, unit="¢/mi"):
+def hbars(rows, *, hi=0, unit="¢/mi", fmt=None, label=None):
     """rows: (label, value, note). Label sits above its bar so nothing collides
-    at phone width. Highlight row `hi` in ignition, the rest neutral."""
+    at phone width. Highlight row `hi` in ignition, the rest neutral. `fmt`
+    formats a value (default: one decimal plus the unit)."""
     W, RH, GAP, BARH = 720, 54, 12, 20
     h = len(rows) * (RH + GAP)
     vmax = max(r[1] for r in rows) or 1
     VALW = 132   # fits '28.0¢/mi' at the 21-unit phone label size
     barmax = W - VALW
+    f = fmt or (lambda v: f"{v:.1f}{unit}")
     out = [f'<svg class="chart" viewBox="0 0 {W} {h}" role="img" '
-           f'aria-label="Comparison in {html.escape(unit)}">']
+           f'aria-label="{html.escape(label or f"Comparison in {unit}")}">']
     for i, (lab, v, note) in enumerate(rows):
         y = i * (RH + GAP)
         bw = max(4, v / vmax * barmax)
@@ -143,9 +146,9 @@ def hbars(rows, *, hi=0, unit="¢/mi"):
         out.append(f'<text class="lab" x="0" y="{y+16:.1f}">{html.escape(lab)}</text>')
         out.append(f'<rect class="bar hbar" style="--i:{i}" x="0" y="{y+RH-BARH-4:.1f}" width="{bw:.1f}" '
                    f'height="{BARH}" rx="4" fill="{col}"><title>{html.escape(lab)}: '
-                   f'{v:.1f}{html.escape(unit)}{" " + note if note else ""}</title></rect>')
+                   f'{html.escape(f(v))}{" " + note if note else ""}</title></rect>')
         out.append(f'<text class="val" x="{bw+10:.1f}" y="{y+RH-BARH/2-1:.1f}" '
-                   f'dominant-baseline="middle">{v:.1f}{html.escape(unit)}</text>')
+                   f'dominant-baseline="middle">{html.escape(f(v))}</text>')
     out.append("</svg>")
     return "".join(out)
 
@@ -196,7 +199,7 @@ def corridor_map():
     return "".join(out)
 
 # ── shell ───────────────────────────────────────────────────────────────────
-NAV = [("/trip/", "Road Trip"), ("/work/", "The Work"), ("/switch/", "The Switch"), ("/drive/", "Drive"),
+NAV = [("/trip/", "Road Trip"), ("/work/", "The Work"), ("/shift/", "Shift"), ("/switch/", "The Switch"), ("/drive/", "Drive"),
        ("/charge/", "Charge"), ("/ledger/", "Ledger"), ("/battery/", "Battery"),
        ("/car/", "The Car")]
 
@@ -274,7 +277,8 @@ FOOTER = f"""</main>
   <div class="pg-f-bottom">
    <p class="pg-f-legend">Figures are labeled measured or modeled. Measured means an invoice or a
    sensor. Pulled {D['pulled_at']}: TezLab for drives and pack-side energy, the Tesla Fleet
-   API for billing invoices and live state. Not affiliated with,
+   API for billing invoices and live state. Delivery days: the shopper app's own screens and
+   the car's drives, exported {GIG['exported_on']}. Not affiliated with,
    endorsed by, or sponsored by Tesla, Inc. Tesla, Model Y, Supercharger and Full Self-Driving are
    trademarks of Tesla, Inc.</p>
   </div>
@@ -324,8 +328,19 @@ def page_work():
         for i, (t, sym, fix) in enumerate(C["problems"]))
     out = []
     for t in W["tracks"]:
+        stat_rows, src_chip = list(t["stats"]), R
+        shift_link = ""
+        if t["key"] == "gig" and GIG["days"]:
+            # the bridge track's figures are the measured workload, from the same export as /shift/
+            g = GIG["days"][0]
+            stat_rows += [(hm(g["wall_s"]), f"door to door on {longdate(g['date'])}"),
+                          (f"{g['batches']} / {g['orders']} / {g['items']}", "batches, orders, items"),
+                          (f"{g['dead_mi']:.1f} mi", "it did not need to drive"),
+                          (usd(g["energy_usd"]), "of electricity for the day")]
+            src_chip = M
+            shift_link = '<p style="margin:12px 0 0"><a href="/shift/">The measured day, mile for mile</a></p>'
         stats = "".join(
-            f'<li><b>{html.escape(v)}</b> {html.escape(k)}</li>' for v, k in t["stats"])
+            f'<li><b>{html.escape(v)}</b> {html.escape(k)}</li>' for v, k in stat_rows)
         prods = "".join(
             f'<tr><td>{html.escape(n)}</td><td>{html.escape(d)}</td></tr>'
             for n, d in t["products"])
@@ -349,8 +364,8 @@ def page_work():
     {eng_block}
     <p class="chart-note" style="margin-top:12px"><strong>What it asks of the car:</strong>
     {html.escape(t['vehicle_need'])}</p>
-    <p class="chart-note">{R} source: {html.escape(t['source'])}</p>
-    {link}
+    <p class="chart-note">{src_chip} source: {html.escape(t['source'])}</p>
+    {link}{shift_link}
   </div>
 </li>""")
     body = f"""<p class="eyebrow">Live case study &middot; updated {D['pulled_at']}</p>
@@ -392,9 +407,10 @@ counts every mile: a cost per mile is only interesting if something is riding on
 
 <section class="bare">
   <h2>What this page is not</h2>
-  <p style="margin:0">Not an income report. Per track earnings, rates and hours stay private, as
-  do the vehicle's financing terms. What is published here is what a vehicle costs to operate and
-  what it is being asked to carry, which are facts about a car and a workload.</p>
+  <p style="margin:0">Not an income report. Per track earnings and rates stay private, as do the
+  vehicle's financing terms. What is published here is what a vehicle costs to operate and what
+  it is being asked to carry, which are facts about a car and a workload. One measured delivery
+  day, hour by hour and mile by mile, is on <a href="/shift/">Shift</a>.</p>
 </section>
 
 <section id="colophon">
@@ -588,7 +604,7 @@ measured and published. Nothing on this page is an estimate.</p>
 </section>
 
 <section>
-  <ul class="doors">
+  <ul class="doors doors-4">
     <li class="g door"><a class="door" href="/work/"><span class="k">If you are hiring</span>
       <h3>One car, three jobs</h3><p>What this vehicle actually carries, and which of the three
       is the one being funded.</p></a></li>
@@ -598,6 +614,7 @@ measured and published. Nothing on this page is an estimate.</p>
     <li class="g door"><a class="door" href="/ledger/"><span class="k">If you are pricing one</span>
       <h3>The Ledger</h3><p>Cost per mile against three gas vehicles that were actually
       owned.</p></a></li>
+    {shift_door()}
   </ul>
 </section>
 
@@ -1380,9 +1397,198 @@ itself, so the car has to prove it belongs.</p>
                  "behind the site, the gas fleet before it, and where the privacy line sits.",
                  "car/plate-6-95a847.jpg", body)
 
+# ── shift: one delivery day as a workload, never as a wage ──────────────────
+def hm(s):
+    """Seconds -> '5h19m'. Durations only: no clock time is ever printed on this site."""
+    s = int(round(s)); return f"{s // 3600}h{(s % 3600) // 60:02d}m"
+
+def mins(s): return f"{int(round(s / 60))} min"
+
+_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"]
+def words(n): return _WORDS[n] if 0 <= n < len(_WORDS) else str(n)
+
+def longdate(iso):
+    d = datetime.date.fromisoformat(iso); return f"{d.day} {d:%B %Y}"
+
+def shift_day():
+    """The newest settled day, checked against the snapshot so the page never prints two rates."""
+    if not GIG["days"]: raise SystemExit("data/gig.json has no settled day: run  gig.py export")
+    d = GIG["days"][0]; c = D["cost"]
+    if abs(GIG["energy_per_mile_usd"] - c["per_mile"]) > 1e-9 or abs(d["shift_mi"] * c["per_mile"] - d["energy_usd"]) > 0.011:
+        raise SystemExit("data/gig.json was exported against a different cost per mile than "
+                         "data/telemetry.json: run  gig.py export  before building")
+    return d
+
+def shift_door():
+    d = shift_day()
+    return (f'<li class="g door"><a class="door" href="/shift/"><span class="k">If you saw it working</span>\n'
+            f'      <h3>One delivery day, mile for mile</h3><p>{hm(d["wall_s"])} door to door, {words(d["batches"])} batches,\n'
+            f'      {d["items"]} items, {d["dead_mi"]:.1f} miles it did not need to drive. Measured, not estimated.</p></a></li>')
+
+def shift_timeline(d):
+    """The day in hours from the first accept: one bar per batch on the app's clock, the door to
+    door span underneath, the charge stop in amber. No clock labels, by rule."""
+    W, H, PADL, PADR, BAR_Y, BAR_H = 720, 172, 6, 6, 70, 26
+    hours = max(1, -(-d["wall_s"] // 3600))
+    span = hours * 3600
+    x = lambda s: PADL + s / span * (W - PADL - PADR)
+    out = [f'<svg class="chart tl" viewBox="0 0 {W} {H}" role="img" aria-label="The day in hours from '
+           f'the first accept: the app clock per batch, the time between, and the charge stop">']
+    for h in range(hours + 1):
+        xx = x(h * 3600)
+        out.append(f'<line class="axis" x1="{xx:.1f}" y1="{BAR_Y - 8}" x2="{xx:.1f}" y2="{BAR_Y + BAR_H + 8}"/>')
+        anchor = "start" if h == 0 else ("end" if h == hours else "middle")
+        out.append(f'<text class="lab" x="{xx:.1f}" y="{H - 10}" text-anchor="{anchor}">{h}h</text>')
+    out.append(f'<rect class="tl-wall" x="{x(0):.1f}" y="{BAR_Y + BAR_H / 2 - 1.5:.1f}" '
+               f'width="{x(d["wall_s"]) - x(0):.1f}" height="3" rx="1.5"><title>Door to door: {hm(d["wall_s"])}</title></rect>')
+    for c in d.get("charge_stop_list", []):
+        cx, cw = x(c["offset_s"]), x(c["seconds"]) - x(0)
+        out.append(f'<rect class="bar" x="{cx:.1f}" y="{BAR_Y + 4}" width="{cw:.1f}" height="{BAR_H - 8}" rx="4" '
+                   f'fill="var(--m3)"><title>Charging {mins(c["seconds"])}, {c["soc_from"]}% to {c["soc_to"]}%</title></rect>')
+        out.append(f'<text class="lab" x="{cx + cw / 2:.1f}" y="{BAR_Y - 18}" text-anchor="middle">charging</text>')
+    for i, b in enumerate(d["batch_rows"]):
+        bx, bw = x(b["accept_offset_s"]), x(b["app_active_s"]) - x(0)
+        out.append(f'<rect class="bar" style="--i:{i}" x="{bx:.1f}" y="{BAR_Y}" width="{bw:.1f}" height="{BAR_H}" rx="4" '
+                   f'fill="var(--m1)"><title>{html.escape(b["store"])}: {mins(b["app_active_s"])} on the app clock, '
+                   f'{b["items"]} items</title></rect>')
+        above = i % 2 == 0
+        anchor = "start" if bx < W / 2 else "end"
+        out.append(f'<text class="lab" x="{(bx if anchor == "start" else bx + bw):.1f}" '
+                   f'y="{BAR_Y - 18 if above else BAR_Y + BAR_H + 28}" text-anchor="{anchor}">{html.escape(b["store"])}</text>')
+        if bw >= 80:
+            out.append(f'<text class="val" x="{bx + bw / 2:.1f}" y="{BAR_Y + BAR_H / 2 + 1:.1f}" text-anchor="middle" '
+                       f'dominant-baseline="middle">{mins(b["app_active_s"])}</text>')
+    out.append("</svg>")
+    return "".join(out)
+
+def page_shift():
+    d = shift_day()
+    c, van = D["cost"], D["fleet"][0]
+    van_usd = d["shift_mi"] * van["cents_per_mi"] / 100
+    charge = d.get("charge_stop_list") or []
+    charging = (f"{round(sum(s['seconds'] for s in charge) / 60)} minutes of it charging "
+                f"{charge[0]['soc_from']}% to {charge[-1]['soc_to']}%") if charge else "none of it charging"
+    rows = "".join(
+        f'<tr><td>{html.escape(b["store"])}{", " + html.escape(b["city"]) if b.get("city") else ""}</td>'
+        f'<td class="n">{b["orders"]}</td><td class="n">{b["items"]}</td>'
+        f'<td class="n">{mins(b["in_store_s"]) if b["in_store_s"] else "n/a"}</td>'
+        f'<td class="n">{str(b["sec_per_item"]) + " s" if b["sec_per_item"] else "n/a"}</td>'
+        f'<td class="n">{mins(b["app_active_s"])}</td><td class="n">{b["route_mi"]:.1f} mi</td>'
+        f'<td>{"n/a" if b["on_time"] is None else ("yes" if b["on_time"] else "no")}</td></tr>'
+        for b in d["batch_rows"])
+    register = "".join(
+        f'<tr><td>{longdate(x["date"])}</td><td class="n">{x["batches"]}</td><td class="n">{x["orders"]}</td>'
+        f'<td class="n">{x["items"]}</td><td class="n">{hm(x["wall_s"])}</td><td class="n">{hm(x["app_active_s"])}</td>'
+        f'<td class="n">{x["shift_mi"]:.1f}</td><td class="n">{x["dead_mi"]:.1f}</td><td class="n">{usd(x["energy_usd"])}</td></tr>'
+        for x in GIG["days"])
+    date = longdate(d["date"])
+    body = f"""<p class="eyebrow"><b>{html.escape(d['platform'])}, measured</b> &middot; {date}</p>
+<h1>One delivery day, <span>mile for mile</span>.</h1>
+<p class="lede prose">This car spent {hm(d['wall_s'])} delivering on {date.rsplit(' ', 1)[0]}: {words(d['batches'])}
+batches, {words(d['orders'])} orders, {d['items']} items, {hm(d['app_active_s'])} of it on the app's clock. It drove
+{d['shift_mi']:.1f} miles for those batches against {d['route_mi']:.1f} miles of route, so {d['dead_mi']:.1f} miles it
+did not need to. The electricity for the whole day cost {usd(d['energy_usd'])}. If you are pricing a car that has
+to earn its keep, this page is the workload and the <a href="/ledger/">Ledger</a> is the cost.</p>
+{livestrip()}
+
+<section class="row row-2-1">
+  <div class="g g-2 cmd">
+    <p class="k">The day's electricity, measured</p>
+    <p class="v">{usd(d['energy_usd'])}</p>
+    <p class="sub">{d['shift_mi']:.1f} miles for batches at {cents(c['per_mile_cents'])} a mile, the rate every
+    page on this site runs on. {M}</p>
+  </div>
+  <div class="bare">
+    <h2>Two clocks</h2>
+    <p>{hm(d['app_active_s'])} on the app's clock. {hm(d['wall_s'])} door to door.</p>
+    <p style="margin:0">{hm(d['gap_s'])} between batches, {charging}.</p>
+  </div>
+</section>
+
+<section class="stats g">
+  <div class="stat"><p class="v">{d['batches']}<small>/</small>{d['orders']}<small>/</small>{d['items']}</p><p class="k">Batches, orders, items</p></div>
+  <div class="stat"><p class="v">{d['dead_mi']:.1f}<small>mi</small></p><p class="k">Dead miles</p></div>
+  <div class="stat"><p class="v">{pct(d['found_or_replaced_pct'])}</p><p class="k">Found or replaced</p></div>
+  <div class="stat"><p class="v">{pct(d['tip_share_pct'])}</p><p class="k">Of pay was tips</p></div>
+</section>
+
+<section class="g">
+  <h2>The day, in hours from the first accept</h2>
+  <ul class="legend" style="margin-top:10px">
+    <li><i style="background:var(--m1)"></i>On the app's clock, one bar per batch</li>
+    <li><i style="background:var(--m-neutral);opacity:.55"></i>Door to door</li>
+    <li><i style="background:var(--m3)"></i>Charging</li>
+  </ul>
+  {shift_timeline(d)}
+  <p class="chart-note">{M}. The app's clock runs from accept to the last drop-off of each batch. The time
+  between bars is the car's: a charge stop and the drive from one zone to the next. Hours, not
+  clock times, so the day's start stays unpublished.</p>
+</section>
+
+<section class="g">
+  <h2>Batch by batch</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Store</th><th class="n">Orders</th><th class="n">Items</th><th class="n">In store</th>
+    <th class="n">Per item</th><th class="n">App clock</th><th class="n">Route</th><th>On time</th></tr></thead>
+    <tbody>{rows}</tbody>
+  </table></div>
+  <p class="chart-note">{M}. In store runs from the minute the car stopped at the store to the minute it
+  left for the first customer. Per item is that time divided by the items shopped. Route is the app's own
+  legs, store to every drop-off. Stores are named by city only.</p>
+</section>
+
+<section class="g">
+  <h2>What the miles cost</h2>
+  {hbars([(f"This car, {d['shift_mi']:.1f} mi", d['energy_usd'], "measured"),
+          (f"The Express van, same miles", van_usd, "modeled")],
+         unit="", fmt=lambda v: usd(v), label="The same miles priced in this car and in the van")}
+  <p class="chart-note">{M} {usd(d['energy_usd'])}: {d['shift_mi']:.1f} miles at the {cents(c['per_mile_cents'])} this car
+  is measured at. {MO} {usd(van_usd)}: the same miles at the {cents(van['cents_per_mi'])} of the {html.escape(van['name'])},
+  the figure on the Ledger.</p>
+</section>
+
+<section class="g">
+  <h2>Every settled day</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Day</th><th class="n">Batches</th><th class="n">Orders</th><th class="n">Items</th>
+    <th class="n">Door to door</th><th class="n">App clock</th><th class="n">Miles</th><th class="n">Dead</th>
+    <th class="n">Energy</th></tr></thead>
+    <tbody>{register}</tbody>
+  </table></div>
+  <p class="chart-note">{M}. A day joins this table once every drive on it is settled and every route leg is
+  in. Miles are the car's for the batches; dead miles are those beyond the app's route.</p>
+</section>
+
+<section>
+  <ul class="doors">
+    <li class="g door"><a class="door" href="/work/"><span class="k">If you are hiring</span>
+      <h3>One car, three jobs</h3><p>The studio this car is the denominator under, and the two tracks
+      carrying its miles today.</p></a></li>
+    <li class="g door"><a class="door" href="/ledger/"><span class="k">If you are pricing one</span>
+      <h3>The Ledger</h3><p>What a mile costs in this car, measured against three gas vehicles that were
+      actually owned.</p></a></li>
+    <li class="g door"><a class="door" href="/switch/"><span class="k">If you are weighing the switch</span>
+      <h3>The Switch</h3><p>Gas to electric in seven chapters, each opening with what it actually
+      measured.</p></a></li>
+  </ul>
+</section>
+
+<section class="bare">
+  <h2>Not an income report</h2>
+  <p style="margin:0">What a shopper is paid stays off this site, as the Work and Driver pages promise. What
+  is here is what the car did: hours, miles, items, energy.</p>
+</section>
+{rulebar()}
+"""
+    return write("/shift/", "One Delivery Day, Mile for Mile",
+                 f"How much does a delivery day ask of a car? {hm(d['wall_s'])} door to door, {words(d['batches'])} "
+                 f"batches, {words(d['orders'])} orders, {d['items']} items and {d['dead_mi']:.1f} miles it did not "
+                 f"need to drive. The electricity for the whole day cost {usd(d['energy_usd'])}.",
+                 "car/plate-2-filled.jpg", body)
+
 # ── run ─────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    built = [page_home(), page_scan(), page_trip(), page_work(), page_switch(), page_drive(), page_charge(),
+    built = [page_home(), page_scan(), page_trip(), page_work(), page_shift(), page_switch(), page_drive(), page_charge(),
              page_ledger(), page_battery(), page_car(), page_driver()]
     # Static rules first, then dynamic, and the more specific prefix before the
     # looser one: Cloudflare applies the top-most match and always follows a
@@ -1401,7 +1607,7 @@ if __name__ == "__main__":
         "/case-study/*    /ledger/  301\n"
         "/log/model-y/*   /car/     301\n"
         "/log/*           /switch/  301\n")
-    urls = ["/", "/scan/", "/trip/", "/work/", "/switch/", "/drive/", "/charge/", "/ledger/", "/battery/", "/car/", "/driver/"]
+    urls = ["/", "/scan/", "/trip/", "/work/", "/shift/", "/switch/", "/drive/", "/charge/", "/ledger/", "/battery/", "/car/", "/driver/"]
     today = datetime.date.today().isoformat()
     (PUB / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'

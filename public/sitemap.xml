@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://garage.paddock20.com/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/scan/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/trip/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/work/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/switch/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/drive/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/charge/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/ledger/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/battery/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/car/</loc><lastmod>2026-09-07</lastmod></url>
-  <url><loc>https://garage.paddock20.com/driver/</loc><lastmod>2026-09-07</lastmod></url>
+  <url><loc>https://garage.paddock20.com/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/scan/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/trip/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/work/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/shift/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/switch/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/drive/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/charge/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/ledger/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/battery/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/car/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://garage.paddock20.com/driver/</loc><lastmod>2026-09-06</lastmod></url>
 </urlset>

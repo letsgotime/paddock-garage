@@ -68,7 +68,7 @@ STORES = ["Costco", "Target", "The Fresh Market", "Fresh Market", "Kroger", "Pub
           "Best Buy", "Staples", "Lowe's", "Home Depot", "Dollar General", "Dollar Tree", "Sephora"]
 try:
     for _d in json.loads((ROOT / "data" / "gig.json").read_text()).get("days", []):
-        for _b in _d.get("batches", []):
+        for _b in _d.get("batch_rows", []):
             if _b.get("store") and _b["store"] not in STORES: STORES.append(_b["store"])
 except FileNotFoundError:
     pass

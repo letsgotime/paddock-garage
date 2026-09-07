@@ -15,7 +15,34 @@ OCR is Apple Vision, on this machine, no network and no key (tools/ocr.swift).
   python3 tools/gig.py day 2026-09-06                      # the reconciled day
   python3 tools/gig.py mail data/inbox/mail/*.json         # captured shopper email -> gig_mail
   python3 tools/gig.py drives 2026-09-06                   # label drives from the app; list the unsettled ones
+  python3 tools/gig.py drives --all                        # every batch date; exit 1 while any drive is unsettled
   python3 tools/gig.py mark personal 80 --note "..."       # your word on a drive
+  python3 tools/gig.py freshness                           # is the car's drive data behind the batches? (exit 1 if so)
+  python3 tools/gig.py export                              # every settled day -> data/gig.json, through the allowlist
+  python3 tools/gig.py export --full                       # also private-src/runway/gig-full.json, every dollar, gitignored
+
+THE EXPORT ALLOWLIST (data/gig.json is public; the site is built from it)
+
+  Kept, per day, from v_gig_day: date, platform, batches, orders, items, tip_share_pct,
+  app_active_s, wall_s, gap_s, charge_stops, charge_stop_s, route_mi, late_orders,
+  found_or_replaced_pct, shift_drives, shift_mi, shift_drive_s, shift_kwh, dead_mi, and
+  energy_usd, the one dollar column that is about the car and not about pay.
+  Kept, per batch (batch_rows): store, city, orders, items, accept_offset_s, app_active_s,
+  route_mi, in_store_s, sec_per_item, on_time, late_orders. Computed from the car: charge stops as
+  offsets from the first accept with the state of charge either side.
+
+  Dropped: every other _usd column (batch pay, tips, tips before changes, totals), every
+  per-hour figure, the operator's own time read and note, the account column, store
+  addresses, source files, batch notes, whole-day car totals and the personal, mixed
+  and charge drive counts (they describe driving that was not the shift), and every
+  timestamp: accepted, arrival and delivery times leave as durations or offsets only.
+
+  Refused, with a non-zero exit and the reason: any day with an unsettled drive, a
+  missing route leg, or no drive labelled shift.
+
+  --full writes the same shape plus the dropped dollar columns and the per-hour figures
+  to a gitignored file for tools/runway.py. Still no timestamps, addresses, notes or
+  the account column: the gated tier sees every dollar, never the raw rows.
 """
 import argparse, datetime as dt, json, os, pathlib, re, subprocess, sys
 
@@ -393,54 +420,69 @@ def mail(a):
         print("  a statement arrived and no parser exists yet: the raw text is in garage.gig_mail, build the parser against it")
 
 # ---------------------------------------------------------------- drive purpose
-def drives(a):
-    """Label a day's drives from what the app recorded, and list the ones only the operator can settle.
+def label_drives(cur, date):
+    """Label one day's drives from what the app recorded; return the ones only the operator can settle.
 
     The car knows where and when, never why. A drive is corroborated shift driving when its distance
     matches an app route leg within 0.2 mi and it ends within 10 minutes of that leg's arrival or
     drop-off. A drive is a charge trip when the NEXT drive starts with the state of charge at least
     10 points higher. Both are written with their evidence. Everything else stays unknown until the
     operator marks it; an operator label is never overwritten by this command."""
+    cur.execute("""select id, started_at at time zone 'America/Chicago', ended_at at time zone 'America/Chicago',
+                          distance_mi, soc_start, soc_end, purpose, purpose_source, purpose_note
+                   from garage.drive where (started_at at time zone 'America/Chicago')::date=%s order by started_at""", (date,))
+    D = cur.fetchall()
+    cur.execute("""select b.store, b.accepted_at at time zone 'America/Chicago', b.store_arrival_at at time zone 'America/Chicago',
+                          b.store_miles, o.label, o.delivered_at at time zone 'America/Chicago', o.drop_miles
+                   from garage.gig_batch b left join garage.gig_order o on o.batch_id=b.id
+                   where b.occurred_on=%s order by b.accepted_at, o.delivered_at""", (date,))
+    legs, accepts, drops = [], [], []
+    for store, acc, arr, smi, lab, dlv, dmi in cur.fetchall():
+        accepts.append(acc)
+        if dlv: drops.append(dlv)
+        if arr and smi is not None: legs.append(("arrival", store, arr, float(smi)))
+        if dlv and dmi is not None: legs.append(("drop-off", (store + " order " + lab) if lab else store, dlv, float(dmi)))
+    first_acc = min(accepts) if accepts else None
+    last_drop = max(drops) if drops else None      # every delivery counts, captured distance or not
+    print(f"{date}: {len(D)} drives, {len(legs)} app legs to match against\n")
+    print(f"{'id':<4}{'start-end':<13}{'mi':>6}  {'soc':<9}label")
+    unsettled = []
+    for i, (id_, s_, e, mi, s0, s1, purpose, src, note) in enumerate(D):
+        mi = float(mi); nxt = D[i + 1] if i + 1 < len(D) else None
+        if src == "operator":
+            print(f"{id_:<4}{s_:%H:%M}-{e:%H:%M}  {mi:5.1f}  {s0}->{s1:<4} {purpose.upper():<9} operator: {note or ''}"); continue
+        hit = next((l for l in legs if abs(mi - l[3]) <= 0.2 and abs((e - l[2]).total_seconds()) <= 600), None)
+        if hit:
+            label, source, why = "shift", "corroborated-app", f"{hit[1]} {hit[0]} {hit[2]:%H:%M}, app leg {hit[3]} mi"
+        elif nxt and nxt[4] is not None and s1 is not None and nxt[4] - s1 >= 10:
+            label, source, why = "charge", "corroborated-soc", f"state of charge {s1}% -> {nxt[4]}% before the next drive"
+        else:
+            label, source = "unknown", None
+            if first_acc and s_ < first_acc: why = "started before the first accept; looks personal, needs your word"
+            elif last_drop and s_ >= last_drop: why = "after the last delivery; looks personal, needs your word"
+            else: why = "between batches, not an app leg, not a charge: needs your word"
+            unsettled.append((id_, s_, e, mi, why))
+        cur.execute("update garage.drive set purpose=%s, purpose_source=%s, purpose_note=%s where id=%s", (label, source, why, id_))
+        print(f"{id_:<4}{s_:%H:%M}-{e:%H:%M}  {mi:5.1f}  {s0}->{s1:<4} {label.upper():<9} {why}")
+    return unsettled
+
+def drives(a):
+    """One date, or --all for every date that has a batch. Exits 1 while any drive is unsettled,
+    so a script can stop and hand the operator the list."""
+    if not (a.date or a.all): raise SystemExit("give a date or --all")
+    unsettled = []
     with db() as c, c.cursor() as cur:
-        cur.execute("""select id, started_at at time zone 'America/Chicago', ended_at at time zone 'America/Chicago',
-                              distance_mi, soc_start, soc_end, purpose, purpose_source, purpose_note
-                       from garage.drive where (started_at at time zone 'America/Chicago')::date=%s order by started_at""", (a.date,))
-        D = cur.fetchall()
-        cur.execute("""select b.store, b.accepted_at at time zone 'America/Chicago', b.store_arrival_at at time zone 'America/Chicago',
-                              b.store_miles, o.label, o.delivered_at at time zone 'America/Chicago', o.drop_miles
-                       from garage.gig_batch b left join garage.gig_order o on o.batch_id=b.id
-                       where b.occurred_on=%s order by b.accepted_at, o.delivered_at""", (a.date,))
-        legs, accepts, drops = [], [], []
-        for store, acc, arr, smi, lab, dlv, dmi in cur.fetchall():
-            accepts.append(acc)
-            if dlv: drops.append(dlv)
-            if arr and smi is not None: legs.append(("arrival", store, arr, float(smi)))
-            if dlv and dmi is not None: legs.append(("drop-off", (store + " order " + lab) if lab else store, dlv, float(dmi)))
-        first_acc = min(accepts) if accepts else None
-        last_drop = max(drops) if drops else None      # every delivery counts, captured distance or not
-        print(f"{a.date}: {len(D)} drives, {len(legs)} app legs to match against\n")
-        print(f"{'id':<4}{'start-end':<13}{'mi':>6}  {'soc':<9}label")
-        unsettled = []
-        for i, (id_, s_, e, mi, s0, s1, purpose, src, note) in enumerate(D):
-            mi = float(mi); nxt = D[i + 1] if i + 1 < len(D) else None
-            if src == "operator":
-                print(f"{id_:<4}{s_:%H:%M}-{e:%H:%M}  {mi:5.1f}  {s0}->{s1:<4} {purpose.upper():<9} operator: {note or ''}"); continue
-            hit = next((l for l in legs if abs(mi - l[3]) <= 0.2 and abs((e - l[2]).total_seconds()) <= 600), None)
-            if hit:
-                label, source, why = "shift", "corroborated-app", f"{hit[1]} {hit[0]} {hit[2]:%H:%M}, app leg {hit[3]} mi"
-            elif nxt and nxt[4] is not None and s1 is not None and nxt[4] - s1 >= 10:
-                label, source, why = "charge", "corroborated-soc", f"state of charge {s1}% -> {nxt[4]}% before the next drive"
-            else:
-                label, source = "unknown", None
-                if first_acc and s_ < first_acc: why = "started before the first accept; looks personal, needs your word"
-                elif last_drop and s_ >= last_drop: why = "after the last delivery; looks personal, needs your word"
-                else: why = "between batches, not an app leg, not a charge: needs your word"
-                unsettled.append((id_, s_, e, mi, why))
-            cur.execute("update garage.drive set purpose=%s, purpose_source=%s, purpose_note=%s where id=%s", (label, source, why, id_))
-            print(f"{id_:<4}{s_:%H:%M}-{e:%H:%M}  {mi:5.1f}  {s0}->{s1:<4} {label.upper():<9} {why}")
+        if a.all:
+            cur.execute("select distinct occurred_on from garage.gig_batch order by 1"); dates = [r[0] for r in cur.fetchall()]
+        else: dates = [a.date]
+        for i, d in enumerate(dates):
+            if i: print()
+            unsettled += label_drives(cur, d)
     if unsettled:
         print("\nneeds your word (mark with:  gig.py mark <id> shift|personal|charge --note '...'):")
         for id_, s_, e, mi, why in unsettled: print(f"  {id_}  {s_:%H:%M}-{e:%H:%M}  {mi} mi   {why}")
+        sys.exit(1)
+    print("\nevery drive on " + ("every batch date" if a.all else str(dates[0])) + " is settled")
 
 def mark(a):
     """The operator's word on a drive. This is the only thing that can overwrite a corroborated label.
@@ -451,6 +493,151 @@ def mark(a):
                     (a.purpose, a.note, a.ids))
         n = len(cur.fetchall())
     print(f"marked {n} drive(s) {a.purpose}" + (f": {a.note}" if a.note else ""))
+
+# ---------------------------------------------------------------- export
+# v_gig_day column -> data/gig.json key. A column that is not here does not leave the warehouse.
+PUBLIC_DAY = {
+    "occurred_on": "date", "platform": "platform", "batches": "batches", "orders": "orders", "items": "items",
+    "tip_share_pct": "tip_share_pct", "app_active_seconds": "app_active_s", "wall_seconds": "wall_s",
+    "gap_seconds": "gap_s", "charge_stops": "charge_stops", "charge_stop_seconds": "charge_stop_s",
+    "route_miles": "route_mi", "late_orders": "late_orders", "found_pct": "found_or_replaced_pct",
+    "shift_drives": "shift_drives", "shift_miles": "shift_mi", "shift_drive_seconds": "shift_drive_s",
+    "shift_kwh": "shift_kwh", "dead_miles": "dead_mi", "energy_usd_shift": "energy_usd",
+}
+# what the gated tier adds: every dollar, the per-hour figures, the operator's own time read
+FULL_DAY = {**PUBLIC_DAY,
+    "batch_pay_usd": "batch_pay_usd", "tips_usd": "tips_usd", "tips_initial_usd": "tips_initial_usd",
+    "total_usd": "total_usd", "per_hour_app": "per_hour_app", "per_hour_wall": "per_hour_wall",
+    "per_hour_true": "per_hour_true", "true_active_seconds": "true_active_s", "energy_usd_on_route": "energy_usd_route",
+}
+PUBLIC_BATCH = ("store", "city", "orders", "items", "accept_offset_s", "app_active_s", "route_mi",
+                "in_store_s", "sec_per_item", "on_time", "late_orders")
+FULL_BATCH = PUBLIC_BATCH + ("batch_pay_usd", "tips_usd", "tips_initial_usd", "total_usd", "heavy_pay", "boost_pay")
+PUBLIC_OUT = ROOT / "data" / "gig.json"
+FULL_OUT = ROOT / "private-src" / "runway" / "gig-full.json"
+
+def plain(v):
+    import decimal
+    if isinstance(v, decimal.Decimal): return float(v)
+    if isinstance(v, (dt.date, dt.datetime)): return v.isoformat()
+    return v
+
+def city_only(s):
+    """'Brentwood, TN' -> 'Brentwood'. The state is not a fact worth a column."""
+    return s.split(",")[0].strip() if s else None
+
+def day_export(cur, date, full):
+    """One settled day through the allowlist, or a SystemExit naming what is unsettled."""
+    cur.execute("select * from garage.v_gig_day where occurred_on=%s", (date,))
+    r = cur.fetchone()
+    if not r: raise SystemExit(f"{date}: nothing logged")
+    v = dict(zip([c[0] for c in cur.description], r))
+    problems = []
+    if v["unsettled_drives"]:
+        problems.append(f"{v['unsettled_drives']} drive(s) not settled: run  gig.py drives {date}  and mark them")
+    if v["route_miles"] is None:
+        problems.append("a route leg is missing on at least one batch, so dead miles cannot be measured")
+    if v["shift_miles"] is None:
+        problems.append("no drive on this date is labelled shift (pull TezLab, then  gig.py drives)")
+    if problems:
+        raise SystemExit(f"refusing to export {date}:\n  " + "\n  ".join(problems))
+    keep = FULL_DAY if full else PUBLIC_DAY
+    day = {out: plain(v[col]) for col, out in keep.items()}
+
+    cur.execute("""select id, accepted_at, store, orders, items, app_active_seconds, route_miles, store_arrival_at,
+                          batch_pay_usd, tips_usd, tips_initial_usd, total_usd, heavy_pay, boost_pay
+                   from garage.gig_batch where occurred_on=%s order by accepted_at""", (date,))
+    B = [dict(zip([c[0] for c in cur.description], x)) for x in cur.fetchall()]
+    cur.execute("""select o.batch_id, count(*) filter (where o.on_time is false), bool_and(o.on_time)
+                   from garage.gig_order o join garage.gig_batch b on b.id=o.batch_id
+                   where b.occurred_on=%s group by o.batch_id""", (date,))
+    O = {bid: (late, ontime) for bid, late, ontime in cur.fetchall()}
+    cur.execute("""select id, started_at, ended_at, to_city, soc_start, soc_end from garage.drive
+                   where (started_at at time zone 'America/Chicago')::date=%s order by started_at""", (date,))
+    DR = [dict(zip([c[0] for c in cur.description], x)) for x in cur.fetchall()]
+    first = min(b["accepted_at"] for b in B)
+
+    def dwell(b):
+        """The car's time at the store, at minute resolution: from the minute the drive that reached the
+        store ended (the last drive ending within ten minutes of the app's arrival time; when two do,
+        the one the car stayed longest after) to the minute the next drive began. Returns
+        (seconds, city) or (None, None) when the car has no drive matching the arrival."""
+        if not b["store_arrival_at"]: return None, None
+        cands = [i for i, d in enumerate(DR)
+                 if abs((d["ended_at"] - b["store_arrival_at"]).total_seconds()) <= 600 and i + 1 < len(DR)]
+        if not cands: return None, None
+        i = max(cands, key=lambda k: (DR[k + 1]["started_at"] - DR[k]["ended_at"]).total_seconds())
+        arrive = DR[i]["ended_at"].replace(second=0, microsecond=0)
+        depart = DR[i + 1]["started_at"].replace(second=0, microsecond=0)
+        return int((depart - arrive).total_seconds()), city_only(DR[i]["to_city"])
+
+    rows = []
+    for b in B:
+        late, ontime = O.get(b["id"], (None, None))
+        in_store, city = dwell(b)
+        row = {"store": b["store"], "city": city, "orders": b["orders"], "items": b["items"],
+               "accept_offset_s": int((b["accepted_at"] - first).total_seconds()),
+               "app_active_s": b["app_active_seconds"], "route_mi": plain(b["route_miles"]),
+               "in_store_s": in_store,
+               "sec_per_item": (round(in_store / b["items"]) if in_store and b["items"] else None),
+               "on_time": ontime, "late_orders": late,
+               "batch_pay_usd": plain(b["batch_pay_usd"]), "tips_usd": plain(b["tips_usd"]),
+               "tips_initial_usd": plain(b["tips_initial_usd"]), "total_usd": plain(b["total_usd"]),
+               "heavy_pay": b["heavy_pay"], "boost_pay": b["boost_pay"]}
+        rows.append({k: row[k] for k in (FULL_BATCH if full else PUBLIC_BATCH)})
+    day["batch_rows"] = rows
+
+    # charge stops: a jump in state of charge between one drive's end and the next drive's start,
+    # placed as an offset from the first accept so the timeline can draw it without a clock time
+    stops = []
+    for p, n in zip(DR, DR[1:]):
+        if p["soc_end"] is not None and n["soc_start"] is not None and n["soc_start"] - p["soc_end"] >= 10:
+            stops.append({"offset_s": int((p["ended_at"] - first).total_seconds()),
+                          "seconds": int((n["started_at"] - p["ended_at"]).total_seconds()),
+                          "soc_from": int(p["soc_end"]), "soc_to": int(n["soc_start"])})
+    if sum(s["seconds"] for s in stops) != (v["charge_stop_seconds"] or 0):
+        raise SystemExit(f"{date}: charge stops from the drives ({stops}) do not match the view ({v['charge_stop_seconds']}s)")
+    day["charge_stop_list"] = stops
+    day["chip"] = "measured"
+    return day
+
+def export(a):
+    """Every day with a batch, newest first, through the allowlist. One unsettled day refuses the
+    whole export: the public file never carries a half-measured day."""
+    with db() as c, c.cursor() as cur:
+        views(cur)
+        cur.execute("select distinct occurred_on from garage.gig_batch order by 1 desc")
+        dates = [r[0] for r in cur.fetchall()]
+        if not dates: raise SystemExit("no batches in the warehouse")
+        public = [day_export(cur, d, full=False) for d in dates]
+        full = [day_export(cur, d, full=True) for d in dates] if a.full else None
+    stamp = {"exported_on": dt.date.today().isoformat(), "figures": "measured",
+             "energy_per_mile_usd": COST_PER_MILE, "source": "the shopper app's own screens and the car"}
+    PUBLIC_OUT.write_text(json.dumps({**stamp, "days": public}, indent=1) + "\n")
+    print(f"wrote {PUBLIC_OUT.relative_to(ROOT)}: {len(public)} day(s), keys per day {sorted(public[0])}")
+    for d in public:
+        print(f"  {d['date']}  {d['batches']} batches, {d['orders']} orders, {d['items']} items,"
+              f" app {d['app_active_s']}s, wall {d['wall_s']}s, {d['shift_mi']} mi for {d['route_mi']} of route, dead {d['dead_mi']}, energy ${d['energy_usd']}")
+    if full is not None:
+        FULL_OUT.parent.mkdir(parents=True, exist_ok=True)
+        FULL_OUT.write_text(json.dumps({**stamp, "tier": "gated, every dollar, never committed", "days": full}, indent=1) + "\n")
+        print(f"wrote {FULL_OUT.relative_to(ROOT)} (gitignored): the same days with every dollar")
+
+def freshness(a):
+    """Drives arrive from a TezLab MCP session, not from here. Say whether they lag the batches."""
+    with db() as c, c.cursor() as cur:
+        cur.execute("select max((started_at at time zone 'America/Chicago')::date), count(*) from garage.drive")
+        latest_drive, n = cur.fetchone()
+        cur.execute("select max(occurred_on) from garage.gig_batch"); latest_batch = cur.fetchone()[0]
+    print(f"drives in the warehouse: {n}, newest {latest_drive}; newest batch: {latest_batch}")
+    if latest_batch and (latest_drive is None or latest_drive < latest_batch):
+        print(f"STALE: the car's drives stop at {latest_drive} but batches run to {latest_batch}.\n"
+              f"  Pull TezLab drives through {latest_batch} in an MCP session (tools/warehouse.py loads them),\n"
+              f"  then run  gig.py drives {latest_batch}  and mark what it cannot settle.")
+        sys.exit(1)
+    if latest_drive and (dt.date.today() - latest_drive).days > 7:
+        print(f"  note: the newest drive is {(dt.date.today() - latest_drive).days} days old; pull TezLab before adding a newer day")
+    print("  drive data is current with the batches")
 
 # ---------------------------------------------------------------- commands
 def ingest(a):
@@ -572,7 +759,10 @@ p = sub.add_parser("true", help="record your own read of time actually worked")
 p.add_argument("date"); p.add_argument("duration", help="e.g. 3h14m"); p.add_argument("--note"); p.set_defaults(fn=true_)
 p = sub.add_parser("day", help="the reconciled day"); p.add_argument("date"); p.set_defaults(fn=day)
 p = sub.add_parser("drives", help="label a day's drives from the app's own timestamps; list what only you can settle")
-p.add_argument("date"); p.set_defaults(fn=drives)
+p.add_argument("date", nargs="?"); p.add_argument("--all", action="store_true", help="every date with a batch"); p.set_defaults(fn=drives)
+p = sub.add_parser("export", help="every settled day -> data/gig.json through the allowlist (see the module docstring)")
+p.add_argument("--full", action="store_true", help="also write private-src/runway/gig-full.json with every dollar"); p.set_defaults(fn=export)
+sub.add_parser("freshness", help="exit 1 when the car's drives stop before the newest batch").set_defaults(fn=freshness)
 p = sub.add_parser("mark", help="your word on one or more drives: shift | personal | charge")
 p.add_argument("purpose", choices=["shift", "personal", "charge", "mixed"]); p.add_argument("ids", type=int, nargs="+"); p.add_argument("--note"); p.set_defaults(fn=mark)
 p = sub.add_parser("mail", help="Gmail get_message JSON files -> garage.gig_mail (idempotent)")

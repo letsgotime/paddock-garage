@@ -96,6 +96,13 @@
       "mpg": 20,
       "cents_per_mi": 18.2,
       "held": "to 2026"
+    },
+    {
+      "name": "Lexus ES300h",
+      "role": "Stopgap, 5 days",
+      "mpg": 44,
+      "cents_per_mi": 8.3,
+      "held": "Aug 2026"
     }
   ],
   "chargers": [

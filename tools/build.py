@@ -612,7 +612,7 @@ measured and published. Nothing on this page is an estimate.</p>
       <h3>A 439 mile road trip</h3><p>What the stops cost, how long they took, and what stopping
       at eighty per cent saves you.</p></a></li>
     <li class="g door"><a class="door" href="/ledger/"><span class="k">If you are pricing one</span>
-      <h3>The Ledger</h3><p>Cost per mile against three gas vehicles that were actually
+      <h3>The Ledger</h3><p>Cost per mile against four gas vehicles that were actually
       owned.</p></a></li>
     {shift_door()}
   </ul>
@@ -643,7 +643,7 @@ def page_home():
     <p class="hero-blob">If you want to know what an electric car really costs to run, the
     number is {cents(c['per_mile_cents'])} a mile. Every charge behind it is here, with the
     invoice, so you can check the figure instead of trusting it. And if you are weighing the
-    switch, the three gas vehicles it replaced are priced the same way.</p>
+    switch, the four gas vehicles it replaced are priced the same way.</p>
     <div class="hero-cta">
       <a class="btn-primary" href="/ledger/">See the numbers</a>
       <a class="btn-ghost" href="/trip/">The last road trip <span>&rarr;</span></a>
@@ -718,13 +718,14 @@ def page_switch():
     fl = D["fleet"]
     chapters = [
         ("Chapter 0", "Before", False,
-         f"Three gas vehicles, all of them actually owned and driven, not national averages. "
-         f"A 2015 Express 2500 cargo van doing detail runs, a 2011 Sienna, and a Sequoia that "
-         f"lasted fifteen days. This is the baseline everything else gets measured against.",
+         f"Four gas vehicles, all of them actually owned and driven, not national averages. "
+         f"A 2015 Express 2500 cargo van doing detail runs, a 2011 Sienna, a Sequoia that "
+         f"lasted fifteen days, and a Lexus ES300h for five more. This is the baseline "
+         f"everything else gets measured against.",
          [(f"{fl[0]['name'].split(' ',1)[1]}", f"{fl[0]['mpg']} mpg, {cents(fl[0]['cents_per_mi'])}/mi"),
           (f"{fl[2]['name'].split(' ',1)[1]}", f"{fl[2]['mpg']} mpg, {cents(fl[2]['cents_per_mi'])}/mi"),
           (f"{fl[1]['name'].split(' ',1)[1]}", f"{fl[1]['mpg']} mpg, {cents(fl[1]['cents_per_mi'])}/mi"),
-          ("Pump price", f"{usd(D['gas']['price_per_gal'])}/gal")]),
+          (fl[3]['name'], f"{fl[3]['mpg']} mpg, {cents(fl[3]['cents_per_mi'])}/mi")]),
         ("Chapter 1", "The decision", False,
          f"A used 2024 Model Y Long Range AWD, Solid Black, seven seats and a tow hitch, bought "
          f"from a Ford Lincoln store in Franklin and financed. Used, because the federal credit "
@@ -1093,7 +1094,7 @@ the real sessions.</p>
 def page_ledger():
     c, ch, b, fl = D["cost"], D["charging"], D["battery"], D["fleet"]
     save_van = fl[0]["cents_per_mi"] - c["per_mile_cents"]
-    body = f"""<p class="eyebrow">Money &middot; measured against three gas vehicles</p>
+    body = f"""<p class="eyebrow">Money &middot; measured against four gas vehicles</p>
 <h1>The <span>Ledger</span>.</h1>
 <p class="lede prose">What the car costs to run, what it is worth, and what it earns. The
 denominator and the numerator on the same page, because separating them is how people talk
@@ -1179,7 +1180,7 @@ themselves into vehicles they cannot afford.</p>
 {rulebar()}
 """
     return write("/ledger/", "Ledger",
-                 f"What a Model Y costs per mile, {cents(c['per_mile_cents'])} measured against three "
+                 f"What a Model Y costs per mile, {cents(c['per_mile_cents'])} measured against four "
                  f"gas vehicles actually owned, plus what it is worth now and what it earns back.",
                  "tex-carbon.jpg", body)
 
@@ -1359,8 +1360,8 @@ itself, so the car has to prove it belongs.</p>
 
 <section class="bare">
   <h2>The fleet before this one</h2>
-  <p class="prose">Three gas vehicles in about a year, each one bought for a job and sold when the
-  job or the math changed.</p>
+  <p class="prose">Four gas vehicles in about a year, one of them for just five days, each one
+  bought for a job and sold when the job or the math changed.</p>
   <div class="tw"><table>
     <thead><tr><th>Vehicle</th><th>What it did</th><th class="n">mpg</th><th class="n">Per mile</th><th>Held</th></tr></thead>
     <tbody>

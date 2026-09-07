@@ -226,7 +226,11 @@ def head(title, desc, path, plate, extra="", bodycls=""):
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:image" content="https://garage.paddock20.com/og/garage.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{html.escape(title)}">
+<meta name="twitter:image" content="https://garage.paddock20.com/og/garage.png">
 <link rel="stylesheet" href="/assets/glass.css">
 <link rel="stylesheet" href="/assets/garage.css">
 <script src="/assets/chart.js" defer></script>

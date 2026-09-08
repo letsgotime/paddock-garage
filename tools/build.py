@@ -663,13 +663,14 @@ def page_home():
 
 <section>
   <h2>Same driver, same roads, same pump.</h2>
-  <p class="prose">The three vehicles below were actually owned and driven, not national averages
+  <p class="prose">The four vehicles below were actually owned and driven, not national averages
   for a car nobody has. Electricity is priced from the invoice, so it already includes the
   {pct(D['charge_loss']['pct'],1)} that never reaches the battery.</p>
   {hbars([("2024 Model Y (this car)", c['per_mile_cents'], "measured"),
           (D['fleet'][0]['name'], D['fleet'][0]['cents_per_mi'], f"{D['fleet'][0]['mpg']} mpg"),
           (D['fleet'][1]['name'], D['fleet'][1]['cents_per_mi'], f"{D['fleet'][1]['mpg']} mpg"),
-          (D['fleet'][2]['name'], D['fleet'][2]['cents_per_mi'], f"{D['fleet'][2]['mpg']} mpg")])}
+          (D['fleet'][2]['name'], D['fleet'][2]['cents_per_mi'], f"{D['fleet'][2]['mpg']} mpg"),
+          (D['fleet'][3]['name'], D['fleet'][3]['cents_per_mi'], f"{D['fleet'][3]['mpg']} mpg")])}
   <p class="chart-note">Electric figure {M}. Gas figures {MO}: each vehicle's measured fuel
   economy at {usd(D['gas']['price_per_gal'])} a gallon ({D['gas']['source']},
   {D['gas']['as_of']}). The difference is {cents(saves)} on every mile driven.</p>

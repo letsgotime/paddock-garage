@@ -661,6 +661,30 @@ def page_home():
   </ul>
 </section>
 
+<section class="bare">
+  <h2>Why this exists.</h2>
+  <p class="prose">Paddock20 builds software. This car is the test bed for a separate question:
+  what one vehicle can actually be pushed to do, proven rather than claimed. Not a review, not a
+  brochure. Every figure on this site is checked against an invoice or a sensor before it is
+  allowed to publish, because a car making real claims should survive being checked.</p>
+  <p class="prose">What gets tracked: cost per mile against the invoices, not an estimate. FSD
+  miles against total miles. Gig income reconciled against the car's own GPS and odometer, so a
+  mile driven for no pay shows up as a mile driven for no pay. Road trips, charging behavior and
+  degradation, all measured the same way.</p>
+  <p class="prose">Whether FSD pays for itself is an open question here, not a settled one.
+  <a href="/switch/">The switch</a> and <a href="/ledger/">the ledger</a> carry the honest math:
+  the financial case is close, close enough that the hours saved on a commute do more of the
+  deciding than the spreadsheet does. That gets reported, not smoothed over.</p>
+  <p class="prose">The three jobs in <a href="/work/">one car, three jobs</a> are real: the
+  software studio this car is a test bed for, the vehicle sourcing it makes possible, and the
+  gig work bridging the two until the first one carries its own weight. One vehicle, priced once,
+  funding all three.</p>
+  <p class="prose">Deciding whether to leave gas: read <a href="/switch/">the switch</a>. Hiring
+  the studio: this car is what rigor looks like applied to something you can check yourself.
+  Pricing a long trip or a charge: the receipts are on this site. The value is the same in every
+  case, a number you can check rather than one you have to trust.</p>
+</section>
+
 <section>
   <h2>Same driver, same roads, same pump.</h2>
   <p class="prose">The four vehicles below were actually owned and driven, not national averages

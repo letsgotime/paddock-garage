@@ -45,8 +45,8 @@ body{ background: var(--g-black) !important; }
 body::before{
   content:''; position:fixed; inset:0; z-index:0;
   background-image:
-    radial-gradient(120% 90% at 50% 0%, rgba(5,7,13,0) 40%, rgba(5,7,13,.55) 100%),
-    linear-gradient(180deg, rgba(5,7,13,.66) 0%, rgba(5,7,13,.48) 30%, rgba(5,7,13,.82) 72%, var(--g-black) 100%),
+    radial-gradient(120% 90% at 50% 0%, rgba(5,7,13,.18) 40%, rgba(5,7,13,.6) 100%),
+    linear-gradient(180deg, rgba(5,7,13,.74) 0%, rgba(5,7,13,.72) 26%, rgba(5,7,13,.88) 62%, var(--g-black) 100%),
     var(--page-bg);
   background-size: cover, cover, cover;
   background-position: center top;
@@ -209,38 +209,38 @@ body{ padding-top:60px; }
 .pg-f-cols{ display:flex; flex-wrap:wrap; align-items:flex-start;
   justify-content:space-between; gap:44px; margin-bottom:52px; }
 .pg-f-brand{ display:flex; flex-direction:column; gap:1.1rem; max-width:22rem; }
-.pg-f-brand p{ font-size:.88rem; line-height:1.72; color:rgba(255,255,255,.48);
+.pg-f-brand p{ font-size:1rem; line-height:1.7; color:rgba(255,255,255,.68);
   max-width:19rem; margin:0; }
 .pg-f-nav{ display:flex; flex-direction:column; gap:.2rem; }
 .pg-f-nav a{ display:flex; align-items:center; min-height:44px; font-weight:700;
-  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
-  color:rgba(255,255,255,.36); text-decoration:none; transition:color .2s; }
+  font-size:.82rem; letter-spacing:.13em; text-transform:uppercase;
+  color:rgba(255,255,255,.62); text-decoration:none; transition:color .2s; }
 .pg-f-nav a:hover{ color:#fff; }
-.pg-f-h{ font-weight:700; font-size:.62rem; letter-spacing:.26em; text-transform:uppercase;
-  color:rgba(255,255,255,.22); margin:0 0 .35em; }
+.pg-f-h{ font-weight:700; font-size:.72rem; letter-spacing:.24em; text-transform:uppercase;
+  color:rgba(255,255,255,.48); margin:0 0 .35em; }
 .pg-f-col{ display:flex; flex-direction:column; gap:.1rem; }
 .pg-f-col a{ display:flex; align-items:center; gap:.55rem; min-height:44px;
-  font-weight:600; font-size:.78rem; color:rgba(255,255,255,.38);
+  font-weight:600; font-size:.9rem; color:rgba(255,255,255,.66);
   text-decoration:none; transition:color .2s; }
 .pg-f-col a:hover{ color:#fff; }
-.pg-f-connect a{ font-weight:700; font-size:.72rem; letter-spacing:.14em;
-  text-transform:uppercase; color:rgba(255,255,255,.55); }
-.pg-f-community a{ font-weight:700; font-size:.65rem; letter-spacing:.12em;
-  text-transform:uppercase; color:rgba(255,255,255,.25); }
+.pg-f-connect a{ font-weight:700; font-size:.82rem; letter-spacing:.13em;
+  text-transform:uppercase; color:rgba(255,255,255,.72); }
+.pg-f-community a{ font-weight:700; font-size:.75rem; letter-spacing:.11em;
+  text-transform:uppercase; color:rgba(255,255,255,.5); }
 .pg-f-community a:hover{ color:rgba(255,255,255,.55); }
 .pg-f-row{ display:flex; flex-wrap:wrap; align-items:flex-start; gap:2.5rem;
   padding:2.4rem 0; border-top:1px solid rgba(255,255,255,.05);
   border-bottom:1px solid rgba(255,255,255,.05); margin-bottom:1.4rem; }
 .pg-f-bottom{ display:flex; flex-wrap:wrap; align-items:center;
-  justify-content:space-between; gap:1rem; font-size:.8rem;
-  color:rgba(255,255,255,.22); letter-spacing:.04em; }
+  justify-content:space-between; gap:1rem; font-size:.9rem;
+  color:rgba(255,255,255,.48); letter-spacing:.04em; }
 .pg-f-live{ display:flex; align-items:center; gap:.6rem; }
 .pg-f-live i{ width:7px; height:7px; border-radius:50%; background:#4ade80;
   box-shadow:0 0 6px #4ade80; display:inline-block; }
-.pg-f-legend{ margin-top:1.4rem; font-size:.72rem; line-height:1.7;
-  color:rgba(255,255,255,.2); max-width:60rem; }
-.pg-f-legend a{ color:rgba(255,255,255,.4); text-decoration:none;
-  border-bottom:1px solid rgba(255,255,255,.14); }
+.pg-f-legend{ margin-top:1.4rem; font-size:.84rem; line-height:1.68;
+  color:rgba(255,255,255,.46); max-width:60rem; }
+.pg-f-legend a{ color:rgba(255,255,255,.62); text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,.3); }
 
 /* ============================================================
    REVIEW-PANEL FIXES

@@ -1137,7 +1137,8 @@ themselves into vehicles they cannot afford.</p>
   {hbars([("2024 Model Y (this car)", c['per_mile_cents'], "measured"),
           (fl[0]['name'], fl[0]['cents_per_mi'], f"{fl[0]['mpg']} mpg"),
           (fl[1]['name'], fl[1]['cents_per_mi'], f"{fl[1]['mpg']} mpg"),
-          (fl[2]['name'], fl[2]['cents_per_mi'], f"{fl[2]['mpg']} mpg")])}
+          (fl[2]['name'], fl[2]['cents_per_mi'], f"{fl[2]['mpg']} mpg"),
+          (fl[3]['name'], fl[3]['cents_per_mi'], f"{fl[3]['mpg']} mpg")])}
   <div class="tw" style="margin-top:14px"><table>
     <thead><tr><th>Vehicle</th><th>Role</th><th class="n">mpg</th><th class="n">Per mile</th></tr></thead>
     <tbody>
@@ -1571,7 +1572,7 @@ to earn its keep, this page is the workload and the <a href="/ledger/">Ledger</a
       <h3>One car, three jobs</h3><p>The studio this car is the denominator under, and the two tracks
       carrying its miles today.</p></a></li>
     <li class="g door"><a class="door" href="/ledger/"><span class="k">If you are pricing one</span>
-      <h3>The Ledger</h3><p>What a mile costs in this car, measured against three gas vehicles that were
+      <h3>The Ledger</h3><p>What a mile costs in this car, measured against four gas vehicles that were
       actually owned.</p></a></li>
     <li class="g door"><a class="door" href="/switch/"><span class="k">If you are weighing the switch</span>
       <h3>The Switch</h3><p>Gas to electric in seven chapters, each opening with what it actually

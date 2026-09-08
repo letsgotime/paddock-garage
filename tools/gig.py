@@ -19,7 +19,7 @@ OCR is Apple Vision, on this machine, no network and no key (tools/ocr.swift).
   python3 tools/gig.py mark personal 80 --note "..."       # your word on a drive
   python3 tools/gig.py freshness                           # is the car's drive data behind the batches? (exit 1 if so)
   python3 tools/gig.py export                              # every settled day -> data/gig.json, through the allowlist
-  python3 tools/gig.py export --full                       # also private-src/runway/gig-full.json, every dollar, gitignored
+  python3 tools/gig.py export --full                       # also private-src/runway-data/gig-full.json, every dollar, gitignored
 
 THE EXPORT ALLOWLIST (data/gig.json is public; the site is built from it)
 
@@ -514,7 +514,9 @@ PUBLIC_BATCH = ("store", "city", "orders", "items", "accept_offset_s", "app_acti
                 "in_store_s", "sec_per_item", "on_time", "late_orders")
 FULL_BATCH = PUBLIC_BATCH + ("batch_pay_usd", "tips_usd", "tips_initial_usd", "total_usd", "heavy_pay", "boost_pay")
 PUBLIC_OUT = ROOT / "data" / "gig.json"
-FULL_OUT = ROOT / "private-src" / "runway" / "gig-full.json"
+# Outside private-src/runway/ on purpose: that directory is the Worker's asset root, so
+# anything in it is served. This file holds every dollar and must never be fetchable.
+FULL_OUT = ROOT / "private-src" / "runway-data" / "gig-full.json"
 
 def plain(v):
     import decimal
@@ -761,7 +763,7 @@ p = sub.add_parser("day", help="the reconciled day"); p.add_argument("date"); p.
 p = sub.add_parser("drives", help="label a day's drives from the app's own timestamps; list what only you can settle")
 p.add_argument("date", nargs="?"); p.add_argument("--all", action="store_true", help="every date with a batch"); p.set_defaults(fn=drives)
 p = sub.add_parser("export", help="every settled day -> data/gig.json through the allowlist (see the module docstring)")
-p.add_argument("--full", action="store_true", help="also write private-src/runway/gig-full.json with every dollar"); p.set_defaults(fn=export)
+p.add_argument("--full", action="store_true", help="also write private-src/runway-data/gig-full.json with every dollar"); p.set_defaults(fn=export)
 sub.add_parser("freshness", help="exit 1 when the car's drives stop before the newest batch").set_defaults(fn=freshness)
 p = sub.add_parser("mark", help="your word on one or more drives: shift | personal | charge")
 p.add_argument("purpose", choices=["shift", "personal", "charge", "mixed"]); p.add_argument("ids", type=int, nargs="+"); p.add_argument("--note"); p.set_defaults(fn=mark)

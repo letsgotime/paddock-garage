@@ -20,6 +20,7 @@ private-src/income.html
 # the gated tier: every dollar, rendered by tools/runway.py from `gig.py export --full` and
 # ~/.garage/runway.json; its own Worker behind Cloudflare Access; never committed
 private-src/runway/
+private-src/runway-data/
 
 # compiled helpers, rebuilt by tools/gig.py on first run
 tools/bin/

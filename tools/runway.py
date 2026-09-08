@@ -4,7 +4,7 @@
 PRIVATE BY CONSTRUCTION, like income.py and gig.py. Nothing here writes into public/.
 
 Renders private-src/runway/index.html (gitignored) from two inputs that never enter the
-repository: private-src/runway/gig-full.json, written by `gig.py export --full` with every
+repository: private-src/runway-data/gig-full.json, written by `gig.py export --full` with every
 dollar the public export drops, and ~/.garage/runway.json, the owner's defaults. The page
 uses build.py's head(), footer and glass so it reads as one site, and every asset and nav
 link points back at garage.paddock20.com, so this Worker serves one HTML file and nothing
@@ -34,7 +34,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import build as B
 
 OUT = ROOT / "private-src" / "runway" / "index.html"
-FULL = ROOT / "private-src" / "runway" / "gig-full.json"
+FULL = ROOT / "private-src" / "runway-data" / "gig-full.json"
 CFG = pathlib.Path(os.path.expanduser("~/.garage/runway.json"))
 HOST, GARAGE = "https://runway.paddock20.com", "https://garage.paddock20.com"
 PLACEHOLDER = {"target_monthly_usd": 0, "tax_rate_pct": 0, "goal_usd": 0, "hours_per_week": 0,
@@ -193,6 +193,17 @@ site shows what the car did; this shows what it paid.</p>
                 "tex-carbon.jpg", body)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(doc)
+
+    # Everything in OUT.parent is uploaded by wrangler and served on the hostname, so one
+    # stray file here is a leak. gig-full.json sat in this directory until 7 September and
+    # was briefly fetchable on the live host; the export now lands outside it, and this
+    # refuses to let anything drift back in.
+    stray = sorted(p.name for p in OUT.parent.iterdir() if p.name != OUT.name)
+    if stray:
+        raise SystemExit(
+            f"refusing to leave {', '.join(stray)} in {OUT.parent.relative_to(ROOT)}: that directory is\n"
+            f"the Worker's asset root and every file in it is served. Move it out, then re-run.")
+
     print(f"wrote {OUT.relative_to(ROOT)} ({len(doc) / 1024:.1f} KB, {len(days)} day(s)). Gitignored; deploy only behind Access.")
     if placeholders: print("  defaults are placeholders: edit ~/.garage/runway.json")
     if not cfg["access_configured"]: print("  access_configured is false: tools/week will not deploy this Worker yet")
